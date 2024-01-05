@@ -1,0 +1,9 @@
+${AnsiColor.RED}  _______ _______ ______ ____  _  _______ _    _ _  __    ___   ___ ___  _  _
+${AnsiColor.BRIGHT_YELLOW} |__   __|__   __|  ____/ __ \| |/ / ____| |  | | |/ /   |__ \ / _ \__ \| || |
+${AnsiColor.GREEN}    | |     | |  | |__ | |  | | ' / |  __| |  | | ' /       ) | | | | ) | || |_
+${AnsiColor.BRIGHT_CYAN}    | |     | |  |  __|| |  | |  <| | |_ | |  | |  <       / /| | | |/ /|__   _|
+${AnsiColor.BLUE}    | |     | |  | |___| |__| | . \ |__| | |__| | . \     / /_| |_| / /_   | |
+${AnsiColor.MAGENTA}    |_|     |_|  |______\____/|_|\_\_____|\____/|_|\_\   |____|\___/____|  |_|
+
+2024 떡국을 부탁해 API / @h-beeen, mungmnb777
+Powered by Spring Boot ${spring-boot.version}
