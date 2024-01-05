@@ -1,0 +1,3 @@
+[submodule "tteokguk-config"]
+	path = tteokguk-config
+	url = git@github.com:tteokguk-please/tteokguk-config.git

@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    group:
+      test:
+        - test
+      dev:
+        - dev
+    default: dev
