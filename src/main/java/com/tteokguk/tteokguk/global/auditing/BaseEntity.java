@@ -1,4 +1,4 @@
-package com.tteokguk.tteokguk.member.global.auditing;
+package com.tteokguk.tteokguk.global.auditing;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.*;
 

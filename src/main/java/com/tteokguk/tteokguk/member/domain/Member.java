@@ -3,7 +3,7 @@ package com.tteokguk.tteokguk.member.domain;
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
-import com.tteokguk.tteokguk.member.global.auditing.BaseEntity;
+import com.tteokguk.tteokguk.global.auditing.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
