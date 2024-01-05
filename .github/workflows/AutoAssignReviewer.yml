@@ -15,5 +15,3 @@ jobs:
           reviewers: mungmnb777, h-beeen
           ready-comment: '코드 리뷰 요청합니다 🙆 <reviewers>'
           merged-comment: '성공적으로 Merge 되었습니다. Shout out to <reviewers> :wink:'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
