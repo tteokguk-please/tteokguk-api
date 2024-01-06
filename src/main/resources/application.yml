@@ -5,4 +5,6 @@ spring:
         - test
       dev:
         - dev
-    default: dev
+      db:
+        - db
+    default: db
