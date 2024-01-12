@@ -68,6 +68,20 @@ test {
     useJUnitPlatform()
 }
 
+tasks.named('bootBuildImage') {
+    def dockerhubId = project.property("DOCKERHUB_ID")
+    def dockerhubToken = project.property("DOCKERHUB_TOKEN")
+
+    imageName = dockerhubId + "/${project.name}"
+    publish = true
+    docker {
+        publishRegistry {
+            username = dockerhubId
+            password = dockerhubToken
+        }
+    }
+}
+
 processResources {
     dependsOn copyGitSubmodule
 }
