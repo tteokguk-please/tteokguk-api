@@ -3,7 +3,7 @@ name: Deploy to Develop Environment
 on:
   push:
     branches:
-      - feat/#4-CICD
+      - develop
 
 jobs:
   deploy:
