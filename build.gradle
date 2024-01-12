@@ -57,7 +57,7 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-task copyGitSubmodule(type: Copy) {
+tasks.register('copyGitSubmodule', Copy) {
     from './tteokguk-config'
     include '*.yml'
     into './src/main/resources'
