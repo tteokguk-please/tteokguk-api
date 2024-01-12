@@ -54,6 +54,7 @@ dependencies {
 }
 
 tasks.named('test') {
+    systemProperty "spring.profiles.active", "test"
     useJUnitPlatform()
 }
 
@@ -61,11 +62,6 @@ tasks.register('copyGitSubmodule', Copy) {
     from './tteokguk-config'
     include '*.yml'
     into './src/main/resources'
-}
-
-test {
-    systemProperty "spring.profiles.active", "test"
-    useJUnitPlatform()
 }
 
 tasks.named('bootBuildImage') {
