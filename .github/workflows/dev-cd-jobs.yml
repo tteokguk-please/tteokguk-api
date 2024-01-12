@@ -1,0 +1,51 @@
+name: Deploy to Develop Environment
+
+on:
+  push:
+    branches:
+      - feat/#4-CICD
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+
+      - name: Update Git submodules
+        run: git submodule update --remote --recursive
+
+      - name: Build and test with Gradle
+        run: ./gradlew test
+
+      - name: Build and push Docker image
+        run: |
+          ./gradlew clean bootBuildImage \ 
+          -PDOCKERHUB_ID=${{ secrets.DOCKERHUB_ID }} \
+          -PDOCKERHUB_TOKEN=${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: SSH into EC2 instance
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          port: ${{ secrets.EC2_SSH_PORT }}
+
+      - name: Download Docker image from Docker Hub
+        run: docker pull mungmnb777/tteokguk:latest
+
+      - name: Stop existing container (if running)
+        run: docker ps -f name=be-server -q | xargs --no-run-if-empty docker container stop
+
+      - name: Remove existing container (if exists)
+        run: ocker ps -a -f name=be-server -q | xargs --no-run-if-empty docker container rm
+
+      - name: Run Docker container
+        run: docker run -d --name be-server -p 80:8080 mungmnb777/tteokguk:latest
