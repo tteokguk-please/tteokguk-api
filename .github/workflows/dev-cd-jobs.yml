@@ -35,15 +35,8 @@ jobs:
           username: ${{ secrets.DEV_EC2_USERNAME }}
           key: ${{ secrets.DEV_EC2_PRIVATE_KEY }}
           port: ${{ secrets.DEV_EC2_SSH_PORT }}
-
-      - name: Download Docker image from Docker Hub
-        run: docker pull mungmnb777/tteokguk:latest
-
-      - name: Stop existing container (if running)
-        run: docker ps -f name=be-server -q | xargs --no-run-if-empty docker container stop
-
-      - name: Remove existing container (if exists)
-        run: ocker ps -a -f name=be-server -q | xargs --no-run-if-empty docker container rm
-
-      - name: Run Docker container
-        run: docker run -d --name be-server -p 80:8080 mungmnb777/tteokguk:latest
+          script: |
+            docker pull mungmnb777/tteokguk:latest
+            docker ps -f name=be-server -q | xargs --no-run-if-empty docker container stop
+            docker ps -a -f name=be-server -q | xargs --no-run-if-empty docker container rm
+            docker run -d --name be-server -p 80:8080 mungmnb777/tteokguk:latest
