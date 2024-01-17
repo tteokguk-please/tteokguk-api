@@ -48,21 +48,38 @@ dependencies {
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    // Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 tasks.named('test') {
+    systemProperty "spring.profiles.active", "test"
     useJUnitPlatform()
 }
 
-task copyGitSubmodule(type: Copy) {
+tasks.register('copyGitSubmodule', Copy) {
     from './tteokguk-config'
     include '*.yml'
     into './src/main/resources'
 }
 
-test {
-    systemProperty "spring.profiles.active", "test"
-    useJUnitPlatform()
+tasks.named('bootBuildImage') {
+    environment["BPE_DELIM_JAVA_TOOL_OPTIONS"] = " "
+    environment["BPE_APPEND_JAVA_TOOL_OPTIONS"] = "-XX:+ExitOnOutOfMemoryError -XX:MaxDirectMemorySize=10M " +
+            "-XX:MaxMetaspaceSize=100M -XX:ReservedCodeCacheSize=60M -Xss256K"
+
+    def dockerhubId = project.property("DOCKERHUB_ID")
+    def dockerhubToken = project.property("DOCKERHUB_TOKEN")
+
+    imageName = dockerhubId + "/${project.name}"
+    publish = true
+    docker {
+        publishRegistry {
+            username = dockerhubId
+            password = dockerhubToken
+        }
+    }
 }
 
 processResources {
