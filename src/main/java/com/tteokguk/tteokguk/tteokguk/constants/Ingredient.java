@@ -1,8 +1,8 @@
 package com.tteokguk.tteokguk.tteokguk.constants;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum Ingredient {
 	RICE_CAKE("떡"),
 	GREEN_ONION("파"),

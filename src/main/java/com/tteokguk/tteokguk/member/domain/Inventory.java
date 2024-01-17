@@ -33,7 +33,7 @@ public class Inventory {
 	@Column(name = "ingredient")
 	private Ingredient ingredient;
 
-	@Column(name = "stockQuantity")
+	@Column(name = "stock_quantity")
 	private int stockQuantity;
 
 	@JoinColumn(name = "member_id")
