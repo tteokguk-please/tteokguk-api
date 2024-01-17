@@ -1,16 +1,10 @@
 package com.tteokguk.tteokguk.member.domain;
 
-import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.EnumType.*;
+import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
-import static org.hibernate.annotations.OnDeleteAction.*;
 
-import java.util.List;
-
-import org.hibernate.annotations.OnDelete;
-
-import com.tteokguk.tteokguk.global.auditing.BaseEntity;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 
 import jakarta.persistence.Column;
@@ -18,33 +12,31 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "t_member")
+@Table(name = "t_inventory")
 @NoArgsConstructor(access = PROTECTED)
-public class Member extends BaseEntity {
+public class Inventory {
 
 	@Id
-	@Column(name = "member_id")
+	@Column(name = "inventory_id")
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
 
 	@Enumerated(STRING)
-	@Column(name = "primary_ingredient")
-	private Ingredient primaryIngredient;
+	@Column(name = "ingredient")
+	private Ingredient ingredient;
 
-	@Column(name = "nickname")
-	private String nickname;
+	@Column(name = "stockQuantity")
+	private int stockQuantity;
 
-	@OneToMany(
-		mappedBy = "member",
-		cascade = PERSIST,
-		orphanRemoval = true)
-	@OnDelete(action = CASCADE)
-	private List<Inventory> inventory;
+	@JoinColumn(name = "member_id")
+	@ManyToOne(fetch = LAZY)
+	private Member member;
 }
