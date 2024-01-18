@@ -1,5 +1,6 @@
 package com.tteokguk.tteokguk.member.application;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.tteokguk.tteokguk.member.application.dto.AppJoinRequest;
@@ -17,10 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthService {
 
 	private final MemberRepository memberRepository;
+	private final PasswordEncoder encoder;
 
 	public Long join(AppJoinRequest request) {
 		SimpleMember saved = memberRepository.save(
-			SimpleMember.join(request.email(), request.password(), request.nickname())
+			SimpleMember.join(request.email(), encoder.encode(request.password()), request.nickname())
 		);
 		return saved.getId();
 	}
