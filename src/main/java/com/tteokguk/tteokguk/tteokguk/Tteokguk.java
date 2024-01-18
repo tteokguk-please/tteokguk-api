@@ -1,4 +1,4 @@
-package com.tteokguk.tteokguk.member.domain;
+package com.tteokguk.tteokguk.tteokguk;
 
 import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.EnumType.*;
@@ -11,7 +11,7 @@ import java.util.List;
 import org.hibernate.annotations.OnDelete;
 
 import com.tteokguk.tteokguk.global.auditing.BaseEntity;
-import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
+import com.tteokguk.tteokguk.global.constants.BooleanStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,26 +25,26 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "t_member")
+@Table(name = "t_tteokguk")
 @NoArgsConstructor(access = PROTECTED)
-public class Member extends BaseEntity {
+public class Tteokguk extends BaseEntity {
 
 	@Id
-	@Column(name = "member_id")
+	@Column(name = "tteokguk_id")
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
 
-	@Enumerated(STRING)
-	@Column(name = "primary_ingredient")
-	private Ingredient primaryIngredient;
+	@Column(name = "wish", columnDefinition = "varchar(120)")
+	private String wish;
 
-	@Column(name = "nickname")
-	private String nickname;
+	@Enumerated(STRING)
+	@Column(name = "public_status")
+	private BooleanStatus publicStatus;
 
 	@OneToMany(
-		mappedBy = "member",
+		mappedBy = "tteokguk",
 		cascade = PERSIST,
 		orphanRemoval = true)
 	@OnDelete(action = CASCADE)
-	private List<Inventory> inventory;
+	private List<TteokgukIngredient> tteokgukIngredients;
 }
