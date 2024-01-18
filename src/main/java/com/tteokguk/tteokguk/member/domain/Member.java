@@ -18,6 +18,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -27,6 +28,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "t_member")
 @NoArgsConstructor(access = PROTECTED)
+@Inheritance
 public class Member extends BaseEntity {
 
 	@Id
@@ -47,4 +49,10 @@ public class Member extends BaseEntity {
 		orphanRemoval = true)
 	@OnDelete(action = CASCADE)
 	private List<Inventory> inventory;
+
+	protected Member(Ingredient primaryIngredient, String nickname, List<Inventory> inventory) {
+		this.primaryIngredient = primaryIngredient;
+		this.nickname = nickname;
+		this.inventory = inventory;
+	}
 }
