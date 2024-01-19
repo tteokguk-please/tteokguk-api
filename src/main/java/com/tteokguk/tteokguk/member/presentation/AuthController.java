@@ -4,12 +4,15 @@ import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tteokguk.tteokguk.member.application.AuthService;
+import com.tteokguk.tteokguk.member.presentation.dto.WebExistedResourceResponse;
 import com.tteokguk.tteokguk.member.presentation.dto.WebJoinRequest;
 import com.tteokguk.tteokguk.member.presentation.dto.WebJoinResponse;
 
@@ -28,5 +31,11 @@ public class AuthController {
 	public ResponseEntity<WebJoinResponse> join(@RequestBody @Validated WebJoinRequest request) {
 		Long savedId = memberService.join(request.convert());
 		return ResponseEntity.created(URI.create("/api/v1/members/" + savedId)).body(new WebJoinResponse(savedId));
+	}
+
+	@GetMapping("/check-email/{email}")
+	public ResponseEntity<WebExistedResourceResponse> checkEmail(@PathVariable String email) {
+		boolean isExist = memberService.existsByEmail(email);
+		return ResponseEntity.ok(new WebExistedResourceResponse(isExist));
 	}
 }
