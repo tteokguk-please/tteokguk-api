@@ -5,6 +5,8 @@ import static lombok.AccessLevel.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.util.ObjectUtils;
+
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 
 import jakarta.persistence.Column;
@@ -38,6 +40,10 @@ public class SimpleMember extends Member {
 	}
 
 	public static SimpleMember of(String email, String password, String nickname) {
-		return new SimpleMember(email, password, nickname, Ingredient.random(), new ArrayList<>());
+		Ingredient primaryIngredient = Ingredient.random();
+
+		SimpleMember entity = new SimpleMember(email, password, nickname, primaryIngredient, new ArrayList<>());
+		entity.initInventory(primaryIngredient);
+		return entity;
 	}
 }
