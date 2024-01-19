@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tteokguk.tteokguk.member.application.AuthService;
+import com.tteokguk.tteokguk.member.application.dto.AppJoinResponse;
 import com.tteokguk.tteokguk.member.presentation.dto.WebExistedResourceResponse;
 import com.tteokguk.tteokguk.member.presentation.dto.WebJoinRequest;
 import com.tteokguk.tteokguk.member.presentation.dto.WebJoinResponse;
@@ -29,8 +30,8 @@ public class AuthController {
 
 	@PostMapping("/join")
 	public ResponseEntity<WebJoinResponse> join(@RequestBody @Validated WebJoinRequest request) {
-		Long savedId = memberService.join(request.convert());
-		return ResponseEntity.created(URI.create("/api/v1/members/" + savedId)).body(new WebJoinResponse(savedId));
+		AppJoinResponse appResponse = memberService.join(request.convert());
+		return ResponseEntity.created(URI.create("/api/v1/members/" + appResponse.id())).body(WebJoinResponse.of(appResponse));
 	}
 
 	@GetMapping("/check-email/{email}")

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.tteokguk.tteokguk.global.exception.BusinessException;
 import com.tteokguk.tteokguk.member.application.dto.AppJoinRequest;
+import com.tteokguk.tteokguk.member.application.dto.AppJoinResponse;
 import com.tteokguk.tteokguk.member.domain.SimpleMember;
 import com.tteokguk.tteokguk.member.exception.AuthError;
 import com.tteokguk.tteokguk.member.infra.persistence.SimpleMemberRepository;
@@ -22,17 +23,17 @@ public class AuthService {
 	private final SimpleMemberRepository simpleMemberRepository;
 	private final PasswordEncoder encoder;
 
-	public Long join(AppJoinRequest request) {
+	public AppJoinResponse join(AppJoinRequest request) {
 		if (existsByEmail(request.email()))
 			throw new BusinessException(AuthError.DUPLICATE_EMAIL);
 
 		if (existsByNickname(request.nickname()))
 			throw new BusinessException(AuthError.DUPLICATE_NICKNAME);
 
-		SimpleMember saved = simpleMemberRepository.save(
+		SimpleMember entity = simpleMemberRepository.save(
 			SimpleMember.of(request.email(), encoder.encode(request.password()), request.nickname())
 		);
-		return saved.getId();
+		return AppJoinResponse.of(entity);
 	}
 
 	public boolean existsByEmail(String email) {
