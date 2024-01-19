@@ -5,6 +5,7 @@ import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 
 import jakarta.persistence.Column;
@@ -36,7 +37,14 @@ public class Inventory {
 	@Column(name = "stock_quantity")
 	private int stockQuantity;
 
+	@JsonIgnore
 	@JoinColumn(name = "member_id")
 	@ManyToOne(fetch = LAZY)
 	private Member member;
+
+	public Inventory(Ingredient ingredient, int stockQuantity, Member member) {
+		this.ingredient = ingredient;
+		this.stockQuantity = stockQuantity;
+		this.member = member;
+	}
 }
