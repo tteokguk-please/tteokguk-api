@@ -30,7 +30,7 @@ public class AuthService {
 			throw new BusinessException(AuthError.DUPLICATE_NICKNAME);
 
 		SimpleMember saved = simpleMemberRepository.save(
-			SimpleMember.join(request.email(), encoder.encode(request.password()), request.nickname())
+			SimpleMember.of(request.email(), encoder.encode(request.password()), request.nickname())
 		);
 		return saved.getId();
 	}

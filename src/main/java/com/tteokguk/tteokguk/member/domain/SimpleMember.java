@@ -29,16 +29,15 @@ public class SimpleMember extends Member {
 		String email,
 		String password,
 		String nickname,
-		Ingredient ingredient,
+		Ingredient primaryIngredient,
 		List<Inventory> inventory
 	) {
-		super(ingredient, nickname, inventory);
+		super(primaryIngredient, nickname, inventory);
 		this.email = email;
 		this.password = password;
 	}
 
-	// TODO: 전용 재료를 회원 가입 때 정하는 로직을 구현해야 한다.
-	public static SimpleMember join(String email, String password, String nickname) {
-		return new SimpleMember(email, password, nickname, Ingredient.BEEF, new ArrayList<>());
+	public static SimpleMember of(String email, String password, String nickname) {
+		return new SimpleMember(email, password, nickname, Ingredient.random(), new ArrayList<>());
 	}
 }
