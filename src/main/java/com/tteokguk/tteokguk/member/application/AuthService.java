@@ -26,6 +26,9 @@ public class AuthService {
 		if (existsByEmail(request.email()))
 			throw new BusinessException(AuthError.DUPLICATE_EMAIL);
 
+		if (existsByNickname(request.nickname()))
+			throw new BusinessException(AuthError.DUPLICATE_NICKNAME);
+
 		SimpleMember saved = simpleMemberRepository.save(
 			SimpleMember.join(request.email(), encoder.encode(request.password()), request.nickname())
 		);
@@ -34,5 +37,9 @@ public class AuthService {
 
 	public boolean existsByEmail(String email) {
 		return simpleMemberRepository.existsByEmail(email);
+	}
+
+	public boolean existsByNickname(String nickname) {
+		return simpleMemberRepository.existsByNickname(nickname);
 	}
 }

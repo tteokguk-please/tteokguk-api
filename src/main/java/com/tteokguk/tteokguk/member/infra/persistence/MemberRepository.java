@@ -7,5 +7,5 @@ import com.tteokguk.tteokguk.member.domain.Member;
 
 @Transactional
 public interface MemberRepository<T extends Member> extends JpaRepository<T, Long> {
-
+	boolean existsByNickname(String nickname);
 }
