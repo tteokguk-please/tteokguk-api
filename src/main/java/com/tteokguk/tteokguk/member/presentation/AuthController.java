@@ -38,4 +38,10 @@ public class AuthController {
 		boolean isExist = memberService.existsByEmail(email);
 		return ResponseEntity.ok(new WebExistedResourceResponse(isExist));
 	}
+
+	@GetMapping("/check-nickname/{nickname}")
+	public ResponseEntity<WebExistedResourceResponse> checkNickname(@PathVariable String nickname) {
+		boolean isExist = memberService.existsByNickname(nickname);
+		return ResponseEntity.ok(new WebExistedResourceResponse(isExist));
+	}
 }
