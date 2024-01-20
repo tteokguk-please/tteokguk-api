@@ -29,7 +29,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		String password = (String) token.getCredentials();
 
 		SimpleMember member = simpleMemberRepository.findByEmail(email)
-			.orElseThrow(() -> new BusinessException(AuthError.NOT_FOUND_EMAIL));
+			.orElseThrow(() -> new BusinessException(AuthError.BAD_EMAIL));
 
 		if (!encoder.matches(password, member.getPassword()))
 			throw new BusinessException(AuthError.BAD_PASSWORD);
