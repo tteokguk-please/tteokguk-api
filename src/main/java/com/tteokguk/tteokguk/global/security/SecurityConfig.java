@@ -17,7 +17,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.tteokguk.tteokguk.global.exception.ApiExceptionHandlingFilter;
 import com.tteokguk.tteokguk.global.security.filter.CustomAuthenticationFilter;
+import com.tteokguk.tteokguk.global.security.handler.CustomAuthenticationFailureHandler;
 import com.tteokguk.tteokguk.global.security.handler.CustomAuthenticationSuccessHandler;
 import com.tteokguk.tteokguk.global.security.model.PrincipalDetailsService;
 
@@ -37,6 +39,7 @@ public class SecurityConfig {
 			.cors(configurer -> corsConfigurationSource())
 			.formLogin(AbstractHttpConfigurer::disable)
 			.httpBasic(AbstractHttpConfigurer::disable)
+			.addFilterBefore(apiExceptionHandlingFilter(), CustomAuthenticationFilter.class)
 			.build();
 	}
 
@@ -49,16 +52,25 @@ public class SecurityConfig {
 	public CustomAuthenticationFilter customAuthenticationFilter() {
 		CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter();
 		customAuthenticationFilter.setFilterProcessesUrl("/api/v1/auth/login");
-		customAuthenticationFilter.setAuthenticationManager(
-			authenticationManager(passwordEncoder())
-		);
+		customAuthenticationFilter.setAuthenticationManager(authenticationManager(passwordEncoder()));
 		customAuthenticationFilter.setAuthenticationSuccessHandler(customAuthenticationSuccessHandler());
+		customAuthenticationFilter.setAuthenticationFailureHandler(customAuthenticationFailureHandler());
 		return customAuthenticationFilter;
+	}
+
+	@Bean
+	public ApiExceptionHandlingFilter apiExceptionHandlingFilter() {
+		return new ApiExceptionHandlingFilter();
 	}
 
 	@Bean
 	public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
 		return new CustomAuthenticationSuccessHandler();
+	}
+
+	@Bean
+	public CustomAuthenticationFailureHandler customAuthenticationFailureHandler() {
+		return new CustomAuthenticationFailureHandler();
 	}
 
 	@Bean
