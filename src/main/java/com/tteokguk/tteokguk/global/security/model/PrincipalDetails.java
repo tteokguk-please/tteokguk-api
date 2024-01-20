@@ -1,55 +1,56 @@
 package com.tteokguk.tteokguk.global.security.model;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.tteokguk.tteokguk.member.domain.Member;
+import com.tteokguk.tteokguk.member.domain.SimpleMember;
 
 import lombok.Getter;
 
 @Getter
 public class PrincipalDetails implements UserDetails {
 
-	private Member member;
+	private SimpleMember member;
 
-	public PrincipalDetails(Member member) {
+	public PrincipalDetails(SimpleMember member) {
 		this.member = member;
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+		return List.of(() -> "ROLE_USER");
 	}
 
 	@Override
 	public String getPassword() {
-		return null;
+		return member.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		return null;
+		return member.getEmail();
 	}
 
 	@Override
 	public boolean isAccountNonExpired() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return false;
+		return true;
 	}
 }

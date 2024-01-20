@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.tteokguk.tteokguk.global.security.filter.CustomAuthenticationFilter;
+import com.tteokguk.tteokguk.global.security.handler.CustomAuthenticationSuccessHandler;
 import com.tteokguk.tteokguk.global.security.model.PrincipalDetailsService;
 
 import lombok.RequiredArgsConstructor;
@@ -51,7 +52,13 @@ public class SecurityConfig {
 		customAuthenticationFilter.setAuthenticationManager(
 			authenticationManager(passwordEncoder())
 		);
+		customAuthenticationFilter.setAuthenticationSuccessHandler(customAuthenticationSuccessHandler());
 		return customAuthenticationFilter;
+	}
+
+	@Bean
+	public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+		return new CustomAuthenticationSuccessHandler();
 	}
 
 	@Bean
