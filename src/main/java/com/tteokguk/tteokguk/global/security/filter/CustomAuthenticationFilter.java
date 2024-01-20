@@ -16,18 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-	record LoginRequest(
-		String email,
-		String password
-	) {}
+	record LoginRequest(String email, String password) {}
 
 	private ObjectMapper om = new ObjectMapper();
 
 	@Override
-	public Authentication attemptAuthentication(
-		HttpServletRequest request,
-		HttpServletResponse response
-	) {
+	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
 		UsernamePasswordAuthenticationToken authenticationToken = getAuthenticationToken(request);
 		setDetails(request, authenticationToken);
 		Authentication authenticate;
