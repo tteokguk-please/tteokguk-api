@@ -1,6 +1,5 @@
 package com.tteokguk.tteokguk.global.security.provider;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -8,13 +7,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.tteokguk.tteokguk.global.exception.BusinessException;
 import com.tteokguk.tteokguk.global.security.model.PrincipalDetails;
-import com.tteokguk.tteokguk.member.application.AuthService;
-import com.tteokguk.tteokguk.member.domain.Member;
 import com.tteokguk.tteokguk.member.domain.SimpleMember;
 import com.tteokguk.tteokguk.member.exception.AuthError;
 import com.tteokguk.tteokguk.member.infra.persistence.SimpleMemberRepository;
 
-import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
