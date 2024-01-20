@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.util.MimeType;
 import org.springframework.util.MimeTypeUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,7 +15,6 @@ import com.tteokguk.tteokguk.global.security.dto.WebLoginResponse;
 import com.tteokguk.tteokguk.global.security.model.PrincipalDetails;
 import com.tteokguk.tteokguk.member.domain.Member;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
