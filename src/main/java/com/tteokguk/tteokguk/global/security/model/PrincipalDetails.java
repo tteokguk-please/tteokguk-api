@@ -13,7 +13,7 @@ import lombok.Getter;
 @Getter
 public class PrincipalDetails implements UserDetails {
 
-	private SimpleMember member;
+	private final SimpleMember member;
 
 	public PrincipalDetails(SimpleMember member) {
 		this.member = member;
