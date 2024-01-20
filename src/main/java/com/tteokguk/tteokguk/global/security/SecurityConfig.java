@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -21,7 +20,8 @@ import com.tteokguk.tteokguk.global.exception.ApiExceptionHandlingFilter;
 import com.tteokguk.tteokguk.global.security.filter.CustomAuthenticationFilter;
 import com.tteokguk.tteokguk.global.security.handler.CustomAuthenticationFailureHandler;
 import com.tteokguk.tteokguk.global.security.handler.CustomAuthenticationSuccessHandler;
-import com.tteokguk.tteokguk.global.security.model.PrincipalDetailsService;
+import com.tteokguk.tteokguk.global.security.provider.CustomAuthenticationProvider;
+import com.tteokguk.tteokguk.member.infra.persistence.SimpleMemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private final PrincipalDetailsService principalDetailsService;
+	private final SimpleMemberRepository simpleMemberRepository;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -52,7 +52,9 @@ public class SecurityConfig {
 	public CustomAuthenticationFilter customAuthenticationFilter() {
 		CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter();
 		customAuthenticationFilter.setFilterProcessesUrl("/api/v1/auth/login");
-		customAuthenticationFilter.setAuthenticationManager(authenticationManager(passwordEncoder()));
+		customAuthenticationFilter.setAuthenticationManager(
+			authenticationManager(passwordEncoder(), simpleMemberRepository)
+		);
 		customAuthenticationFilter.setAuthenticationSuccessHandler(customAuthenticationSuccessHandler());
 		customAuthenticationFilter.setAuthenticationFailureHandler(customAuthenticationFailureHandler());
 		return customAuthenticationFilter;
@@ -75,15 +77,13 @@ public class SecurityConfig {
 
 	@Bean
 	public AuthenticationManager authenticationManager(
-		PasswordEncoder passwordEncoder
+		PasswordEncoder passwordEncoder,
+		SimpleMemberRepository simpleMemberRepository
 	) {
-		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(principalDetailsService);
-		authenticationProvider.setPasswordEncoder(passwordEncoder);
-
+		CustomAuthenticationProvider authenticationProvider =
+			new CustomAuthenticationProvider(passwordEncoder, simpleMemberRepository);
 		ProviderManager providerManager = new ProviderManager(authenticationProvider);
 		providerManager.setEraseCredentialsAfterAuthentication(false);
-
 		return providerManager;
 	}
 
