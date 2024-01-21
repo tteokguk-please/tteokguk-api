@@ -20,6 +20,7 @@ import com.tteokguk.tteokguk.global.exception.ApiExceptionHandlingFilter;
 import com.tteokguk.tteokguk.global.security.filter.CustomAuthenticationFilter;
 import com.tteokguk.tteokguk.global.security.handler.CustomAuthenticationFailureHandler;
 import com.tteokguk.tteokguk.global.security.handler.CustomAuthenticationSuccessHandler;
+import com.tteokguk.tteokguk.global.security.jwt.JwtFactory;
 import com.tteokguk.tteokguk.global.security.provider.CustomAuthenticationProvider;
 import com.tteokguk.tteokguk.member.infra.persistence.SimpleMemberRepository;
 
@@ -31,6 +32,8 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
 	private final SimpleMemberRepository simpleMemberRepository;
+
+	private final JwtFactory jwtFactory;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -67,7 +70,7 @@ public class SecurityConfig {
 
 	@Bean
 	public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
-		return new CustomAuthenticationSuccessHandler();
+		return new CustomAuthenticationSuccessHandler(jwtFactory);
 	}
 
 	@Bean

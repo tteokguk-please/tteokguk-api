@@ -4,11 +4,13 @@ import java.security.Key;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Component
 public class JwtFactory {
 
 	private final Key key;
@@ -17,8 +19,8 @@ public class JwtFactory {
 
 	public JwtFactory(
 		@Value("${jwt.secret.key}") String secret,
-		@Value("${jwt.secret.access-token-validity}") Long periodOfAccessToken,
-		@Value("${jwt.secret.refresh-token-validity}") Long periodOfRefreshToken
+		@Value("${jwt.access-token-validity}") Long periodOfAccessToken,
+		@Value("${jwt.refresh-token-validity}") Long periodOfRefreshToken
 	) {
 		this.key = Keys.hmacShaKeyFor(secret.getBytes());
 		this.periodOfAccessToken = periodOfAccessToken;
