@@ -22,7 +22,6 @@ import com.tteokguk.tteokguk.global.exception.ApiExceptionHandlingFilter;
 import com.tteokguk.tteokguk.global.security.filter.CustomAuthenticationFilter;
 import com.tteokguk.tteokguk.global.security.filter.CustomAuthorizationFilter;
 import com.tteokguk.tteokguk.global.security.provider.CustomAuthenticationProvider;
-import com.tteokguk.tteokguk.member.infra.persistence.SimpleMemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,8 +29,6 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-
-	private final SimpleMemberRepository simpleMemberRepository;
 
 	@Bean
 	@Order(0)
@@ -74,9 +71,7 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public AuthenticationManager authenticationManager(PasswordEncoder passwordEncoder) {
-		CustomAuthenticationProvider authenticationProvider =
-			new CustomAuthenticationProvider(passwordEncoder, simpleMemberRepository);
+	public AuthenticationManager authenticationManager(CustomAuthenticationProvider authenticationProvider) {
 		ProviderManager providerManager = new ProviderManager(authenticationProvider);
 		providerManager.setEraseCredentialsAfterAuthentication(false);
 		return providerManager;
