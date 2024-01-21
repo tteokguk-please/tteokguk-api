@@ -3,7 +3,6 @@ package com.tteokguk.tteokguk.global.security.handler;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
-import java.util.UUID;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
