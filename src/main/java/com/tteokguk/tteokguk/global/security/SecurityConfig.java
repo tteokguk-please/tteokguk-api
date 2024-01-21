@@ -38,6 +38,8 @@ public class SecurityConfig {
 	private final SimpleMemberRepository simpleMemberRepository;
 
 	private final JwtFactory jwtFactory;
+	private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+	private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
 	@Bean
 	@Order(0)
@@ -76,10 +78,10 @@ public class SecurityConfig {
 		CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter();
 		customAuthenticationFilter.setFilterProcessesUrl("/api/v1/auth/login");
 		customAuthenticationFilter.setAuthenticationManager(
-			authenticationManager(passwordEncoder(), simpleMemberRepository)
+			authenticationManager(passwordEncoder())
 		);
-		customAuthenticationFilter.setAuthenticationSuccessHandler(customAuthenticationSuccessHandler());
-		customAuthenticationFilter.setAuthenticationFailureHandler(customAuthenticationFailureHandler());
+		customAuthenticationFilter.setAuthenticationSuccessHandler(customAuthenticationSuccessHandler);
+		customAuthenticationFilter.setAuthenticationFailureHandler(customAuthenticationFailureHandler);
 		return customAuthenticationFilter;
 	}
 
@@ -102,20 +104,7 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
-		return new CustomAuthenticationSuccessHandler(jwtFactory);
-	}
-
-	@Bean
-	public CustomAuthenticationFailureHandler customAuthenticationFailureHandler() {
-		return new CustomAuthenticationFailureHandler();
-	}
-
-	@Bean
-	public AuthenticationManager authenticationManager(
-		PasswordEncoder passwordEncoder,
-		SimpleMemberRepository simpleMemberRepository
-	) {
+	public AuthenticationManager authenticationManager(PasswordEncoder passwordEncoder) {
 		CustomAuthenticationProvider authenticationProvider =
 			new CustomAuthenticationProvider(passwordEncoder, simpleMemberRepository);
 		ProviderManager providerManager = new ProviderManager(authenticationProvider);
