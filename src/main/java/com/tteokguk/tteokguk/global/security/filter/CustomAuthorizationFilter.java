@@ -2,8 +2,11 @@ package com.tteokguk.tteokguk.global.security.filter;
 
 import java.io.IOException;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.tteokguk.tteokguk.global.security.jwt.Jwt;
@@ -15,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
+@Component
 @RequiredArgsConstructor
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
@@ -46,5 +50,13 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 		}
 
 		return null;
+	}
+
+	@Bean
+	public FilterRegistrationBean<CustomAuthorizationFilter> filterRegistrationBean() {
+		FilterRegistrationBean<CustomAuthorizationFilter> filterRegistrationBean = new FilterRegistrationBean<>();
+		filterRegistrationBean.setFilter(this);
+		filterRegistrationBean.setEnabled(false);
+		return filterRegistrationBean;
 	}
 }

@@ -2,7 +2,6 @@ package com.tteokguk.tteokguk.global.security;
 
 import java.util.List;
 
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -22,9 +21,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.tteokguk.tteokguk.global.exception.ApiExceptionHandlingFilter;
 import com.tteokguk.tteokguk.global.security.filter.CustomAuthenticationFilter;
 import com.tteokguk.tteokguk.global.security.filter.CustomAuthorizationFilter;
-import com.tteokguk.tteokguk.global.security.handler.CustomAuthenticationFailureHandler;
-import com.tteokguk.tteokguk.global.security.handler.CustomAuthenticationSuccessHandler;
-import com.tteokguk.tteokguk.global.security.jwt.JwtFactory;
 import com.tteokguk.tteokguk.global.security.provider.CustomAuthenticationProvider;
 import com.tteokguk.tteokguk.member.infra.persistence.SimpleMemberRepository;
 
@@ -37,8 +33,6 @@ public class SecurityConfig {
 
 	private final SimpleMemberRepository simpleMemberRepository;
 
-	private final JwtFactory jwtFactory;
-
 	@Bean
 	@Order(0)
 	public SecurityFilterChain authFilterChain(HttpSecurity http) throws Exception {
@@ -50,9 +44,12 @@ public class SecurityConfig {
 
 	@Bean
 	@Order(1)
-	public SecurityFilterChain anyRequestFilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain anyRequestFilterChain(
+		HttpSecurity http,
+		CustomAuthorizationFilter customAuthorizationFilter
+	) throws Exception {
 		http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-			.addFilterAfter(customAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+			.addFilterAfter(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return commonHttpSecurity(http).build();
 	}
@@ -69,19 +66,6 @@ public class SecurityConfig {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-	}
-
-	@Bean
-	public CustomAuthorizationFilter customAuthorizationFilter() {
-		return new CustomAuthorizationFilter(jwtFactory);
-	}
-
-	@Bean
-	public FilterRegistrationBean<CustomAuthorizationFilter> filterRegistrationBean() {
-		FilterRegistrationBean<CustomAuthorizationFilter> filterRegistrationBean = new FilterRegistrationBean<>();
-		filterRegistrationBean.setFilter(customAuthorizationFilter());
-		filterRegistrationBean.setEnabled(false);
-		return filterRegistrationBean;
 	}
 
 	@Bean
