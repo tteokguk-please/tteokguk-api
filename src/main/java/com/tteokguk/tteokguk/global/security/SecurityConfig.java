@@ -31,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
 	private final ApiExceptionHandlingFilter apiExceptionHandlingFilter;
+	private final CustomAuthorizationFilter customAuthorizationFilter;
 
 	@Bean
 	@Order(0)
@@ -44,10 +45,7 @@ public class SecurityConfig {
 
 	@Bean
 	@Order(1)
-	public SecurityFilterChain anyRequestFilterChain(
-		HttpSecurity http,
-		CustomAuthorizationFilter customAuthorizationFilter
-	) throws Exception {
+	public SecurityFilterChain anyRequestFilterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
 			.addFilterAfter(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(apiExceptionHandlingFilter, UsernamePasswordAuthenticationFilter.class);
