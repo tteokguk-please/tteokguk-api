@@ -30,11 +30,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+	private final ApiExceptionHandlingFilter apiExceptionHandlingFilter;
+
 	@Bean
 	@Order(0)
 	public SecurityFilterChain authFilterChain(HttpSecurity http) throws Exception {
 		http.securityMatcher("/api/v1/auth/**")
-			.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+			.authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+			.addFilterBefore(apiExceptionHandlingFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return commonHttpSecurity(http).build();
 	}
@@ -46,7 +49,8 @@ public class SecurityConfig {
 		CustomAuthorizationFilter customAuthorizationFilter
 	) throws Exception {
 		http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-			.addFilterAfter(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+			.addFilterAfter(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(apiExceptionHandlingFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return commonHttpSecurity(http).build();
 	}
@@ -56,18 +60,12 @@ public class SecurityConfig {
 			.csrf(AbstractHttpConfigurer::disable)
 			.cors(configurer -> corsConfigurationSource())
 			.formLogin(AbstractHttpConfigurer::disable)
-			.httpBasic(AbstractHttpConfigurer::disable)
-			.addFilterBefore(apiExceptionHandlingFilter(), CustomAuthenticationFilter.class);
+			.httpBasic(AbstractHttpConfigurer::disable);
 	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-	}
-
-	@Bean
-	public ApiExceptionHandlingFilter apiExceptionHandlingFilter() {
-		return new ApiExceptionHandlingFilter();
 	}
 
 	@Bean
