@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-	private final ObjectMapper om = new ObjectMapper();
+	private final ObjectMapper om;
 	private final JwtFactory jwtFactory;
 
 	@Override
