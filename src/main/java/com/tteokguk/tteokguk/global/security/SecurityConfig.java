@@ -38,8 +38,6 @@ public class SecurityConfig {
 	private final SimpleMemberRepository simpleMemberRepository;
 
 	private final JwtFactory jwtFactory;
-	private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
-	private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
 	@Bean
 	@Order(0)
@@ -71,18 +69,6 @@ public class SecurityConfig {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-	}
-
-	@Bean
-	public CustomAuthenticationFilter customAuthenticationFilter() {
-		CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter();
-		customAuthenticationFilter.setFilterProcessesUrl("/api/v1/auth/login");
-		customAuthenticationFilter.setAuthenticationManager(
-			authenticationManager(passwordEncoder())
-		);
-		customAuthenticationFilter.setAuthenticationSuccessHandler(customAuthenticationSuccessHandler);
-		customAuthenticationFilter.setAuthenticationFailureHandler(customAuthenticationFailureHandler);
-		return customAuthenticationFilter;
 	}
 
 	@Bean
