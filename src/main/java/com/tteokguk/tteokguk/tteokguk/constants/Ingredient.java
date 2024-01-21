@@ -1,5 +1,7 @@
 package com.tteokguk.tteokguk.tteokguk.constants;
 
+import java.util.Random;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -18,4 +20,12 @@ public enum Ingredient {
 	PEPPER("후추");
 
 	private final String name;
+
+	public static Ingredient random() {
+		Random random = new Random();
+
+		Ingredient[] ingredients = Ingredient.values();
+		int randomIdx = random.nextInt(ingredients.length);
+		return ingredients[randomIdx];
+	}
 }

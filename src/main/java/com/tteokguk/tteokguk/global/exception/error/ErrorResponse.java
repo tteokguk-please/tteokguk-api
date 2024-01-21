@@ -7,6 +7,9 @@ import java.util.Optional;
 
 import org.springframework.validation.FieldError;
 
+import lombok.Getter;
+
+@Getter
 public class ErrorResponse {
 
 	private final String timeStamp;
