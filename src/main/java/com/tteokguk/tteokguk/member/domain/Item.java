@@ -54,7 +54,7 @@ public class Item {
 		this.member = member;
 	}
 
-	public static Item create(
+	public static Item of(
 		Ingredient ingredient,
 		int stockQuantity,
 		Member member

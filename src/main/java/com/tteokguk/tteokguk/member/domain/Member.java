@@ -67,10 +67,10 @@ public class Member extends BaseEntity {
 
 		List<Item> items = Arrays.stream(Ingredient.values())
 			.filter(this::isNotPrimaryIngredient)
-			.map(ingredient -> Item.create(ingredient, 0, this))
+			.map(ingredient -> Item.of(ingredient, 0, this))
 			.toList();
 
-		Item primaryIngredientItem = Item.create(primaryIngredient, INF, this);
+		Item primaryIngredientItem = Item.of(primaryIngredient, INF, this);
 
 		this.items.addAll(items);
 		this.items.add(primaryIngredientItem);
