@@ -21,7 +21,7 @@ public class ApiExceptionHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-		return ErrorResponse.of(Optional.ofNullable(ex.getFieldError()));
+		return ErrorResponse.of(ex.getFieldErrors());
 	}
 
 	@ExceptionHandler(BusinessException.class)
