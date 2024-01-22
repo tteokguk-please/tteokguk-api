@@ -6,10 +6,10 @@ import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 import static org.hibernate.annotations.OnDeleteAction.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.hibernate.annotations.OnDelete;
-import org.springframework.util.ObjectUtils;
 
 import com.tteokguk.tteokguk.global.auditing.BaseEntity;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
@@ -49,28 +49,34 @@ public class Member extends BaseEntity {
 		cascade = PERSIST,
 		orphanRemoval = true)
 	@OnDelete(action = CASCADE)
-	private List<Inventory> inventory;
+	private List<Inventory> inventories;
 
-	protected Member(Ingredient primaryIngredient, String nickname, List<Inventory> inventory) {
+	protected Member(
+		Ingredient primaryIngredient,
+		String nickname,
+		List<Inventory> inventories
+	) {
 		this.primaryIngredient = primaryIngredient;
 		this.nickname = nickname;
-		this.inventory = inventory;
+		this.inventories = inventories;
 	}
 
-	public void store(Ingredient ingredient, int quantity) {
-		List<Inventory> filteredInventory = getInventory().stream()
-			.filter(i -> ObjectUtils.nullSafeEquals(i.getIngredient(), ingredient))
+	// Initialize Inventory
+	protected void initializeInventory(Ingredient primaryIngredient) {
+		final int INF = 1_000_000_000;
+
+		List<Inventory> initInventories = Arrays.stream(Ingredient.values())
+			.filter(this::isNotPrimaryIngredient)
+			.map(ingredient -> Inventory.create(ingredient, 0, this))
 			.toList();
 
-		if (filteredInventory.isEmpty()) {
-			getInventory().add(new Inventory(ingredient, quantity, this));
-		} else {
-			// TODO: inventory에 데이터가 있는 경우 해당 데이터에서 stockQuantity를 늘려줘야 한다. (Atomic)
-		}
+		Inventory primaryIngredientInventory = Inventory.create(primaryIngredient, INF, this);
+
+		inventories.addAll(initInventories);
+		inventories.add(primaryIngredientInventory);
 	}
 
-	protected void initInventory(Ingredient primaryIngredient) {
-		final int INF = 1_000_000_000;
-		store(primaryIngredient, INF);
+	private boolean isNotPrimaryIngredient(Object ingredient) {
+		return !primaryIngredient.equals(ingredient);
 	}
 }
