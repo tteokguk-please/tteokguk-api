@@ -49,31 +49,31 @@ public class Member extends BaseEntity {
 		cascade = PERSIST,
 		orphanRemoval = true)
 	@OnDelete(action = CASCADE)
-	private List<Inventory> inventories;
+	private List<Item> items;
 
 	protected Member(
 		Ingredient primaryIngredient,
 		String nickname,
-		List<Inventory> inventories
+		List<Item> items
 	) {
 		this.primaryIngredient = primaryIngredient;
 		this.nickname = nickname;
-		this.inventories = inventories;
+		this.items = items;
 	}
 
-	// Initialize Inventory
-	protected void initializeInventory(Ingredient primaryIngredient) {
+	// Initialize Item
+	protected void initializeItem(Ingredient primaryIngredient) {
 		final int INF = 1_000_000_000;
 
-		List<Inventory> initInventories = Arrays.stream(Ingredient.values())
+		List<Item> items = Arrays.stream(Ingredient.values())
 			.filter(this::isNotPrimaryIngredient)
-			.map(ingredient -> Inventory.create(ingredient, 0, this))
+			.map(ingredient -> Item.create(ingredient, 0, this))
 			.toList();
 
-		Inventory primaryIngredientInventory = Inventory.create(primaryIngredient, INF, this);
+		Item primaryIngredientItem = Item.create(primaryIngredient, INF, this);
 
-		inventories.addAll(initInventories);
-		inventories.add(primaryIngredientInventory);
+		this.items.addAll(items);
+		this.items.add(primaryIngredientItem);
 	}
 
 	private boolean isNotPrimaryIngredient(Object ingredient) {
