@@ -74,11 +74,9 @@ public class Tteokguk extends BaseEntity {
 
 	public static Tteokguk of(
 		String wish,
-		List<String> tteokgukIngredients,
+		List<Ingredient> ingredients,
 		Member member
 	) {
-		List<Ingredient> ingredients = Ingredient.toIngredients(tteokgukIngredients);
-
 		return Tteokguk.builder()
 			.wish(wish)
 			.tteokgukIngredients(ingredients)

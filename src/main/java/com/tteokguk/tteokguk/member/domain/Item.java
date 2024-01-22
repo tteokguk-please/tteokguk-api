@@ -65,4 +65,12 @@ public class Item {
 			.member(member)
 			.build();
 	}
+
+	public void decreaseStockQuantity(int amount) {
+		this.stockQuantity -= amount;
+	}
+
+	public void increaseStockQuantity(int amount) {
+		this.stockQuantity += amount;
+	}
 }
