@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -42,7 +43,8 @@ public class Inventory {
 	@ManyToOne(fetch = LAZY)
 	private Member member;
 
-	public Inventory(
+	@Builder(access = PRIVATE)
+	private Inventory(
 		Ingredient ingredient,
 		int stockQuantity,
 		Member member
@@ -50,5 +52,17 @@ public class Inventory {
 		this.ingredient = ingredient;
 		this.stockQuantity = stockQuantity;
 		this.member = member;
+	}
+
+	public static Inventory create(
+		Ingredient ingredient,
+		int stockQuantity,
+		Member member
+	) {
+		return Inventory.builder()
+			.ingredient(ingredient)
+			.stockQuantity(stockQuantity)
+			.member(member)
+			.build();
 	}
 }
