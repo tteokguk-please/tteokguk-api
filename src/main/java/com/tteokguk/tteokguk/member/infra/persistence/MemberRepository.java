@@ -6,6 +6,5 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tteokguk.tteokguk.member.domain.Member;
 
 @Transactional
-public interface MemberRepository<T extends Member> extends JpaRepository<T, Long> {
-	boolean existsByNickname(String nickname);
+public interface MemberRepository extends JpaRepository<Member, Long> {
 }
