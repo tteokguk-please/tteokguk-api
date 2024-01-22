@@ -18,6 +18,9 @@ jobs:
           token: ${{ secrets.GIT_TOKEN }}
           submodules: true
 
+      - name: Update Git submodules
+        run: git submodule update --remote --recursive
+
       - name: (Set Up) Set up JDK 17
         uses: actions/setup-java@v3
         with:
