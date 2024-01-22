@@ -42,7 +42,11 @@ public class Inventory {
 	@ManyToOne(fetch = LAZY)
 	private Member member;
 
-	public Inventory(Ingredient ingredient, int stockQuantity, Member member) {
+	public Inventory(
+		Ingredient ingredient,
+		int stockQuantity,
+		Member member
+	) {
 		this.ingredient = ingredient;
 		this.stockQuantity = stockQuantity;
 		this.member = member;
