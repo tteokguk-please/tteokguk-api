@@ -1,7 +1,5 @@
 package com.tteokguk.tteokguk.global.exception;
 
-import java.util.Optional;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,7 +19,7 @@ public class ApiExceptionHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-		return ErrorResponse.of(Optional.ofNullable(ex.getFieldError()));
+		return ErrorResponse.of(ex.getFieldErrors());
 	}
 
 	@ExceptionHandler(BusinessException.class)
