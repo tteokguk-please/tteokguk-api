@@ -11,6 +11,7 @@ public record CreateTteokgukResponse(
 	Long tteokgukId,
 	Long memberId,
 	String wish,
-	List<Ingredient> ingredients
+	List<Ingredient> ingredients,
+	boolean access
 ) {
 }

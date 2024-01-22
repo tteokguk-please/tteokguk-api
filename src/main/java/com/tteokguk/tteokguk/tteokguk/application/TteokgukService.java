@@ -48,7 +48,7 @@ public class TteokgukService {
 		}
 
 		decreaseStockQuantities(items, ingredients);
-		Tteokguk tteokguk = Tteokguk.of(request.wish(), ingredients, member);
+		Tteokguk tteokguk = Tteokguk.of(request.wish(), ingredients, member, request.access());
 		Tteokguk savedTteokguk = tteokgukRepository.save(tteokguk);
 
 		return CreateTteokgukResponse.builder()
@@ -56,6 +56,7 @@ public class TteokgukService {
 			.memberId(savedTteokguk.getMember().getId())
 			.wish(savedTteokguk.getWish())
 			.ingredients(savedTteokguk.getTteokgukIngredients())
+			.access(savedTteokguk.isAccess())
 			.build();
 	}
 }
