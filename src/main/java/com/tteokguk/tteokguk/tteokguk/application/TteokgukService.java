@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tteokguk.tteokguk.global.exception.BusinessException;
 import com.tteokguk.tteokguk.member.domain.Member;
-import com.tteokguk.tteokguk.member.infra.persistence.MemberRepository;
+import com.tteokguk.tteokguk.member.infra.persistence.SimpleMemberRepository;
 import com.tteokguk.tteokguk.tteokguk.application.dto.request.CreateTteokgukRequest;
 import com.tteokguk.tteokguk.tteokguk.application.dto.response.CreateTteokgukResponse;
 import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
@@ -20,19 +20,21 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TteokgukService {
 
-	private final MemberRepository memberRepository;
+	private final SimpleMemberRepository memberRepository;
 	private final TteokgukRepository tteokgukRepository;
 
 	public CreateTteokgukResponse createTteokguk(
+		String email,
 		CreateTteokgukRequest request
 	) {
-		Member member = memberRepository.findById(2L)
+		Member member = memberRepository.findByEmail(email)
 			.orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
+		// 유저 재고 바탕 예외처리 및 재고 감산 로직 추가 예정
+		
 		Tteokguk tteokguk = Tteokguk.of(request.wish(), request.ingredients(), member);
 		Tteokguk savedTteokguk = tteokgukRepository.save(tteokguk);
 
-		// 유저 재고 바탕 예외처리 및 재고 감산 로직 추가 예정
 		return CreateTteokgukResponse.builder()
 			.tteokgukId(savedTteokguk.getId())
 			.memberId(savedTteokguk.getMember().getId())
