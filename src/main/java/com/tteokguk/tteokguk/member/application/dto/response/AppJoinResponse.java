@@ -1,4 +1,4 @@
-package com.tteokguk.tteokguk.member.application.dto;
+package com.tteokguk.tteokguk.member.application.dto.response;
 
 import com.tteokguk.tteokguk.member.domain.Member;
 

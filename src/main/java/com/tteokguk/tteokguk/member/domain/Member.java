@@ -6,6 +6,7 @@ import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 import static org.hibernate.annotations.OnDeleteAction.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import org.hibernate.annotations.OnDelete;
 
 import com.tteokguk.tteokguk.global.auditing.BaseEntity;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
+import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,6 +39,13 @@ public class Member extends BaseEntity {
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
 
+	@OneToMany(
+		mappedBy = "member",
+		cascade = PERSIST,
+		orphanRemoval = true)
+	@OnDelete(action = CASCADE)
+	private final List<Tteokguk> tteokguks = new ArrayList<>();
+
 	@Enumerated(STRING)
 	@Column(name = "primary_ingredient")
 	private Ingredient primaryIngredient;
@@ -49,7 +58,7 @@ public class Member extends BaseEntity {
 		cascade = PERSIST,
 		orphanRemoval = true)
 	@OnDelete(action = CASCADE)
-	private List<Item> items;
+	private List<Item> items = new ArrayList<>();
 
 	protected Member(
 		Ingredient primaryIngredient,
@@ -78,5 +87,9 @@ public class Member extends BaseEntity {
 
 	private boolean isNotPrimaryIngredient(Object ingredient) {
 		return !primaryIngredient.equals(ingredient);
+	}
+
+	public void addTteokguk(Tteokguk tteokguk) {
+		this.tteokguks.add(tteokguk);
 	}
 }

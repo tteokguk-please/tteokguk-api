@@ -50,6 +50,7 @@ public class TteokgukService {
 		decreaseStockQuantities(items, ingredients);
 		Tteokguk tteokguk = Tteokguk.of(request.wish(), ingredients, member, request.access());
 		Tteokguk savedTteokguk = tteokgukRepository.save(tteokguk);
+		member.addTteokguk(savedTteokguk);
 
 		return CreateTteokgukResponse.builder()
 			.tteokgukId(savedTteokguk.getId())

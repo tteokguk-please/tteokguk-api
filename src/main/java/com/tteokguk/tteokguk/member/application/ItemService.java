@@ -1,20 +1,20 @@
 package com.tteokguk.tteokguk.member.application;
 
+import static lombok.AccessLevel.*;
+
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tteokguk.tteokguk.member.domain.Item;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.NoArgsConstructor;
 
-@Slf4j
-@Service
+@Component
 @Transactional
-@RequiredArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 public class ItemService {
 
 	public static boolean hasSufficientIngredients(
