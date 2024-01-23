@@ -11,7 +11,9 @@ public record CreateTteokgukRequest(
 	@Length(max = 150, message = "문자열의 최대 길이는 150자입니다.")
 	String wish,
 
-	@NotNull(message = "떡국 재료가 유효하지 않아요.")
-	List<String> ingredients
+	@NotNull(message = "떡국 재료가 유효하지 않습니다.")
+	List<String> ingredients,
+	
+	boolean access
 ) {
 }

@@ -22,12 +22,12 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "t_inventory")
+@Table(name = "t_item")
 @NoArgsConstructor(access = PROTECTED)
-public class Inventory {
+public class Item {
 
 	@Id
-	@Column(name = "inventory_id")
+	@Column(name = "item_id")
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
 
@@ -44,7 +44,7 @@ public class Inventory {
 	private Member member;
 
 	@Builder(access = PRIVATE)
-	private Inventory(
+	private Item(
 		Ingredient ingredient,
 		int stockQuantity,
 		Member member
@@ -54,15 +54,23 @@ public class Inventory {
 		this.member = member;
 	}
 
-	public static Inventory create(
+	public static Item of(
 		Ingredient ingredient,
 		int stockQuantity,
 		Member member
 	) {
-		return Inventory.builder()
+		return Item.builder()
 			.ingredient(ingredient)
 			.stockQuantity(stockQuantity)
 			.member(member)
 			.build();
+	}
+
+	public void decreaseStockQuantity(int amount) {
+		this.stockQuantity -= amount;
+	}
+
+	public void increaseStockQuantity(int amount) {
+		this.stockQuantity += amount;
 	}
 }

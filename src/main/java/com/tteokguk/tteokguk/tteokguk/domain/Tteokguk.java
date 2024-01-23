@@ -47,6 +47,9 @@ public class Tteokguk extends BaseEntity {
 	@ColumnDefault("false")
 	private boolean deleted;
 
+	@Column(name = "access")
+	private boolean access;
+
 	@JoinColumn(name = "member_id")
 	@ManyToOne(fetch = LAZY)
 	private Member member;
@@ -64,24 +67,26 @@ public class Tteokguk extends BaseEntity {
 	private Tteokguk(
 		String wish,
 		List<Ingredient> tteokgukIngredients,
-		Member member
+		Member member,
+		boolean access
 	) {
 		this.wish = wish;
 		this.tteokgukIngredients = tteokgukIngredients;
 		this.member = member;
+		this.access = access;
 		this.deleted = false;
 	}
 
 	public static Tteokguk of(
 		String wish,
-		List<String> tteokgukIngredients,
-		Member member
+		List<Ingredient> ingredients,
+		Member member,
+		boolean access
 	) {
-		List<Ingredient> ingredients = Ingredient.toIngredients(tteokgukIngredients);
-
 		return Tteokguk.builder()
 			.wish(wish)
 			.tteokgukIngredients(ingredients)
+			.access(access)
 			.member(member)
 			.build();
 	}
