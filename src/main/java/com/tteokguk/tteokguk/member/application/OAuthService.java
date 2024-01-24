@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.tteokguk.tteokguk.global.security.jwt.Jwt;
 import com.tteokguk.tteokguk.global.security.jwt.JwtFactory;
-import com.tteokguk.tteokguk.member.application.dto.AppOAuthLoginResponse;
+import com.tteokguk.tteokguk.member.application.dto.response.AppOAuthLoginResponse;
 import com.tteokguk.tteokguk.member.domain.OAuthMember;
 import com.tteokguk.tteokguk.member.domain.ProviderType;
 import com.tteokguk.tteokguk.member.domain.RoleType;

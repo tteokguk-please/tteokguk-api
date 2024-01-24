@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tteokguk.tteokguk.member.application.OAuthService;
-import com.tteokguk.tteokguk.member.application.dto.AppOAuthLoginResponse;
+import com.tteokguk.tteokguk.member.application.dto.response.AppOAuthLoginResponse;
 import com.tteokguk.tteokguk.member.domain.ProviderType;
 import com.tteokguk.tteokguk.member.presentation.dto.WebOAuthLoginRequest;
 
