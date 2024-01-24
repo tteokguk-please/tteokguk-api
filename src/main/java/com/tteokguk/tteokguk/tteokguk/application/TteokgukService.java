@@ -35,6 +35,7 @@ public class TteokgukService {
         List<Ingredient> ingredients = Ingredient.toIngredients(request.ingredients());
         Tteokguk tteokguk = Tteokguk.of(request.wish(), ingredients, member, request.access());
         Tteokguk savedTteokguk = tteokgukRepository.save(tteokguk);
+
         member.addTteokguk(savedTteokguk);
 
         return CreateTteokgukResponse.builder()

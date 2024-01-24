@@ -16,7 +16,6 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class UserInfoResponseAssembler {
 
-    //== Entity List to Response List ==//
     public static MyPageResponse transferToMyPageResponse(Member member) {
         List<TteokgukResponse> tteokgukResponses = transferToTteokgukResponses(member.getTteokguks());
         List<ItemResponse> itemResponses = transferToItemResponses(member.getItems());
@@ -34,7 +33,7 @@ public class UserInfoResponseAssembler {
         List<TteokgukResponse> tteokgukResponses = transferToTteokgukResponses(member.getTteokguks());
         List<TteokgukResponse> accessibleTteokgukResponses =
                 tteokgukResponses.stream()
-                        .filter(tteokgukResponse -> tteokgukResponse.access())
+                        .filter(TteokgukResponse::access)
                         .toList();
 
         return UserInfoResponse.builder()

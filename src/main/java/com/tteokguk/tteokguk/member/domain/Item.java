@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -61,21 +59,11 @@ public class Item {
                 .build();
     }
 
-    private void decreaseStockQuantities(
-            List<Item> items,
-            List<Ingredient> ingredients
-    ) {
-        ingredients.forEach(ingredient -> items.stream()
-                .filter(item -> item.getIngredient().equals(ingredient))
-                .forEach(item -> item.decreaseStockQuantity(1))
-        );
+    public synchronized void useIngredient() {
+        this.stockQuantity--;
     }
 
-    public void decreaseStockQuantity(int amount) {
-        this.stockQuantity -= amount;
-    }
-
-    public void increaseStockQuantity(int amount) {
+    public synchronized void increaseStockQuantity(int amount) {
         this.stockQuantity += amount;
     }
 }

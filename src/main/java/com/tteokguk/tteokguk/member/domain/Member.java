@@ -84,12 +84,17 @@ public class Member extends BaseEntity {
         this.tteokguks.add(tteokguk);
     }
 
+    public void useIngredients(List<Ingredient> ingredients) {
+        items.stream()
+                .filter(item -> ingredients.contains(item.getIngredient()))
+                .forEach(Item::useIngredient);
+    }
+
     public boolean hasSufficientIngredients(List<Ingredient> requiredIngredients) {
         return requiredIngredients.stream()
-                .allMatch(
-                        ingredient -> items.stream()
-                                .filter(item -> item.getIngredient().equals(ingredient))
-                                .allMatch(item -> item.getStockQuantity() >= 1)
-                );
+                .flatMap(ingredient -> items.stream()
+                        .filter(item -> item.getIngredient().equals(ingredient))
+                        .map(Item::getStockQuantity))
+                .allMatch(quantity -> quantity >= 1);
     }
 }
