@@ -16,6 +16,7 @@ import com.tteokguk.tteokguk.member.application.OAuthService;
 import com.tteokguk.tteokguk.member.application.dto.response.AppOAuthLoginResponse;
 import com.tteokguk.tteokguk.member.domain.ProviderType;
 import com.tteokguk.tteokguk.member.presentation.dto.WebOAuthLoginRequest;
+import com.tteokguk.tteokguk.member.presentation.dto.WebOAuthLoginResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -39,21 +40,21 @@ public class OAuthController {
 			.filter(cookie -> "redirect_url".equals(cookie.getName()))
 			.toList().get(0).getValue();
 
-		final String url = String.format("%s?accessToken=%s&refreshToken=%s&isInitialized=%s",
-			redirectUrl, response.accessToken(), response.refreshToken(), response.isInitialized());
+		final String url = String.format("%s?id=%s&accessToken=%s&refreshToken=%s&isInitialized=%s",
+			redirectUrl, response.id(), response.accessToken(), response.refreshToken(), response.isInitialized());
 
 		return "redirect:" + url;
 	}
 
 	@ResponseBody
 	@PostMapping("/{provider}/login")
-	public ResponseEntity<AppOAuthLoginResponse> oAuthLogin(
+	public ResponseEntity<WebOAuthLoginResponse> oAuthLogin(
 		@PathVariable String provider,
 		@RequestBody WebOAuthLoginRequest request
 	) {
 		AppOAuthLoginResponse response = oAuthService.getByAccessToken(
 			ProviderType.valueOf(provider.toUpperCase()), request.accessToken()
 		);
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok(WebOAuthLoginResponse.of(response));
 	}
 }
