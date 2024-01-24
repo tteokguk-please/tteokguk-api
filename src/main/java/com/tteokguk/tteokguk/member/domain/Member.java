@@ -58,6 +58,14 @@ public class Member extends BaseEntity {
 	protected Member(
 		Ingredient primaryIngredient,
 		String nickname,
+		List<Inventory> inventories
+	) {
+		this(primaryIngredient, nickname, inventories, RoleType.ROLE_USER);
+	}
+
+	protected Member(
+		Ingredient primaryIngredient,
+		String nickname,
 		List<Inventory> inventories,
 		RoleType role
 	) {

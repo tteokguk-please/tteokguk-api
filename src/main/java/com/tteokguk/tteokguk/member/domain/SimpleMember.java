@@ -30,17 +30,20 @@ public class SimpleMember extends Member {
 		String password,
 		String nickname,
 		Ingredient primaryIngredient,
-		List<Inventory> inventory
+		List<Inventory> inventory,
+		RoleType role
 	) {
-		super(primaryIngredient, nickname, inventory);
+		super(primaryIngredient, nickname, inventory, role);
 		this.email = email;
 		this.password = password;
 	}
 
-	public static SimpleMember of(String email, String password, String nickname) {
+	public static SimpleMember of(String email, String password, String nickname, RoleType role) {
 		Ingredient primaryIngredient = Ingredient.random();
 
-		SimpleMember member = new SimpleMember(email, password, nickname, primaryIngredient, new ArrayList<>());
+		SimpleMember member = new SimpleMember(
+			email, password, nickname, primaryIngredient, new ArrayList<>(), role
+		);
 
 		member.initializeInventory(primaryIngredient);
 		return member;

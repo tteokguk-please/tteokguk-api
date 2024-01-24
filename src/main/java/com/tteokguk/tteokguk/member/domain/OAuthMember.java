@@ -31,17 +31,20 @@ public class OAuthMember extends Member {
 		String resourceId,
 		String nickname,
 		Ingredient primaryIngredient,
-		List<Inventory> inventories
+		List<Inventory> inventories,
+		RoleType role
 	) {
-		super(primaryIngredient, nickname, inventories);
+		super(primaryIngredient, nickname, inventories, role);
 		this.providerType = providerType;
 		this.resourceId = resourceId;
 	}
 
-	public static OAuthMember of(ProviderType providerType, String resourceId, String nickname) {
+	public static OAuthMember of(ProviderType providerType, String resourceId, String nickname, RoleType role) {
 		Ingredient primaryIngredient = Ingredient.random();
 
-		OAuthMember member = new OAuthMember(providerType, resourceId, nickname, primaryIngredient, new ArrayList<>());
+		OAuthMember member = new OAuthMember(
+			providerType, resourceId, nickname, primaryIngredient, new ArrayList<>(), role
+		);
 
 		member.initializeInventory(primaryIngredient);
 		return member;
