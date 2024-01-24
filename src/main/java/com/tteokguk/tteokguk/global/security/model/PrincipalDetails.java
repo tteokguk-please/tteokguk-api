@@ -6,16 +6,16 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.tteokguk.tteokguk.member.domain.SimpleMember;
+import com.tteokguk.tteokguk.member.domain.Member;
 
 import lombok.Getter;
 
 @Getter
 public class PrincipalDetails implements UserDetails {
 
-	private final SimpleMember member;
+	private final Member member;
 
-	public PrincipalDetails(SimpleMember member) {
+	public PrincipalDetails(Member member) {
 		this.member = member;
 	}
 
@@ -26,14 +26,18 @@ public class PrincipalDetails implements UserDetails {
 		return authorities;
 	}
 
+	public Long getId() {
+		return member.getId();
+	}
+
 	@Override
 	public String getPassword() {
-		return member.getPassword();
+		return null;
 	}
 
 	@Override
 	public String getUsername() {
-		return member.getEmail();
+		return String.valueOf(member.getId());
 	}
 
 	@Override
