@@ -45,7 +45,7 @@ public class SecurityConfig {
 	@Bean
 	@Order(1)
 	public SecurityFilterChain anyRequestFilterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+		http.authorizeHttpRequests(auth -> auth.anyRequest().hasRole("USER"))
 			.addFilterAfter(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(apiExceptionHandlingFilter, UsernamePasswordAuthenticationFilter.class);
 
