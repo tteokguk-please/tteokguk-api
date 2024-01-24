@@ -1,5 +1,6 @@
 package com.tteokguk.tteokguk.global.security.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,7 +22,9 @@ public class PrincipalDetails implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(() -> "ROLE_USER");
+		Collection<GrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(() -> member.getRole().name());
+		return authorities;
 	}
 
 	@Override

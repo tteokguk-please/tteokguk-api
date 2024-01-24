@@ -63,7 +63,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
 	private String createAccessToken(SimpleMember member, Long now) {
 		Long expiryOfAccessToken = jwtFactory.getExpiryOfAccessToken(now);
-		Jwt accessToken = jwtFactory.createAuthToken(member.getEmail(), "ROLE_USER", new Date(expiryOfAccessToken));
+		Jwt accessToken = jwtFactory.createAuthToken(member.getEmail(), member.getRole().name(), new Date(expiryOfAccessToken));
 		return accessToken.getEncodedBody();
 	}
 

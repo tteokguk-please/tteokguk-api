@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.tteokguk.tteokguk.global.exception.BusinessException;
 import com.tteokguk.tteokguk.member.application.dto.AppJoinRequest;
 import com.tteokguk.tteokguk.member.application.dto.AppJoinResponse;
+import com.tteokguk.tteokguk.member.domain.RoleType;
 import com.tteokguk.tteokguk.member.domain.SimpleMember;
 import com.tteokguk.tteokguk.member.exception.AuthError;
 import com.tteokguk.tteokguk.member.infra.persistence.SimpleMemberRepository;
@@ -31,7 +32,7 @@ public class AuthService {
 			throw new BusinessException(AuthError.DUPLICATE_NICKNAME);
 
 		SimpleMember entity = simpleMemberRepository.save(
-			SimpleMember.of(request.email(), encoder.encode(request.password()), request.nickname())
+			SimpleMember.of(request.email(), encoder.encode(request.password()), request.nickname(), RoleType.ROLE_USER)
 		);
 		return AppJoinResponse.of(entity);
 	}

@@ -9,6 +9,7 @@ import com.tteokguk.tteokguk.global.security.jwt.JwtFactory;
 import com.tteokguk.tteokguk.member.application.dto.AppOAuthLoginResponse;
 import com.tteokguk.tteokguk.member.domain.OAuthMember;
 import com.tteokguk.tteokguk.member.domain.ProviderType;
+import com.tteokguk.tteokguk.member.domain.RoleType;
 import com.tteokguk.tteokguk.member.infra.persistence.OAuthHttpRequestHelper;
 import com.tteokguk.tteokguk.member.infra.persistence.OAuthMemberRepository;
 import com.tteokguk.tteokguk.member.infra.persistence.dto.TokenResponse;
@@ -36,18 +37,19 @@ public class OAuthService {
 
 		OAuthMember member = oAuthMemberRepository.findByProviderTypeAndResourceId(providerType, userInfoResponse.id())
 			.orElseGet(() -> oAuthMemberRepository.save(
-				OAuthMember.of(providerType, userInfoResponse.id(), providerType + "_" + userInfoResponse.id())
+				OAuthMember.of(providerType, userInfoResponse.id(), providerType + "_" + userInfoResponse.id(), RoleType.ROLE_TEMP_USER)
 			));
 
 		Long now = System.currentTimeMillis();
 		Long expiryOfAccessToken = jwtFactory.getExpiryOfAccessToken(now);
 		Long expiryOfRefreshToken = jwtFactory.getExpiryOfRefreshToken(now);
 		Jwt accessToken = jwtFactory.createAuthToken(
-			String.valueOf(member.getId()), "ROLE_USER", new Date(expiryOfAccessToken)
+			String.valueOf(member.getId()), member.getRole().name(), new Date(expiryOfAccessToken)
 		);
 		Jwt refreshToken = jwtFactory.createAuthToken(null, new Date(expiryOfRefreshToken));
 
-		// TODO: 유저가 닉네임을 정하지 않았다면 정하게 해줘야함!
-		return new AppOAuthLoginResponse(accessToken.getEncodedBody(), refreshToken.getEncodedBody(), false);
+		return new AppOAuthLoginResponse(
+			accessToken.getEncodedBody(), refreshToken.getEncodedBody(), member.getRole() == RoleType.ROLE_USER
+		);
 	}
 }
