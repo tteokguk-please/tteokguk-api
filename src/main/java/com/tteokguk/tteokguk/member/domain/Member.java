@@ -51,14 +51,20 @@ public class Member extends BaseEntity {
 	@OnDelete(action = CASCADE)
 	private List<Inventory> inventories;
 
+	@Enumerated
+	@Column(name = "role")
+	private RoleType role;
+
 	protected Member(
 		Ingredient primaryIngredient,
 		String nickname,
-		List<Inventory> inventories
+		List<Inventory> inventories,
+		RoleType role
 	) {
 		this.primaryIngredient = primaryIngredient;
 		this.nickname = nickname;
 		this.inventories = inventories;
+		this.role = role;
 	}
 
 	// Initialize Inventory
