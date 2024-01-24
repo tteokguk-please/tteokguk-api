@@ -1,5 +1,9 @@
-package com.tteokguk.tteokguk.member.application.dto.response;
+package com.tteokguk.tteokguk.member.application.dto.response.assembler;
 
+import com.tteokguk.tteokguk.member.application.dto.response.ItemResponse;
+import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
+import com.tteokguk.tteokguk.member.application.dto.response.TteokgukResponse;
+import com.tteokguk.tteokguk.member.application.dto.response.UserInfoResponse;
 import com.tteokguk.tteokguk.member.domain.Item;
 import com.tteokguk.tteokguk.member.domain.Member;
 import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
@@ -10,7 +14,7 @@ import java.util.List;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
-public class MyPageResponseAssembler {
+public class UserInfoResponseAssembler {
 
     //== Entity List to Response List ==//
     public static MyPageResponse transferToMyPageResponse(Member member) {
@@ -26,10 +30,24 @@ public class MyPageResponseAssembler {
                 .build();
     }
 
+    public static UserInfoResponse transferToUserInfoResponse(Member member) {
+        List<TteokgukResponse> tteokgukResponses = transferToTteokgukResponses(member.getTteokguks());
+        List<TteokgukResponse> accessibleTteokgukResponses =
+                tteokgukResponses.stream()
+                        .filter(tteokgukResponse -> tteokgukResponse.access())
+                        .toList();
+
+        return UserInfoResponse.builder()
+                .nickname(member.getNickname())
+                .primaryIngredient(member.getPrimaryIngredient())
+                .tteokguks(accessibleTteokgukResponses)
+                .build();
+    }
+
     //== Tteokguk Response ==//
     private static List<TteokgukResponse> transferToTteokgukResponses(List<Tteokguk> tteokguks) {
         return tteokguks.stream()
-                .map(MyPageResponseAssembler::toTteokgukResponse)
+                .map(UserInfoResponseAssembler::toTteokgukResponse)
                 .toList();
     }
 
@@ -45,7 +63,7 @@ public class MyPageResponseAssembler {
     //== Item Response ==//
     private static List<ItemResponse> transferToItemResponses(List<Item> items) {
         return items.stream()
-                .map(MyPageResponseAssembler::toItemResponses)
+                .map(UserInfoResponseAssembler::toItemResponses)
                 .toList();
     }
 
