@@ -1,4 +1,4 @@
-package com.tteokguk.tteokguk.tteokguk.infra.persistence.dto;
+package com.tteokguk.tteokguk.member.infra.persistence.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
