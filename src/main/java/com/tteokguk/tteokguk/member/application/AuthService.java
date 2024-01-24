@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.tteokguk.tteokguk.global.exception.BusinessException;
 
-import com.tteokguk.tteokguk.member.application.dto.AppJoinRequest;
-import com.tteokguk.tteokguk.member.application.dto.AppJoinResponse;
+import com.tteokguk.tteokguk.member.application.dto.request.AppJoinRequest;
+import com.tteokguk.tteokguk.member.application.dto.response.AppJoinResponse;
 import com.tteokguk.tteokguk.member.domain.RoleType;
 import com.tteokguk.tteokguk.member.domain.SimpleMember;
 import com.tteokguk.tteokguk.member.exception.AuthError;

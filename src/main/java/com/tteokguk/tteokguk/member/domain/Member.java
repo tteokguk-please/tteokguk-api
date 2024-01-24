@@ -69,7 +69,7 @@ public class Member extends BaseEntity {
 		String nickname,
 		List<Item> items
 	) {
-		this(primaryIngredient, nickname, inventories, RoleType.ROLE_USER);
+		this(primaryIngredient, nickname, items, RoleType.ROLE_USER);
 	}
 
 	protected Member(

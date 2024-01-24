@@ -31,10 +31,10 @@ public class OAuthMember extends Member {
 		String resourceId,
 		String nickname,
 		Ingredient primaryIngredient,
-		List<Inventory> inventories,
+		List<Item> items,
 		RoleType role
 	) {
-		super(primaryIngredient, nickname, inventories, role);
+		super(primaryIngredient, nickname, items, role);
 		this.providerType = providerType;
 		this.resourceId = resourceId;
 	}
@@ -46,7 +46,7 @@ public class OAuthMember extends Member {
 			providerType, resourceId, nickname, primaryIngredient, new ArrayList<>(), role
 		);
 
-		member.initializeInventory(primaryIngredient);
+		member.initializeItem(primaryIngredient);
 		return member;
 	}
 }

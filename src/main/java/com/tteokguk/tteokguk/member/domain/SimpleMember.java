@@ -30,10 +30,10 @@ public class SimpleMember extends Member {
 		String password,
 		String nickname,
 		Ingredient primaryIngredient,
-		List<Item> item
+		List<Item> items,
 		RoleType role
 	) {
-		super(primaryIngredient, nickname, inventory, role);
+		super(primaryIngredient, nickname, items, role);
 		this.email = email;
 		this.password = password;
 	}
