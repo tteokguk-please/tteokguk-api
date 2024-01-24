@@ -29,17 +29,35 @@ public class OAuthService {
 	private final OAuthMemberRepository oAuthMemberRepository;
 	private final JwtFactory jwtFactory;
 
-	public AppOAuthLoginResponse getOAuthMember(ProviderType providerType, String code) {
+	public AppOAuthLoginResponse getByAuthorizationCode(ProviderType providerType, String code) {
 		TokenResponse tokenResponse = oAuthHttpRequestHelper.exchangeToken(providerType, code);
+
 		UserInfoResponse userInfoResponse = oAuthHttpRequestHelper.getUserInfo(
 			providerType, tokenResponse.accessToken()
 		);
 
-		OAuthMember member = oAuthMemberRepository.findByProviderTypeAndResourceId(providerType, userInfoResponse.id())
-			.orElseGet(() -> oAuthMemberRepository.save(
-				OAuthMember.of(providerType, userInfoResponse.id(), providerType + "_" + userInfoResponse.id(), RoleType.ROLE_TEMP_USER)
-			));
+		return createResponse(getOAuthMember(providerType, userInfoResponse));
+	}
 
+	public AppOAuthLoginResponse getByAccessToken(ProviderType providerType, String accessToken) {
+		UserInfoResponse userInfoResponse = oAuthHttpRequestHelper.getUserInfo(providerType, accessToken);
+
+		return createResponse(getOAuthMember(providerType, userInfoResponse));
+	}
+
+	private OAuthMember getOAuthMember(ProviderType providerType, UserInfoResponse userInfoResponse) {
+		return oAuthMemberRepository.findByProviderTypeAndResourceId(providerType, userInfoResponse.id())
+			.orElseGet(() -> oAuthMemberRepository.save(
+				OAuthMember.of(
+					providerType,
+					userInfoResponse.id(),
+					providerType + "_" + userInfoResponse.id(),
+					RoleType.ROLE_TEMP_USER
+				)
+			));
+	}
+
+	private AppOAuthLoginResponse createResponse(OAuthMember member) {
 		Long now = System.currentTimeMillis();
 		Long expiryOfAccessToken = jwtFactory.getExpiryOfAccessToken(now);
 		Long expiryOfRefreshToken = jwtFactory.getExpiryOfRefreshToken(now);
