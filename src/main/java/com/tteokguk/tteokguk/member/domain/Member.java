@@ -60,14 +60,28 @@ public class Member extends BaseEntity {
 	@OnDelete(action = CASCADE)
 	private List<Item> items = new ArrayList<>();
 
+	@Enumerated(STRING)
+	@Column(name = "role")
+	private RoleType role;
+
 	protected Member(
 		Ingredient primaryIngredient,
 		String nickname,
 		List<Item> items
 	) {
+		this(primaryIngredient, nickname, items, RoleType.ROLE_USER);
+	}
+
+	protected Member(
+		Ingredient primaryIngredient,
+		String nickname,
+		List<Item> items,
+		RoleType role
+	) {
 		this.primaryIngredient = primaryIngredient;
 		this.nickname = nickname;
 		this.items = items;
+		this.role = role;
 	}
 
 	// Initialize Item

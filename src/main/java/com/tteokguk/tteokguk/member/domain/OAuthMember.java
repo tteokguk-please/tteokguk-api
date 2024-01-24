@@ -9,40 +9,41 @@ import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class SimpleMember extends Member {
+public class OAuthMember extends Member {
 
-	@Column(name = "email",
-		updatable = false,
-		unique = true)
-	private String email;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "provider_type")
+	private ProviderType providerType;
 
-	@Column(name = "password")
-	private String password;
+	@Column(name = "resource_id")
+	private String resourceId;
 
-	private SimpleMember(
-		String email,
-		String password,
+	private OAuthMember(
+		ProviderType providerType,
+		String resourceId,
 		String nickname,
 		Ingredient primaryIngredient,
 		List<Item> items,
 		RoleType role
 	) {
 		super(primaryIngredient, nickname, items, role);
-		this.email = email;
-		this.password = password;
+		this.providerType = providerType;
+		this.resourceId = resourceId;
 	}
 
-	public static SimpleMember of(String email, String password, String nickname, RoleType role) {
+	public static OAuthMember of(ProviderType providerType, String resourceId, String nickname, RoleType role) {
 		Ingredient primaryIngredient = Ingredient.random();
 
-		SimpleMember member = new SimpleMember(
-			email, password, nickname, primaryIngredient, new ArrayList<>(), role
+		OAuthMember member = new OAuthMember(
+			providerType, resourceId, nickname, primaryIngredient, new ArrayList<>(), role
 		);
 
 		member.initializeItem(primaryIngredient);

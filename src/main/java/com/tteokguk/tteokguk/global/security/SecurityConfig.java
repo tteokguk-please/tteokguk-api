@@ -35,7 +35,7 @@ public class SecurityConfig {
 	@Bean
 	@Order(0)
 	public SecurityFilterChain authFilterChain(HttpSecurity http) throws Exception {
-		http.securityMatcher("/api/v1/auth/**")
+		http.securityMatchers(matcher -> matcher.requestMatchers("/api/v1/auth/**", "/api/v1/oauth/**"))
 			.authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
 			.addFilterBefore(apiExceptionHandlingFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -45,7 +45,7 @@ public class SecurityConfig {
 	@Bean
 	@Order(1)
 	public SecurityFilterChain anyRequestFilterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+		http.authorizeHttpRequests(auth -> auth.anyRequest().hasRole("USER"))
 			.addFilterAfter(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(apiExceptionHandlingFilter, UsernamePasswordAuthenticationFilter.class);
 

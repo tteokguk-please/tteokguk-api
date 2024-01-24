@@ -1,37 +1,43 @@
 package com.tteokguk.tteokguk.global.security.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.tteokguk.tteokguk.member.domain.SimpleMember;
+import com.tteokguk.tteokguk.member.domain.Member;
 
 import lombok.Getter;
 
 @Getter
 public class PrincipalDetails implements UserDetails {
 
-	private final SimpleMember member;
+	private final Member member;
 
-	public PrincipalDetails(SimpleMember member) {
+	public PrincipalDetails(Member member) {
 		this.member = member;
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(() -> "ROLE_USER");
+		Collection<GrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(() -> member.getRole().name());
+		return authorities;
+	}
+
+	public Long getId() {
+		return member.getId();
 	}
 
 	@Override
 	public String getPassword() {
-		return member.getPassword();
+		return null;
 	}
 
 	@Override
 	public String getUsername() {
-		return member.getEmail();
+		return String.valueOf(member.getId());
 	}
 
 	@Override

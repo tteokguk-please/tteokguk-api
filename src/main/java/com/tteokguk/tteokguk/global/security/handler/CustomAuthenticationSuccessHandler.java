@@ -16,7 +16,7 @@ import com.tteokguk.tteokguk.global.security.dto.WebLoginResponse;
 import com.tteokguk.tteokguk.global.security.jwt.Jwt;
 import com.tteokguk.tteokguk.global.security.jwt.JwtFactory;
 import com.tteokguk.tteokguk.global.security.model.PrincipalDetails;
-import com.tteokguk.tteokguk.member.domain.SimpleMember;
+import com.tteokguk.tteokguk.member.domain.Member;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -47,7 +47,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		writer.write(jsonResponse);
 	}
 
-	private String getJsonResponse(SimpleMember member) throws IOException {
+	private String getJsonResponse(Member member) throws IOException {
 		om.registerModule(new JavaTimeModule());
 		om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
@@ -61,9 +61,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 			);
 	}
 
-	private String createAccessToken(SimpleMember member, Long now) {
+	private String createAccessToken(Member member, Long now) {
 		Long expiryOfAccessToken = jwtFactory.getExpiryOfAccessToken(now);
-		Jwt accessToken = jwtFactory.createAuthToken(member.getEmail(), "ROLE_USER", new Date(expiryOfAccessToken));
+		Jwt accessToken = jwtFactory.createAuthToken(String.valueOf(member.getId()), member.getRole().name(), new Date(expiryOfAccessToken));
 		return accessToken.getEncodedBody();
 	}
 
