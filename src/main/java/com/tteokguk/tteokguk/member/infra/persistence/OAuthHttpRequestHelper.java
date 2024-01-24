@@ -13,7 +13,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.tteokguk.tteokguk.member.application.properties.OAuthProperties;
 import com.tteokguk.tteokguk.member.domain.ProviderType;
-import com.tteokguk.tteokguk.tteokguk.infra.persistence.dto.TokenResponse;
+import com.tteokguk.tteokguk.member.infra.persistence.dto.TokenResponse;
+import com.tteokguk.tteokguk.member.infra.persistence.dto.UserInfoResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -49,6 +50,23 @@ public class OAuthHttpRequestHelper {
 
 		ResponseEntity<TokenResponse> response = restTemplate.postForEntity(
 			providerProperty.tokenUri(), request, TokenResponse.class
+		);
+
+		return response.getBody();
+	}
+
+	public UserInfoResponse getUserInfo(ProviderType providerType, String accessToken) {
+		OAuthProviderProperty providerProperty = oAuthProperties.getProviderProperties(providerType);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		headers.add("Accept", "application/json");
+		headers.add("Authorization", "Bearer " + accessToken);
+
+		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(headers);
+
+		ResponseEntity<UserInfoResponse> response = restTemplate.postForEntity(
+			providerProperty.userInfoUri(), request, UserInfoResponse.class
 		);
 
 		return response.getBody();
