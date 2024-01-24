@@ -67,7 +67,10 @@ public class OAuthService {
 		Jwt refreshToken = jwtFactory.createAuthToken(null, new Date(expiryOfRefreshToken));
 
 		return new AppOAuthLoginResponse(
-			accessToken.getEncodedBody(), refreshToken.getEncodedBody(), member.getRole() == RoleType.ROLE_USER
+			member.getId(),
+			accessToken.getEncodedBody(),
+			refreshToken.getEncodedBody(),
+			member.getRole() == RoleType.ROLE_USER
 		);
 	}
 }
