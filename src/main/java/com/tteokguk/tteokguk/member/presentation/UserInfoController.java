@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
-public class MyPageController {
+public class UserInfoController {
 
     private final UserInfoService userInfoService;
 
