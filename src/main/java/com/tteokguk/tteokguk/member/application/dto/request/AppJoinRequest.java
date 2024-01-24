@@ -1,4 +1,4 @@
-package com.tteokguk.tteokguk.member.application.dto;
+package com.tteokguk.tteokguk.member.application.dto.request;
 
 public record AppJoinRequest(
 	String email,

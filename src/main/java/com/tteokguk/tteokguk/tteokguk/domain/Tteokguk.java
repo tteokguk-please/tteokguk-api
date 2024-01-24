@@ -48,6 +48,7 @@ public class Tteokguk extends BaseEntity {
 	private boolean deleted;
 
 	@Column(name = "access")
+	@ColumnDefault("true")
 	private boolean access;
 
 	@JoinColumn(name = "member_id")

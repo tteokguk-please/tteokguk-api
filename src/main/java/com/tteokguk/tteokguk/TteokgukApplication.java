@@ -9,5 +9,4 @@ public class TteokgukApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TteokgukApplication.class, args);
 	}
-
 }
