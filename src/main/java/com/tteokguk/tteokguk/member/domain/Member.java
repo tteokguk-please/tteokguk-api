@@ -1,31 +1,22 @@
 package com.tteokguk.tteokguk.member.domain;
 
-import static jakarta.persistence.CascadeType.*;
-import static jakarta.persistence.EnumType.*;
-import static jakarta.persistence.GenerationType.*;
-import static lombok.AccessLevel.*;
-import static org.hibernate.annotations.OnDeleteAction.*;
+import com.tteokguk.tteokguk.global.auditing.BaseEntity;
+import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
+import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hibernate.annotations.OnDelete;
-
-import com.tteokguk.tteokguk.global.auditing.BaseEntity;
-import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
-import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import static jakarta.persistence.CascadeType.PERSIST;
+import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
+import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 @Entity
 @Getter
@@ -34,62 +25,71 @@ import lombok.NoArgsConstructor;
 @Inheritance
 public class Member extends BaseEntity {
 
-	@Id
-	@Column(name = "member_id")
-	@GeneratedValue(strategy = IDENTITY)
-	private Long id;
+    @Id
+    @Column(name = "member_id")
+    @GeneratedValue(strategy = IDENTITY)
+    private Long id;
 
-	@OneToMany(
-		mappedBy = "member",
-		cascade = PERSIST,
-		orphanRemoval = true)
-	@OnDelete(action = CASCADE)
-	private final List<Tteokguk> tteokguks = new ArrayList<>();
+    @OneToMany(
+            mappedBy = "member",
+            cascade = PERSIST,
+            orphanRemoval = true)
+    @OnDelete(action = CASCADE)
+    private final List<Tteokguk> tteokguks = new ArrayList<>();
 
-	@Enumerated(STRING)
-	@Column(name = "primary_ingredient")
-	private Ingredient primaryIngredient;
+    @Enumerated(STRING)
+    @Column(name = "primary_ingredient")
+    private Ingredient primaryIngredient;
 
-	@Column(name = "nickname")
-	private String nickname;
+    @Column(name = "nickname")
+    private String nickname;
 
-	@OneToMany(
-		mappedBy = "member",
-		cascade = PERSIST,
-		orphanRemoval = true)
-	@OnDelete(action = CASCADE)
-	private List<Item> items = new ArrayList<>();
+    @OneToMany(
+            mappedBy = "member",
+            cascade = PERSIST,
+            orphanRemoval = true)
+    @OnDelete(action = CASCADE)
+    private List<Item> items = new ArrayList<>();
 
-	protected Member(
-		Ingredient primaryIngredient,
-		String nickname,
-		List<Item> items
-	) {
-		this.primaryIngredient = primaryIngredient;
-		this.nickname = nickname;
-		this.items = items;
-	}
+    protected Member(
+            Ingredient primaryIngredient,
+            String nickname,
+            List<Item> items
+    ) {
+        this.primaryIngredient = primaryIngredient;
+        this.nickname = nickname;
+        this.items = items;
+    }
 
-	// Initialize Item
-	protected void initializeItem(Ingredient primaryIngredient) {
-		final int INF = 1_000_000_000;
+    //== Initialize Item ==//
+    protected void initializeItem(Ingredient primaryIngredient) {
+        final int INF = 1_000_000_000;
 
-		List<Item> items = Arrays.stream(Ingredient.values())
-			.filter(this::isNotPrimaryIngredient)
-			.map(ingredient -> Item.of(ingredient, 0, this))
-			.toList();
+        List<Item> items = Arrays.stream(Ingredient.values())
+                .filter(this::isNotPrimaryIngredient)
+                .map(ingredient -> Item.of(ingredient, 0, this))
+                .toList();
 
-		Item primaryIngredientItem = Item.of(primaryIngredient, INF, this);
+        Item primaryIngredientItem = Item.of(primaryIngredient, INF, this);
 
-		this.items.addAll(items);
-		this.items.add(primaryIngredientItem);
-	}
+        this.items.addAll(items);
+        this.items.add(primaryIngredientItem);
+    }
 
-	private boolean isNotPrimaryIngredient(Object ingredient) {
-		return !primaryIngredient.equals(ingredient);
-	}
+    private boolean isNotPrimaryIngredient(Object ingredient) {
+        return !primaryIngredient.equals(ingredient);
+    }
 
-	public void addTteokguk(Tteokguk tteokguk) {
-		this.tteokguks.add(tteokguk);
-	}
+    public void addTteokguk(Tteokguk tteokguk) {
+        this.tteokguks.add(tteokguk);
+    }
+
+    public boolean hasSufficientIngredients(List<Ingredient> requiredIngredients) {
+        return requiredIngredients.stream()
+                .allMatch(
+                        ingredient -> items.stream()
+                                .filter(item -> item.getIngredient().equals(ingredient))
+                                .allMatch(item -> item.getStockQuantity() >= 1)
+                );
+    }
 }
