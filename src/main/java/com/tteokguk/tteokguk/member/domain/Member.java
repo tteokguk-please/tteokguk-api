@@ -51,7 +51,7 @@ public class Member extends BaseEntity {
 	@OnDelete(action = CASCADE)
 	private List<Inventory> inventories;
 
-	@Enumerated
+	@Enumerated(STRING)
 	@Column(name = "role")
 	private RoleType role;
 
