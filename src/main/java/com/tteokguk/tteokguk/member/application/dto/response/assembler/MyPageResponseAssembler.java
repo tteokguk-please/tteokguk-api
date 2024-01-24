@@ -1,5 +1,8 @@
-package com.tteokguk.tteokguk.member.application.dto.response;
+package com.tteokguk.tteokguk.member.application.dto.response.assembler;
 
+import com.tteokguk.tteokguk.member.application.dto.response.ItemResponse;
+import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
+import com.tteokguk.tteokguk.member.application.dto.response.TteokgukResponse;
 import com.tteokguk.tteokguk.member.domain.Item;
 import com.tteokguk.tteokguk.member.domain.Member;
 import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
