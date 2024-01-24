@@ -6,11 +6,10 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record MyPageResponse(
-        Long id,
-        Ingredient primaryIngredient,
-        String nickname,
-        List<TteokgukResponse> tteokguks,
-        List<ItemResponse> items
+public record TteokgukResponse(
+        Long tteokgukId,
+        String wish,
+        boolean access,
+        List<Ingredient> tteokgukIngredients
 ) {
 }
