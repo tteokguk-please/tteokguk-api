@@ -2,7 +2,7 @@ package com.tteokguk.tteokguk.member.presentation.dto;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.tteokguk.tteokguk.member.application.dto.AppJoinRequest;
+import com.tteokguk.tteokguk.member.application.dto.request.AppJoinRequest;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

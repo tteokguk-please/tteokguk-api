@@ -4,6 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.tteokguk.tteokguk.global.exception.BusinessException;
+
 import com.tteokguk.tteokguk.member.application.dto.AppJoinRequest;
 import com.tteokguk.tteokguk.member.application.dto.AppJoinResponse;
 import com.tteokguk.tteokguk.member.domain.RoleType;

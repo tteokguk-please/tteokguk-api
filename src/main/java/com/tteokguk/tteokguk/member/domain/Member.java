@@ -6,6 +6,7 @@ import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 import static org.hibernate.annotations.OnDeleteAction.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import org.hibernate.annotations.OnDelete;
 
 import com.tteokguk.tteokguk.global.auditing.BaseEntity;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
+import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,6 +39,13 @@ public class Member extends BaseEntity {
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
 
+	@OneToMany(
+		mappedBy = "member",
+		cascade = PERSIST,
+		orphanRemoval = true)
+	@OnDelete(action = CASCADE)
+	private final List<Tteokguk> tteokguks = new ArrayList<>();
+
 	@Enumerated(STRING)
 	@Column(name = "primary_ingredient")
 	private Ingredient primaryIngredient;
@@ -49,7 +58,7 @@ public class Member extends BaseEntity {
 		cascade = PERSIST,
 		orphanRemoval = true)
 	@OnDelete(action = CASCADE)
-	private List<Inventory> inventories;
+	private List<Item> items = new ArrayList<>();
 
 	@Enumerated(STRING)
 	@Column(name = "role")
@@ -58,7 +67,7 @@ public class Member extends BaseEntity {
 	protected Member(
 		Ingredient primaryIngredient,
 		String nickname,
-		List<Inventory> inventories
+		List<Item> items
 	) {
 		this(primaryIngredient, nickname, inventories, RoleType.ROLE_USER);
 	}
@@ -66,31 +75,35 @@ public class Member extends BaseEntity {
 	protected Member(
 		Ingredient primaryIngredient,
 		String nickname,
-		List<Inventory> inventories,
+		List<Item> items,
 		RoleType role
 	) {
 		this.primaryIngredient = primaryIngredient;
 		this.nickname = nickname;
-		this.inventories = inventories;
+		this.items = items;
 		this.role = role;
 	}
 
-	// Initialize Inventory
-	protected void initializeInventory(Ingredient primaryIngredient) {
+	// Initialize Item
+	protected void initializeItem(Ingredient primaryIngredient) {
 		final int INF = 1_000_000_000;
 
-		List<Inventory> initInventories = Arrays.stream(Ingredient.values())
+		List<Item> items = Arrays.stream(Ingredient.values())
 			.filter(this::isNotPrimaryIngredient)
-			.map(ingredient -> Inventory.create(ingredient, 0, this))
+			.map(ingredient -> Item.of(ingredient, 0, this))
 			.toList();
 
-		Inventory primaryIngredientInventory = Inventory.create(primaryIngredient, INF, this);
+		Item primaryIngredientItem = Item.of(primaryIngredient, INF, this);
 
-		inventories.addAll(initInventories);
-		inventories.add(primaryIngredientInventory);
+		this.items.addAll(items);
+		this.items.add(primaryIngredientItem);
 	}
 
 	private boolean isNotPrimaryIngredient(Object ingredient) {
 		return !primaryIngredient.equals(ingredient);
+	}
+
+	public void addTteokguk(Tteokguk tteokguk) {
+		this.tteokguks.add(tteokguk);
 	}
 }

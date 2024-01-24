@@ -30,7 +30,7 @@ public class SimpleMember extends Member {
 		String password,
 		String nickname,
 		Ingredient primaryIngredient,
-		List<Inventory> inventory,
+		List<Item> item
 		RoleType role
 	) {
 		super(primaryIngredient, nickname, inventory, role);
@@ -45,7 +45,7 @@ public class SimpleMember extends Member {
 			email, password, nickname, primaryIngredient, new ArrayList<>(), role
 		);
 
-		member.initializeInventory(primaryIngredient);
+		member.initializeItem(primaryIngredient);
 		return member;
 	}
 }

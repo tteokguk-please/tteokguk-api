@@ -1,6 +1,6 @@
 package com.tteokguk.tteokguk.member.presentation.dto;
 
-import com.tteokguk.tteokguk.member.application.dto.AppJoinResponse;
+import com.tteokguk.tteokguk.member.application.dto.response.AppJoinResponse;
 
 public record WebJoinResponse(
 	Long id,
