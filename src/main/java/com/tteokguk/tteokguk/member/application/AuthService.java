@@ -33,7 +33,13 @@ public class AuthService {
 			throw new BusinessException(AuthError.DUPLICATE_NICKNAME);
 
 		SimpleMember entity = simpleMemberRepository.save(
-			SimpleMember.of(request.email(), encoder.encode(request.password()), request.nickname(), RoleType.ROLE_USER)
+			SimpleMember.of(
+				request.email(),
+				encoder.encode(request.password()),
+				request.nickname(),
+				RoleType.ROLE_USER,
+				request.acceptsMarketing()
+			)
 		);
 		return AppJoinResponse.of(entity);
 	}

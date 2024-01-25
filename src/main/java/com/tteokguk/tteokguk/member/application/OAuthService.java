@@ -52,7 +52,8 @@ public class OAuthService {
 					providerType,
 					userInfoResponse.id(),
 					providerType + "_" + userInfoResponse.id(),
-					RoleType.ROLE_TEMP_USER
+					RoleType.ROLE_TEMP_USER,
+					null
 				)
 			));
 	}

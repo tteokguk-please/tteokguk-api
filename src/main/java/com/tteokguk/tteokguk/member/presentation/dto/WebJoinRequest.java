@@ -19,10 +19,13 @@ public record WebJoinRequest(
 		message = "영문, 숫자, 특수문자가 반드시 조합되어야 합니다.")
 	String password,
 	@Length(min = 2, max = 6, message = "닉네임을 2 ~ 6글자로 입력해주세요.")
-	String nickname
+	String nickname,
+	@NotNull(message = "해당 필드는 필수값입니다.")
+	@Pattern(regexp = "true|false", message = "true 혹은 false로 입력해주세요.")
+	String acceptsMarketing
 ) {
 
 	public AppJoinRequest convert() {
-		return new AppJoinRequest(email, password, nickname);
+		return new AppJoinRequest(email, password, nickname, Boolean.valueOf(acceptsMarketing));
 	}
 }
