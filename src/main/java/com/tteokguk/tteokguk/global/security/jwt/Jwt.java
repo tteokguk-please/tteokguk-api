@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import com.tteokguk.tteokguk.global.exception.BusinessException;
+import com.tteokguk.tteokguk.global.security.model.CustomUser;
 import com.tteokguk.tteokguk.member.exception.AuthError;
 
 import io.jsonwebtoken.Claims;
@@ -90,7 +91,7 @@ public class Jwt {
 				.collect(Collectors.toList());
 
 		log.debug("claims subject := [{}]", claims.getSubject());
-		User principal = new User(claims.getSubject(), "", authorities);
+		User principal = new CustomUser(Long.parseLong(claims.getSubject()), claims.getSubject(), "", authorities);
 		return new UsernamePasswordAuthenticationToken(principal, this, authorities);
 	}
 }
