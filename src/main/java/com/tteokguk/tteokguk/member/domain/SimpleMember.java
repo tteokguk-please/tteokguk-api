@@ -31,18 +31,25 @@ public class SimpleMember extends Member {
 		String nickname,
 		Ingredient primaryIngredient,
 		List<Item> items,
-		RoleType role
+		RoleType role,
+		Boolean acceptsMarketing
 	) {
-		super(primaryIngredient, nickname, items, role);
+		super(primaryIngredient, nickname, items, role, acceptsMarketing);
 		this.email = email;
 		this.password = password;
 	}
 
-	public static SimpleMember of(String email, String password, String nickname, RoleType role) {
+	public static SimpleMember of(
+		String email,
+		String password,
+		String nickname,
+		RoleType role,
+		Boolean acceptsMarketing
+	) {
 		Ingredient primaryIngredient = Ingredient.random();
 
 		SimpleMember member = new SimpleMember(
-			email, password, nickname, primaryIngredient, new ArrayList<>(), role
+			email, password, nickname, primaryIngredient, new ArrayList<>(), role, acceptsMarketing
 		);
 
 		member.initializeItem(primaryIngredient);

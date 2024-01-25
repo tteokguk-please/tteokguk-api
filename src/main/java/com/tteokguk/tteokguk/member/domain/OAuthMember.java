@@ -32,18 +32,25 @@ public class OAuthMember extends Member {
 		String nickname,
 		Ingredient primaryIngredient,
 		List<Item> items,
-		RoleType role
+		RoleType role,
+		Boolean acceptsMarketing
 	) {
-		super(primaryIngredient, nickname, items, role);
+		super(primaryIngredient, nickname, items, role, acceptsMarketing);
 		this.providerType = providerType;
 		this.resourceId = resourceId;
 	}
 
-	public static OAuthMember of(ProviderType providerType, String resourceId, String nickname, RoleType role) {
+	public static OAuthMember of(
+		ProviderType providerType,
+		String resourceId,
+		String nickname,
+		RoleType role,
+		Boolean acceptsMarketing
+	) {
 		Ingredient primaryIngredient = Ingredient.random();
 
 		OAuthMember member = new OAuthMember(
-			providerType, resourceId, nickname, primaryIngredient, new ArrayList<>(), role
+			providerType, resourceId, nickname, primaryIngredient, new ArrayList<>(), role, acceptsMarketing
 		);
 
 		member.initializeItem(primaryIngredient);
