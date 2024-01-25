@@ -2,9 +2,11 @@ package com.tteokguk.tteokguk.member.presentation;
 
 import com.tteokguk.tteokguk.global.security.annotation.AuthId;
 import com.tteokguk.tteokguk.member.application.UserInfoService;
+import com.tteokguk.tteokguk.member.application.dto.response.AppInitResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.UserInfoResponse;
 import com.tteokguk.tteokguk.member.presentation.dto.WebInitRequest;
+import com.tteokguk.tteokguk.member.presentation.dto.WebInitResponse;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +32,8 @@ public class UserInfoController {
     }
 
     @PostMapping("/initialization")
-    public ResponseEntity<Void> initialize(@AuthId Long id, @RequestBody WebInitRequest request) {
-        userInfoService.initialize(id, request.convert());
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<WebInitResponse> initialize(@AuthId Long id, @RequestBody WebInitRequest request) {
+        AppInitResponse response = userInfoService.initialize(id, request.convert());
+        return ResponseEntity.ok(WebInitResponse.of(response));
     }
 }
