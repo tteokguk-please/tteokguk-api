@@ -61,9 +61,10 @@ public class Tteokguk extends BaseEntity {
             String wish,
             List<Ingredient> ingredients,
             Member member,
-            boolean access,
-            boolean completion
+            boolean access
     ) {
+        member.validateSufficientIngredients(ingredients);
+        
         this.wish = wish;
         this.ingredients = ingredients;
         this.member = member;
@@ -78,8 +79,6 @@ public class Tteokguk extends BaseEntity {
             Member member,
             boolean access
     ) {
-        member.validateSufficientIngredients(ingredients);
-
         return Tteokguk.builder()
                 .wish(wish)
                 .ingredients(ingredients)
