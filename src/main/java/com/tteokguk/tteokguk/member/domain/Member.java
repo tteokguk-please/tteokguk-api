@@ -13,6 +13,8 @@ import java.util.List;
 import org.hibernate.annotations.OnDelete;
 
 import com.tteokguk.tteokguk.global.auditing.BaseEntity;
+import com.tteokguk.tteokguk.global.exception.BusinessException;
+import com.tteokguk.tteokguk.member.exception.MemberError;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
 
@@ -111,5 +113,11 @@ public class Member extends BaseEntity {
 
 	public void addTteokguk(Tteokguk tteokguk) {
 		this.tteokguks.add(tteokguk);
+	}
+
+	public void initialize(String nickname, Boolean acceptsMarketing) {
+		this.nickname = nickname;
+		this.acceptsMarketing = acceptsMarketing;
+		this.role = RoleType.ROLE_USER;
 	}
 }
