@@ -22,4 +22,8 @@ public class CustomRequestMatcher {
 	public RequestMatcher serverInfoEndpoints() {
 		return new AntPathRequestMatcher("/actuator/info");
 	}
+
+	public RequestMatcher tempUserEndpoints() {
+		return new AntPathRequestMatcher("/api/v1/user/initialization");
+	}
 }

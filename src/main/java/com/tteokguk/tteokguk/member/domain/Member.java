@@ -116,9 +116,6 @@ public class Member extends BaseEntity {
 	}
 
 	public void initialize(String nickname, Boolean acceptsMarketing) {
-		if (this.role == RoleType.ROLE_TEMP_USER)
-			throw new BusinessException(MemberError.NOT_TEMP_USER);
-
 		this.nickname = nickname;
 		this.acceptsMarketing = acceptsMarketing;
 		this.role = RoleType.ROLE_USER;
