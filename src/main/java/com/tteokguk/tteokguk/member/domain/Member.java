@@ -64,24 +64,30 @@ public class Member extends BaseEntity {
 	@Column(name = "role")
 	private RoleType role;
 
+	@Column(name = "accepts_marketing")
+	private Boolean acceptsMarketing;
+
 	protected Member(
 		Ingredient primaryIngredient,
 		String nickname,
-		List<Item> items
+		List<Item> items,
+		Boolean acceptsMarketing
 	) {
-		this(primaryIngredient, nickname, items, RoleType.ROLE_USER);
+		this(primaryIngredient, nickname, items, RoleType.ROLE_USER, acceptsMarketing);
 	}
 
 	protected Member(
 		Ingredient primaryIngredient,
 		String nickname,
 		List<Item> items,
-		RoleType role
+		RoleType role,
+		Boolean acceptsMarketing
 	) {
 		this.primaryIngredient = primaryIngredient;
 		this.nickname = nickname;
 		this.items = items;
 		this.role = role;
+		this.acceptsMarketing = acceptsMarketing;
 	}
 
 	// Initialize Item
