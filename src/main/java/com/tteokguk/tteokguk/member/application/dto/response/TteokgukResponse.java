@@ -10,6 +10,7 @@ public record TteokgukResponse(
         Long tteokgukId,
         String wish,
         boolean access,
-        List<Ingredient> tteokgukIngredients
+        boolean completion,
+        List<Ingredient> ingredients
 ) {
 }

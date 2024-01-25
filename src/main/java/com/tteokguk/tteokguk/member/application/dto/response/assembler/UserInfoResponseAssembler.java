@@ -55,7 +55,8 @@ public class UserInfoResponseAssembler {
                 .tteokgukId(tteokguk.getId())
                 .wish(tteokguk.getWish())
                 .access(tteokguk.isAccess())
-                .tteokgukIngredients(tteokguk.getTteokgukIngredients())
+                .completion(tteokguk.isCompletion())
+                .ingredients(tteokguk.getIngredients())
                 .build();
     }
 
