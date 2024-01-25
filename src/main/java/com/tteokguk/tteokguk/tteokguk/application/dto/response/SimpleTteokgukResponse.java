@@ -6,9 +6,8 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record CreateTteokgukResponse(
+public record SimpleTteokgukResponse(
         Long tteokgukId,
-        Long memberId,
         String wish,
         boolean access,
         boolean completion,

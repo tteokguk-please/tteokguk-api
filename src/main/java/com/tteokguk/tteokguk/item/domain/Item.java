@@ -1,6 +1,7 @@
-package com.tteokguk.tteokguk.member.domain;
+package com.tteokguk.tteokguk.item.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tteokguk.tteokguk.member.domain.Member;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 import jakarta.persistence.*;
 import lombok.Builder;

@@ -1,11 +1,11 @@
 package com.tteokguk.tteokguk.member.application.dto.response.assembler;
 
-import com.tteokguk.tteokguk.member.application.dto.response.ItemResponse;
+import com.tteokguk.tteokguk.item.application.dto.response.ItemResponse;
+import com.tteokguk.tteokguk.item.domain.Item;
 import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
-import com.tteokguk.tteokguk.member.application.dto.response.TteokgukResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.UserInfoResponse;
-import com.tteokguk.tteokguk.member.domain.Item;
 import com.tteokguk.tteokguk.member.domain.Member;
+import com.tteokguk.tteokguk.tteokguk.application.dto.response.SimpleTteokgukResponse;
 import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +17,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class UserInfoResponseAssembler {
 
     public static MyPageResponse transferToMyPageResponse(Member member) {
-        List<TteokgukResponse> tteokgukResponses = transferToTteokgukResponses(member.getTteokguks());
+        List<SimpleTteokgukResponse> tteokgukResponses = transferToTteokgukResponses(member.getTteokguks());
         List<ItemResponse> itemResponses = transferToItemResponses(member.getItems());
 
         return MyPageResponse.builder()
@@ -30,8 +30,8 @@ public class UserInfoResponseAssembler {
     }
 
     public static UserInfoResponse transferToUserInfoResponse(Member member) {
-        List<TteokgukResponse> tteokgukResponses = transferToTteokgukResponses(member.getTteokguks());
-        List<TteokgukResponse> accessibleTteokgukResponses =
+        List<SimpleTteokgukResponse> tteokgukResponses = transferToTteokgukResponses(member.getTteokguks());
+        List<SimpleTteokgukResponse> accessibleTteokgukResponses =
                 tteokgukResponses.stream()
                         .filter(tteokgukResponse -> tteokgukResponse.access())
                         .toList();
@@ -44,14 +44,14 @@ public class UserInfoResponseAssembler {
     }
 
     //== Tteokguk Response ==//
-    private static List<TteokgukResponse> transferToTteokgukResponses(List<Tteokguk> tteokguks) {
+    private static List<SimpleTteokgukResponse> transferToTteokgukResponses(List<Tteokguk> tteokguks) {
         return tteokguks.stream()
                 .map(UserInfoResponseAssembler::toTteokgukResponse)
                 .toList();
     }
 
-    private static TteokgukResponse toTteokgukResponse(Tteokguk tteokguk) {
-        return TteokgukResponse.builder()
+    private static SimpleTteokgukResponse toTteokgukResponse(Tteokguk tteokguk) {
+        return SimpleTteokgukResponse.builder()
                 .tteokgukId(tteokguk.getId())
                 .wish(tteokguk.getWish())
                 .access(tteokguk.isAccess())

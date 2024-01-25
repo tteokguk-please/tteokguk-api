@@ -4,7 +4,7 @@ import com.tteokguk.tteokguk.global.exception.BusinessException;
 import com.tteokguk.tteokguk.member.domain.Member;
 import com.tteokguk.tteokguk.member.infra.persistence.SimpleMemberRepository;
 import com.tteokguk.tteokguk.tteokguk.application.dto.request.CreateTteokgukRequest;
-import com.tteokguk.tteokguk.tteokguk.application.dto.response.CreateTteokgukResponse;
+import com.tteokguk.tteokguk.tteokguk.application.dto.response.TteokgukResponse;
 import com.tteokguk.tteokguk.tteokguk.application.dto.response.assembler.TteokgukResponseAssembler;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
@@ -25,7 +25,7 @@ public class TteokgukService {
     private final SimpleMemberRepository memberRepository;
     private final TteokgukRepository tteokgukRepository;
 
-    public CreateTteokgukResponse createTteokguk(
+    public TteokgukResponse createTteokguk(
             String userId,
             CreateTteokgukRequest request
     ) {

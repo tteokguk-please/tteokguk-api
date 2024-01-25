@@ -1,5 +1,6 @@
 package com.tteokguk.tteokguk.member.application.dto.response;
 
+import com.tteokguk.tteokguk.tteokguk.application.dto.response.SimpleTteokgukResponse;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 import lombok.Builder;
 
@@ -9,6 +10,6 @@ import java.util.List;
 public record UserInfoResponse(
         String nickname,
         Ingredient primaryIngredient,
-        List<TteokgukResponse> tteokguks
+        List<SimpleTteokgukResponse> tteokguks
 ) {
 }

@@ -1,4 +1,4 @@
-package com.tteokguk.tteokguk.member.application.dto.response;
+package com.tteokguk.tteokguk.item.application.dto.response;
 
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 import lombok.Builder;
