@@ -1,6 +1,7 @@
 package com.tteokguk.tteokguk.member.application;
 
 import com.tteokguk.tteokguk.global.exception.BusinessException;
+import com.tteokguk.tteokguk.member.application.dto.request.AppInitRequest;
 import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.UserInfoResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.assembler.UserInfoResponseAssembler;
@@ -31,5 +32,12 @@ public class UserInfoService {
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
         return UserInfoResponseAssembler.transferToUserInfoResponse(member);
+    }
+
+    public void initialize(Long memberId, AppInitRequest request) {
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
+
+        member.initialize(request.nickname(), request.acceptsMarketing());
     }
 }
