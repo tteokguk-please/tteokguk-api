@@ -12,6 +12,7 @@ public record TteokgukResponse(
         String wish,
         boolean access,
         boolean completion,
-        List<Ingredient> ingredients
+        List<Ingredient> ingredients,
+        List<Ingredient> usedIngredients
 ) {
 }

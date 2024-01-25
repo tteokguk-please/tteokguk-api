@@ -2,6 +2,7 @@ package com.tteokguk.tteokguk.tteokguk.presentation;
 
 import com.tteokguk.tteokguk.tteokguk.application.TteokgukService;
 import com.tteokguk.tteokguk.tteokguk.application.dto.request.CreateTteokgukRequest;
+import com.tteokguk.tteokguk.tteokguk.application.dto.request.IngredientRequest;
 import com.tteokguk.tteokguk.tteokguk.application.dto.response.TteokgukResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,15 @@ public class TteokgukController {
             @RequestBody @Validated CreateTteokgukRequest request
     ) {
         TteokgukResponse response = tteokgukService.createTteokguk(user.getUsername(), request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/use")
+    public ResponseEntity<TteokgukResponse> useIngredient(
+            @AuthenticationPrincipal UserDetails user,
+            @RequestBody @Validated IngredientRequest request
+    ) {
+        TteokgukResponse response = tteokgukService.useIngredients(user.getUsername(), request);
         return ResponseEntity.ok(response);
     }
 }

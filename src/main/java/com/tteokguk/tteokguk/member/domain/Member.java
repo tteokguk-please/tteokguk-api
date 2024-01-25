@@ -8,7 +8,6 @@ import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +18,6 @@ import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
-import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 @Entity
 @Getter
@@ -37,7 +35,6 @@ public class Member extends BaseEntity {
             mappedBy = "member",
             cascade = PERSIST,
             orphanRemoval = true)
-    @OnDelete(action = CASCADE)
     private final List<Tteokguk> tteokguks = new ArrayList<>();
 
     @Enumerated(STRING)
@@ -51,7 +48,6 @@ public class Member extends BaseEntity {
             mappedBy = "member",
             cascade = PERSIST,
             orphanRemoval = true)
-    @OnDelete(action = CASCADE)
     private List<Item> items = new ArrayList<>();
 
     @Enumerated(STRING)

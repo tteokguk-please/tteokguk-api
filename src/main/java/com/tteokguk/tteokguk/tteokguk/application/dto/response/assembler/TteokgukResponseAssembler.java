@@ -14,6 +14,7 @@ public class TteokgukResponseAssembler {
                 .memberId(tteokguk.getMember().getId())
                 .wish(tteokguk.getWish())
                 .ingredients(tteokguk.getIngredients())
+                .usedIngredients(tteokguk.getUsedIngredients())
                 .access(tteokguk.isAccess())
                 .completion(tteokguk.isCompletion())
                 .build();
