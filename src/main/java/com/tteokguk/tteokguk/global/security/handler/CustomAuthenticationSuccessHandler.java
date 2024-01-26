@@ -15,7 +15,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tteokguk.tteokguk.global.security.dto.WebLoginResponse;
 import com.tteokguk.tteokguk.global.security.jwt.Jwt;
 import com.tteokguk.tteokguk.global.security.jwt.JwtFactory;
+import com.tteokguk.tteokguk.global.security.jwt.JwtService;
 import com.tteokguk.tteokguk.global.security.model.PrincipalDetails;
+import com.tteokguk.tteokguk.global.utils.LocalDateTimeUtils;
+import com.tteokguk.tteokguk.member.application.RefreshTokenService;
 import com.tteokguk.tteokguk.member.domain.Member;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
 	private final ObjectMapper om;
-	private final JwtFactory jwtFactory;
+	private final JwtService jwtService;
 
 	@Override
 	public void onAuthenticationSuccess(
@@ -37,7 +40,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		HttpServletResponse response,
 		Authentication authentication
 	) throws IOException {
-		PrincipalDetails details = (PrincipalDetails) authentication.getPrincipal();
+		PrincipalDetails details = (PrincipalDetails)authentication.getPrincipal();
 		writeResponseBody(response, getJsonResponse(details.getMember()));
 		response.setContentType(MimeTypeUtils.APPLICATION_JSON_VALUE);
 	}
@@ -52,24 +55,12 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
 		Long now = System.currentTimeMillis();
-		String accessToken = createAccessToken(member, now);
-		String refreshToken = createRefreshToken(now);
+		String accessToken = jwtService.getAccessToken(member, now).getEncodedBody();
+		String refreshToken = jwtService.getRefreshToken(member, now).getEncodedBody();
 
 		return om.writerWithDefaultPrettyPrinter()
 			.writeValueAsString(
 				new WebLoginResponse(member.getId(), accessToken, refreshToken)
 			);
-	}
-
-	private String createAccessToken(Member member, Long now) {
-		Long expiryOfAccessToken = jwtFactory.getExpiryOfAccessToken(now);
-		Jwt accessToken = jwtFactory.createAuthToken(String.valueOf(member.getId()), member.getRole().name(), new Date(expiryOfAccessToken));
-		return accessToken.getEncodedBody();
-	}
-
-	private String createRefreshToken(Long now) {
-		Long expiryOfRefreshToken = jwtFactory.getExpiryOfRefreshToken(now);
-		Jwt accessToken = jwtFactory.createAuthToken(null, new Date(expiryOfRefreshToken));
-		return accessToken.getEncodedBody();
 	}
 }
