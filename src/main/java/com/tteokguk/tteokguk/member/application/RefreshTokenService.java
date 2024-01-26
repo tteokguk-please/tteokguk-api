@@ -1,15 +1,10 @@
 package com.tteokguk.tteokguk.member.application;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
 import org.springframework.stereotype.Service;
 
 import com.tteokguk.tteokguk.global.exception.BusinessException;
-import com.tteokguk.tteokguk.global.security.jwt.Jwt;
-import com.tteokguk.tteokguk.global.security.jwt.JwtFactory;
-import com.tteokguk.tteokguk.global.utils.LocalDateTimeUtils;
-import com.tteokguk.tteokguk.member.domain.Member;
+import com.tteokguk.tteokguk.global.security.jwt.JwtService;
+import com.tteokguk.tteokguk.member.application.dto.response.AppIssuedTokensResponse;
 import com.tteokguk.tteokguk.member.domain.RefreshToken;
 import com.tteokguk.tteokguk.member.exception.AuthError;
 import com.tteokguk.tteokguk.member.infra.persistence.RefreshTokenRepository;
@@ -23,32 +18,23 @@ import lombok.RequiredArgsConstructor;
 public class RefreshTokenService {
 
 	private final RefreshTokenRepository refreshTokenRepository;
-	private final JwtFactory jwtFactory;
+	private final JwtService jwtService;
 
-	public void save(String token, Member member, LocalDateTime expiredDateTime) {
-		RefreshToken entity = refreshTokenRepository.findByMember(member)
-			.orElseGet(() -> new RefreshToken(member, token, expiredDateTime));
-		entity.update(token, expiredDateTime);
-		refreshTokenRepository.save(entity);
-	}
-
-	public String issueRefreshToken(String refreshToken) {
+	public AppIssuedTokensResponse issueTokens(String refreshToken) {
 		RefreshToken entity = refreshTokenRepository.findByToken(refreshToken)
 			.orElseThrow(() -> new BusinessException(AuthError.UNSUPPORTED_JWT_TOKEN));
 
-		Long expiry = jwtFactory.getExpiryOfRefreshToken(System.currentTimeMillis());
-		Jwt newToken = jwtFactory.createAuthToken(null, new Date(expiry));
-		save(newToken.getEncodedBody(), entity.getMember(), LocalDateTimeUtils.convertBy(expiry));
-		return newToken.getEncodedBody();
+		long currentTimeMillis = System.currentTimeMillis();
+		String issuedAccessToken = issueAccessToken(entity, currentTimeMillis);
+		String issuedRefreshToken = issueRefreshToken(entity, currentTimeMillis);
+		return new AppIssuedTokensResponse(entity.getMember().getId(), issuedAccessToken, issuedRefreshToken);
 	}
 
-	public String issueAccessToken(String refreshToken) {
-		RefreshToken entity = refreshTokenRepository.findByToken(refreshToken)
-			.orElseThrow(() -> new BusinessException(AuthError.UNSUPPORTED_JWT_TOKEN));
+	public String issueRefreshToken(RefreshToken entity, Long currentTimeMillis) {
+		return jwtService.getRefreshToken(entity.getMember(), currentTimeMillis).getEncodedBody();
+	}
 
-		Member member = entity.getMember();
-		Long expiry = jwtFactory.getExpiryOfAccessToken(System.currentTimeMillis());
-		return jwtFactory.createAuthToken(String.valueOf(member.getId()), member.getRole().name(), new Date(expiry))
-			.getEncodedBody();
+	public String issueAccessToken(RefreshToken entity, Long currentTimeMillis) {
+		return jwtService.getAccessToken(entity.getMember(), currentTimeMillis).getEncodedBody();
 	}
 }
