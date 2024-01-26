@@ -60,11 +60,15 @@ public class Item {
                 .build();
     }
 
-    public synchronized void use() {
+    public synchronized void minus() {
         this.stockQuantity--;
     }
 
-    public synchronized void increaseStockQuantity(int amount) {
-        this.stockQuantity += amount;
+    public synchronized void plus() {
+        this.stockQuantity++;
+    }
+
+    public synchronized void addStockQuantity(int amount) {
+        this.stockQuantity = stockQuantity + amount;
     }
 }

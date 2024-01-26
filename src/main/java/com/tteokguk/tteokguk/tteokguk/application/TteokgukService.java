@@ -28,10 +28,10 @@ public class TteokgukService {
     private final TteokgukRepository tteokgukRepository;
 
     public TteokgukResponse createTteokguk(
-            String userId,
+            Long id,
             CreateTteokgukRequest request
     ) {
-        Member member = memberRepository.findById(Long.parseLong(userId))
+        Member member = memberRepository.findById(id)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
         List<Ingredient> ingredients = Ingredient.toIngredients(request.ingredients());
@@ -44,10 +44,10 @@ public class TteokgukService {
     }
 
     public TteokgukResponse useIngredients(
-            String userId,
+            Long id,
             IngredientRequest request
     ) {
-        Member member = memberRepository.findById(Long.parseLong(userId))
+        Member member = memberRepository.findById(id)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
         Tteokguk tteokguk = member.getTteokguks()

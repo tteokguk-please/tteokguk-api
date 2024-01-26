@@ -9,8 +9,6 @@ import com.tteokguk.tteokguk.member.presentation.dto.WebInitRequest;
 import com.tteokguk.tteokguk.member.presentation.dto.WebInitResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,19 +19,31 @@ public class UserInfoController {
     private final UserInfoService userInfoService;
 
     @GetMapping("/myPage")
-    public ResponseEntity<MyPageResponse> getMyPageInfo(@AuthenticationPrincipal UserDetails user) {
-        MyPageResponse myPageInfo = userInfoService.getMyPageInfo(Long.parseLong(user.getUsername()));
+    public ResponseEntity<MyPageResponse> getMyPageInfo(@AuthId Long id) {
+        MyPageResponse myPageInfo = userInfoService.getMyPageInfo(id);
         return ResponseEntity.ok(myPageInfo);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserInfoResponse> getUserInfo(@PathVariable Long userId) {
+    public ResponseEntity<UserInfoResponse> getUserInfo(
+            @AuthId Long id,
+            @PathVariable Long userId
+    ) {
         UserInfoResponse userInfo = userInfoService.getUserInfo(userId);
         return ResponseEntity.ok(userInfo);
     }
 
+    @GetMapping("/random")
+    public ResponseEntity<UserInfoResponse> getRandomUserInfo(@AuthId Long id) {
+        UserInfoResponse userInfo = userInfoService.getRandomUserInfo();
+        return ResponseEntity.ok(userInfo);
+    }
+
     @PostMapping("/initialization")
-    public ResponseEntity<WebInitResponse> initialize(@AuthId Long id, @RequestBody WebInitRequest request) {
+    public ResponseEntity<WebInitResponse> initialize(
+            @AuthId Long id,
+            @RequestBody WebInitRequest request
+    ) {
         AppInitResponse response = userInfoService.initialize(id, request.convert());
         return ResponseEntity.ok(WebInitResponse.of(response));
     }
