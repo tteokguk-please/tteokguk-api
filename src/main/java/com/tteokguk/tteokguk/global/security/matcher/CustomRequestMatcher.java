@@ -26,4 +26,8 @@ public class CustomRequestMatcher {
 	public RequestMatcher tempUserEndpoints() {
 		return new AntPathRequestMatcher("/api/v1/user/initialization");
 	}
+
+	public RequestMatcher errorEndpoints() {
+		return new AntPathRequestMatcher("/error");
+	}
 }

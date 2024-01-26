@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tteokguk.tteokguk.member.application.AuthService;
 import com.tteokguk.tteokguk.member.application.RefreshTokenService;
 import com.tteokguk.tteokguk.member.application.dto.response.AppJoinResponse;
+import com.tteokguk.tteokguk.member.presentation.dto.WebCheckEmailRequest;
+import com.tteokguk.tteokguk.member.presentation.dto.WebCheckNicknameRequest;
 import com.tteokguk.tteokguk.member.presentation.dto.WebExistedResourceResponse;
 import com.tteokguk.tteokguk.member.presentation.dto.WebIssuedTokensRequest;
 import com.tteokguk.tteokguk.member.presentation.dto.WebIssuedTokensResponse;
@@ -40,14 +42,14 @@ public class AuthController {
 	}
 
 	@GetMapping("/check-email/{email}")
-	public ResponseEntity<WebExistedResourceResponse> checkEmail(@PathVariable String email) {
-		boolean isExist = authService.existsByEmail(email);
+	public ResponseEntity<WebExistedResourceResponse> checkEmail(@Validated WebCheckEmailRequest request) {
+		boolean isExist = authService.existsByEmail(request.email());
 		return ResponseEntity.ok(new WebExistedResourceResponse(isExist));
 	}
 
 	@GetMapping("/check-nickname/{nickname}")
-	public ResponseEntity<WebExistedResourceResponse> checkNickname(@PathVariable String nickname) {
-		boolean isExist = authService.existsByNickname(nickname);
+	public ResponseEntity<WebExistedResourceResponse> checkNickname(@Validated WebCheckNicknameRequest request) {
+		boolean isExist = authService.existsByNickname(request.nickname());
 		return ResponseEntity.ok(new WebExistedResourceResponse(isExist));
 	}
 

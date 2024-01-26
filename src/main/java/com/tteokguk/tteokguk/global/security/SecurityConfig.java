@@ -40,7 +40,8 @@ public class SecurityConfig {
 		http.securityMatchers(matcher -> matcher.requestMatchers(
 				customRequestMatcher.authEndpoints(),
 				customRequestMatcher.healthEndpoints(),
-				customRequestMatcher.serverInfoEndpoints()
+				customRequestMatcher.serverInfoEndpoints(),
+				customRequestMatcher.errorEndpoints()
 			))
 			.authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
 			.addFilterBefore(apiExceptionHandlingFilter, UsernamePasswordAuthenticationFilter.class);
