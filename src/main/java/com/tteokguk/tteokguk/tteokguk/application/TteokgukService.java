@@ -43,6 +43,21 @@ public class TteokgukService {
         return TteokgukResponseAssembler.toTteokgukResponse(savedTteokguk);
     }
 
+    public void deleteTteokguk(
+            Long id,
+            Long tteokgukId
+    ) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
+
+        Tteokguk tteokguk = member.getTteokguks().stream()
+                .filter(t -> t.getId().equals(tteokgukId))
+                .findFirst()
+                .orElseThrow(() -> BusinessException.of(NOT_OWNER));
+
+        tteokguk.delete();
+    }
+
     public TteokgukResponse useIngredients(
             Long id,
             IngredientRequest request
