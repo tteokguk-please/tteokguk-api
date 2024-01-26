@@ -9,8 +9,6 @@ import com.tteokguk.tteokguk.member.presentation.dto.WebInitRequest;
 import com.tteokguk.tteokguk.member.presentation.dto.WebInitResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,8 +19,8 @@ public class UserInfoController {
     private final UserInfoService userInfoService;
 
     @GetMapping("/myPage")
-    public ResponseEntity<MyPageResponse> getMyPageInfo(@AuthenticationPrincipal UserDetails user) {
-        MyPageResponse myPageInfo = userInfoService.getMyPageInfo(Long.parseLong(user.getUsername()));
+    public ResponseEntity<MyPageResponse> getMyPageInfo(@AuthId Long id) {
+        MyPageResponse myPageInfo = userInfoService.getMyPageInfo(id);
         return ResponseEntity.ok(myPageInfo);
     }
 
@@ -33,7 +31,10 @@ public class UserInfoController {
     }
 
     @PostMapping("/initialization")
-    public ResponseEntity<WebInitResponse> initialize(@AuthId Long id, @RequestBody WebInitRequest request) {
+    public ResponseEntity<WebInitResponse> initialize(
+            @AuthId Long id,
+            @RequestBody WebInitRequest request
+    ) {
         AppInitResponse response = userInfoService.initialize(id, request.convert());
         return ResponseEntity.ok(WebInitResponse.of(response));
     }

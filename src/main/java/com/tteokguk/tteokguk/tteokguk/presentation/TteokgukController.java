@@ -1,5 +1,6 @@
 package com.tteokguk.tteokguk.tteokguk.presentation;
 
+import com.tteokguk.tteokguk.global.security.annotation.AuthId;
 import com.tteokguk.tteokguk.tteokguk.application.TteokgukService;
 import com.tteokguk.tteokguk.tteokguk.application.dto.request.CreateTteokgukRequest;
 import com.tteokguk.tteokguk.tteokguk.application.dto.request.IngredientRequest;
@@ -7,8 +8,6 @@ import com.tteokguk.tteokguk.tteokguk.application.dto.response.TteokgukResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,19 +24,19 @@ public class TteokgukController {
 
     @PostMapping
     public ResponseEntity<TteokgukResponse> createTteokguk(
-            @AuthenticationPrincipal UserDetails user,
+            @AuthId Long id,
             @RequestBody @Validated CreateTteokgukRequest request
     ) {
-        TteokgukResponse response = tteokgukService.createTteokguk(user.getUsername(), request);
+        TteokgukResponse response = tteokgukService.createTteokguk(id, request);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/use")
     public ResponseEntity<TteokgukResponse> useIngredient(
-            @AuthenticationPrincipal UserDetails user,
+            @AuthId Long id,
             @RequestBody @Validated IngredientRequest request
     ) {
-        TteokgukResponse response = tteokgukService.useIngredients(user.getUsername(), request);
+        TteokgukResponse response = tteokgukService.useIngredients(id, request);
         return ResponseEntity.ok(response);
     }
 }
