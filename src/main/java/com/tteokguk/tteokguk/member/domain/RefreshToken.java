@@ -30,8 +30,6 @@ public class RefreshToken {
 	@Column(name = "rt_expired_datetime", nullable = false)
 	private LocalDateTime expiredDateTime;
 
-
-	@Builder
 	public RefreshToken(Long memberId, String token, LocalDateTime expiredDateTime) {
 		this.memberId = memberId;
 		this.token = token;
