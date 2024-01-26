@@ -1,4 +1,4 @@
-package com.tteokguk.tteokguk.member.application.dto.response;
+package com.tteokguk.tteokguk.tteokguk.application.dto.response;
 
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 import lombok.Builder;
@@ -6,10 +6,11 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record TteokgukResponse(
+public record SimpleTteokgukResponse(
         Long tteokgukId,
         String wish,
         boolean access,
-        List<Ingredient> tteokgukIngredients
+        boolean completion,
+        List<Ingredient> ingredients
 ) {
 }

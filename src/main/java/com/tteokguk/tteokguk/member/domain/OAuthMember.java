@@ -5,6 +5,7 @@ import static lombok.AccessLevel.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tteokguk.tteokguk.item.domain.Item;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 
 import jakarta.persistence.Column;
@@ -41,16 +42,16 @@ public class OAuthMember extends Member {
 	}
 
 	public static OAuthMember of(
-		ProviderType providerType,
-		String resourceId,
-		String nickname,
-		RoleType role,
-		Boolean acceptsMarketing
+			ProviderType providerType,
+			String resourceId,
+			String nickname,
+			RoleType role,
+			Boolean acceptsMarketing
 	) {
 		Ingredient primaryIngredient = Ingredient.random();
 
 		OAuthMember member = new OAuthMember(
-			providerType, resourceId, nickname, primaryIngredient, new ArrayList<>(), role, acceptsMarketing
+				providerType, resourceId, nickname, primaryIngredient, new ArrayList<>(), role, acceptsMarketing
 		);
 
 		member.initializeItem(primaryIngredient);

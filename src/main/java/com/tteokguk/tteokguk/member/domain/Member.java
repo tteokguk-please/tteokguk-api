@@ -1,20 +1,18 @@
 package com.tteokguk.tteokguk.member.domain;
 
+import static com.tteokguk.tteokguk.item.exception.ItemError.INSUFFICIENT_INGREDIENTS;
 import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.EnumType.*;
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
-import static org.hibernate.annotations.OnDeleteAction.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hibernate.annotations.OnDelete;
-
 import com.tteokguk.tteokguk.global.auditing.BaseEntity;
 import com.tteokguk.tteokguk.global.exception.BusinessException;
-import com.tteokguk.tteokguk.member.exception.MemberError;
+import com.tteokguk.tteokguk.item.domain.Item;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
 
@@ -45,7 +43,6 @@ public class Member extends BaseEntity {
 		mappedBy = "member",
 		cascade = PERSIST,
 		orphanRemoval = true)
-	@OnDelete(action = CASCADE)
 	private final List<Tteokguk> tteokguks = new ArrayList<>();
 
 	@Enumerated(STRING)
@@ -59,7 +56,6 @@ public class Member extends BaseEntity {
 		mappedBy = "member",
 		cascade = PERSIST,
 		orphanRemoval = true)
-	@OnDelete(action = CASCADE)
 	private List<Item> items = new ArrayList<>();
 
 	@Enumerated(STRING)
@@ -109,6 +105,26 @@ public class Member extends BaseEntity {
 
 	private boolean isNotPrimaryIngredient(Object ingredient) {
 		return !primaryIngredient.equals(ingredient);
+	}
+
+	public void validateSufficientIngredients(List<Ingredient> requiredIngredients) {
+		if (!hasSufficientIngredients(requiredIngredients)) {
+			throw BusinessException.of(INSUFFICIENT_INGREDIENTS);
+		}
+	}
+
+	private boolean hasSufficientIngredients(List<Ingredient> requiredIngredients) {
+		return requiredIngredients.stream()
+				.flatMap(ingredient -> items.stream()
+						.filter(item -> item.getIngredient().equals(ingredient))
+						.map(Item::getStockQuantity))
+				.allMatch(quantity -> quantity >= 1);
+	}
+
+	public void useIngredients(List<Ingredient> ingredients) {
+		items.stream()
+				.filter(item -> ingredients.contains(item.getIngredient()))
+				.forEach(Item::use);
 	}
 
 	public void addTteokguk(Tteokguk tteokguk) {
