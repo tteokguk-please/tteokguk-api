@@ -25,8 +25,17 @@ public class UserInfoController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserInfoResponse> getUserInfo(@PathVariable Long userId) {
+    public ResponseEntity<UserInfoResponse> getUserInfo(
+            @AuthId Long id,
+            @PathVariable Long userId
+    ) {
         UserInfoResponse userInfo = userInfoService.getUserInfo(userId);
+        return ResponseEntity.ok(userInfo);
+    }
+
+    @GetMapping("/random")
+    public ResponseEntity<UserInfoResponse> getRandomUserInfo(@AuthId Long id) {
+        UserInfoResponse userInfo = userInfoService.getRandomUserInfo();
         return ResponseEntity.ok(userInfo);
     }
 
