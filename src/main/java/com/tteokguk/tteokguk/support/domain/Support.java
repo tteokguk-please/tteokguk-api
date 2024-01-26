@@ -1,5 +1,6 @@
 package com.tteokguk.tteokguk.support.domain;
 
+import com.tteokguk.tteokguk.global.exception.BusinessException;
 import com.tteokguk.tteokguk.member.domain.Member;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
@@ -9,8 +10,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Random;
 
-import static com.tteokguk.tteokguk.tteokguk.constants.Ingredient.TOFU;
+import static com.tteokguk.tteokguk.support.exception.SupportError.CANT_SEND_TO_OWN_SELF;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -68,16 +70,23 @@ public class Support {
         supportedTteokguk.validateAlreadyUsedIngredients(List.of(supportIngredient));
         supportedTteokguk.validateHasAppropriateIngredients(List.of(supportIngredient));
 
+        if (sender.equals(receiver)) {
+            throw BusinessException.of(CANT_SEND_TO_OWN_SELF);
+        }
+
+        Random random = new Random();
+
         this.sender = sender;
         this.receiver = receiver;
         this.supportedTteokguk = supportedTteokguk;
         this.supportIngredient = supportIngredient;
         this.access = access;
         this.message = message;
-        this.rewardIngredient = TOFU;
-        this.rewardQuantity = 3;
+        this.rewardIngredient = Ingredient.random();
+        this.rewardQuantity = random.nextInt(1, 7);
 
-        // 지원한 유저의 재료 감산
+        sender.sendIngredient(receiver, supportIngredient);
+        sender.giftToSender(rewardIngredient, rewardQuantity);
     }
 
     public static Support of(

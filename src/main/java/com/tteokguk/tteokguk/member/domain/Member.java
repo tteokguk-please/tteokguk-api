@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.tteokguk.tteokguk.item.exception.ItemError.INSUFFICIENT_INGREDIENTS;
-import static com.tteokguk.tteokguk.item.exception.ItemError.UNNECESSARY_INGREDIENTS_REQUESTED;
+import static com.tteokguk.tteokguk.item.exception.ItemError.UNKNOWN_INGREDIENT;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -117,15 +117,33 @@ public class Member extends BaseEntity {
     public synchronized void useIngredients(List<Ingredient> ingredients) {
         items.stream()
                 .filter(item -> ingredients.contains(item.getIngredient()))
-                .forEach(Item::use);
+                .forEach(Item::minus);
     }
 
-    public synchronized void addIngredient(Ingredient ingredient) {
-        items.stream()
+    public synchronized void sendIngredient(
+            Member receiver,
+            Ingredient ingredient
+    ) {
+        Item senderItem = findItemByIngredient(this, ingredient);
+        Item receiverItem = findItemByIngredient(receiver, ingredient);
+
+        senderItem.minus();
+        receiverItem.plus();
+    }
+
+    public synchronized void giftToSender(
+            Ingredient ingredient,
+            int amount
+    ) {
+        Item item = findItemByIngredient(this, ingredient);
+        item.addStockQuantity(amount);
+    }
+
+    private Item findItemByIngredient(Member member, Ingredient ingredient) {
+        return member.getItems().stream()
                 .filter(item -> item.getIngredient().equals(ingredient))
                 .findFirst()
-                .orElseThrow(() -> BusinessException.of(UNNECESSARY_INGREDIENTS_REQUESTED))
-                .increaseStockQuantity();
+                .orElseThrow(() -> BusinessException.of(UNKNOWN_INGREDIENT));
     }
 
     public void addTteokguk(Tteokguk tteokguk) {
