@@ -8,6 +8,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+import static com.tteokguk.tteokguk.tteokguk.constants.Ingredient.TOFU;
+import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -34,9 +38,17 @@ public class Support {
     @JoinColumn(name = "supported_tteokguk_id")
     private Tteokguk supportedTteokguk;
 
+    @Enumerated(STRING)
+    @Column(name = "support_ingredient")
+    private Ingredient supportIngredient;
+
     @Column(name = "access")
     private boolean access;
 
+    @Column(name = "message")
+    private String message;
+
+    @Enumerated(STRING)
     @Column(name = "reward_ingredient")
     private Ingredient rewardIngredient;
 
@@ -48,27 +60,41 @@ public class Support {
             Member sender,
             Member receiver,
             Tteokguk supportedTteokguk,
-            boolean access
+            Ingredient supportIngredient,
+            boolean access,
+            String message
     ) {
+        sender.validateHasSufficientIngredients(List.of(supportIngredient));
+        supportedTteokguk.validateAlreadyUsedIngredients(List.of(supportIngredient));
+        supportedTteokguk.validateHasAppropriateIngredients(List.of(supportIngredient));
+
         this.sender = sender;
         this.receiver = receiver;
         this.supportedTteokguk = supportedTteokguk;
+        this.supportIngredient = supportIngredient;
         this.access = access;
-        this.rewardIngredient = Ingredient.TOFU; //todo change random
-        this.rewardQuantity = 3; //todo change random
+        this.message = message;
+        this.rewardIngredient = TOFU;
+        this.rewardQuantity = 3;
+
+        // 지원한 유저의 재료 감산
     }
 
-    public Support of(
+    public static Support of(
             Member sender,
             Member receiver,
             Tteokguk supportedTteokguk,
-            boolean access
+            Ingredient supportIngredient,
+            boolean access,
+            String message
     ) {
         return Support.builder()
                 .sender(sender)
                 .receiver(receiver)
                 .supportedTteokguk(supportedTteokguk)
+                .supportIngredient(supportIngredient)
                 .access(access)
+                .message(message)
                 .build();
     }
 }

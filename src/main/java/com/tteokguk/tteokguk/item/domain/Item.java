@@ -64,7 +64,7 @@ public class Item {
         this.stockQuantity--;
     }
 
-    public synchronized void increaseStockQuantity(int amount) {
-        this.stockQuantity += amount;
+    public synchronized void increaseStockQuantity() {
+        this.stockQuantity++;
     }
 }

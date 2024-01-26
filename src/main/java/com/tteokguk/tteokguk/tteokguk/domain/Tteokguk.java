@@ -106,29 +106,38 @@ public class Tteokguk extends BaseEntity {
     }
 
     public void useIngredients(List<Ingredient> desiredIngredients) {
-        member.validateSufficientIngredients(desiredIngredients);
-        if (!hasAppropriateIngredients(desiredIngredients)) {
-            throw BusinessException.of(UNNECESSARY_INGREDIENTS_REQUESTED);
-        } else if (alreadyUsedIngredients(desiredIngredients)) {
-            throw BusinessException.of(ALREADY_USED_INGREDIENTS);
-        }
+        member.validateHasSufficientIngredients(desiredIngredients);
+        validateHasAppropriateIngredients(desiredIngredients);
+        validateAlreadyUsedIngredients(desiredIngredients);
 
         usedIngredients.addAll(desiredIngredients);
         member.useIngredients(desiredIngredients);
-        
+
         if (usedIngredients.size() == 5) {
             completion = true;
         }
     }
 
-    private boolean hasAppropriateIngredients(List<Ingredient> desiredIngredients) {
+    public void validateHasAppropriateIngredients(List<Ingredient> desiredIngredients) {
+        if (!hasAppropriateIngredients(desiredIngredients)) {
+            throw BusinessException.of(UNNECESSARY_INGREDIENTS_REQUESTED);
+        }
+    }
+
+    public void validateAlreadyUsedIngredients(List<Ingredient> desiredIngredients) {
+        if (alreadyUsedIngredients(desiredIngredients)) {
+            throw BusinessException.of(ALREADY_USED_INGREDIENTS);
+        }
+    }
+
+    public boolean hasAppropriateIngredients(List<Ingredient> desiredIngredients) {
         return new HashSet<>(ingredients).containsAll(desiredIngredients)
                 && desiredIngredients.size() <= 5;
     }
 
     private boolean alreadyUsedIngredients(List<Ingredient> desiredIngredients) {
         return usedIngredients.stream()
-                .anyMatch(i -> desiredIngredients.contains(i));
+                .anyMatch(desiredIngredients::contains);
     }
 
     private void validateIngredientConstraint(List<Ingredient> ingredients) {
