@@ -20,6 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.tteokguk.tteokguk.global.exception.ApiExceptionHandlingFilter;
 import com.tteokguk.tteokguk.global.security.filter.CustomAuthorizationFilter;
+import com.tteokguk.tteokguk.global.security.matcher.CustomRequestMatcher;
 import com.tteokguk.tteokguk.global.security.provider.CustomAuthenticationProvider;
 
 import lombok.RequiredArgsConstructor;
@@ -31,11 +32,16 @@ public class SecurityConfig {
 
 	private final ApiExceptionHandlingFilter apiExceptionHandlingFilter;
 	private final CustomAuthorizationFilter customAuthorizationFilter;
+	private final CustomRequestMatcher customRequestMatcher;
 
 	@Bean
 	@Order(0)
 	public SecurityFilterChain authFilterChain(HttpSecurity http) throws Exception {
-		http.securityMatchers(matcher -> matcher.requestMatchers("/api/v1/auth/**", "/api/v1/oauth/**"))
+		http.securityMatchers(matcher -> matcher.requestMatchers(
+				customRequestMatcher.authEndpoints(),
+				customRequestMatcher.healthEndpoints(),
+				customRequestMatcher.serverInfoEndpoints()
+			))
 			.authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
 			.addFilterBefore(apiExceptionHandlingFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -45,7 +51,9 @@ public class SecurityConfig {
 	@Bean
 	@Order(1)
 	public SecurityFilterChain anyRequestFilterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests(auth -> auth.anyRequest().hasRole("USER"))
+		http.authorizeHttpRequests(auth -> auth
+				.requestMatchers(customRequestMatcher.tempUserEndpoints()).hasRole("TEMP_USER")
+				.anyRequest().hasRole("USER"))
 			.addFilterAfter(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(apiExceptionHandlingFilter, UsernamePasswordAuthenticationFilter.class);
 

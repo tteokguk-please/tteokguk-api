@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tteokguk.tteokguk.global.exception.BusinessException;
 import com.tteokguk.tteokguk.member.application.OAuthService;
 import com.tteokguk.tteokguk.member.application.dto.response.AppOAuthLoginResponse;
 import com.tteokguk.tteokguk.member.domain.ProviderType;
+import com.tteokguk.tteokguk.member.exception.AuthError;
 import com.tteokguk.tteokguk.member.presentation.dto.WebOAuthLoginRequest;
 import com.tteokguk.tteokguk.member.presentation.dto.WebOAuthLoginResponse;
 
@@ -38,7 +40,9 @@ public class OAuthController {
 
 		String redirectUrl = Arrays.stream(request.getCookies())
 			.filter(cookie -> "redirect_url".equals(cookie.getName()))
-			.toList().get(0).getValue();
+			.findFirst()
+			.orElseThrow(() -> new BusinessException(AuthError.EMPTY_VALUE_IN_COOKIE))
+			.getValue();
 
 		final String url = String.format("%s?id=%s&accessToken=%s&refreshToken=%s&isInitialized=%s",
 			redirectUrl, response.id(), response.accessToken(), response.refreshToken(), response.isInitialized());

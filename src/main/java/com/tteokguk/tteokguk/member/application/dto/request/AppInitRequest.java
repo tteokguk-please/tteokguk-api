@@ -1,8 +1,6 @@
 package com.tteokguk.tteokguk.member.application.dto.request;
 
-public record AppJoinRequest(
-	String email,
-	String password,
+public record AppInitRequest(
 	String nickname,
 	Boolean acceptsMarketing
 ) {
