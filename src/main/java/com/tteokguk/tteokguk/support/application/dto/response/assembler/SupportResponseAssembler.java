@@ -13,6 +13,7 @@ public class SupportResponseAssembler {
                 .id(support.getId())
                 .rewardIngredient(support.getRewardIngredient())
                 .rewardQuantity(support.getRewardQuantity())
+                .access(support.isAccess())
                 .build();
     }
 }

@@ -1,16 +1,18 @@
 package com.tteokguk.tteokguk.support.presentation;
 
+import com.tteokguk.tteokguk.global.dto.response.ApiPageResponse;
 import com.tteokguk.tteokguk.global.security.annotation.AuthId;
 import com.tteokguk.tteokguk.support.application.SupportService;
 import com.tteokguk.tteokguk.support.application.dto.SupportRequest;
+import com.tteokguk.tteokguk.support.application.dto.request.SupportPageableRequest;
+import com.tteokguk.tteokguk.support.application.dto.response.ReceivedIngredientResponse;
 import com.tteokguk.tteokguk.support.application.dto.response.SupportResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,5 +28,15 @@ public class SupportController {
     ) {
         SupportResponse response = supportService.doSupport(id, request);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/ingredient")
+    public ResponseEntity<ApiPageResponse<ReceivedIngredientResponse>> getReceivedIngredientResponse(
+            @AuthId Long id,
+            @Valid SupportPageableRequest request
+    ) {
+        Page<ReceivedIngredientResponse> pagedResponse = supportService.getReceivedIngredientResponse(id, request);
+        ApiPageResponse<ReceivedIngredientResponse> pagedApiResponse = ApiPageResponse.of(pagedResponse);
+        return ResponseEntity.ok(pagedApiResponse);
     }
 }
