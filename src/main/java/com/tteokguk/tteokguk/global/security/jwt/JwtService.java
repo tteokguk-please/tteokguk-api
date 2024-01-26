@@ -39,4 +39,8 @@ public class JwtService {
 		refreshTokenRepository.save(entity);
 		return refreshToken;
 	}
+
+	public void validate(String encodedBody) {
+		jwtFactory.convertAuthToken(encodedBody).getTokenClaims();
+	}
 }

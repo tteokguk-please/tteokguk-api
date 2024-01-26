@@ -21,8 +21,14 @@ public class RefreshTokenService {
 	private final JwtService jwtService;
 
 	public AppIssuedTokensResponse issueTokens(String refreshToken) {
+		try {
+			jwtService.validate(refreshToken);
+		} catch (BusinessException e) {
+			throw new BusinessException(AuthError.UNUSABLE_TOKEN);
+		}
+
 		RefreshToken entity = refreshTokenRepository.findByToken(refreshToken)
-			.orElseThrow(() -> new BusinessException(AuthError.UNSUPPORTED_JWT_TOKEN));
+			.orElseThrow(() -> new BusinessException(AuthError.UNUSABLE_TOKEN));
 
 		long currentTimeMillis = System.currentTimeMillis();
 		String issuedAccessToken = issueAccessToken(entity, currentTimeMillis);
