@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.tteokguk.tteokguk.global.security.jwt.Jwt;
 import com.tteokguk.tteokguk.global.security.jwt.JwtFactory;
+import com.tteokguk.tteokguk.global.security.jwt.JwtService;
 import com.tteokguk.tteokguk.member.application.dto.response.AppOAuthLoginResponse;
 import com.tteokguk.tteokguk.member.domain.OAuthMember;
 import com.tteokguk.tteokguk.member.domain.ProviderType;
@@ -27,7 +28,7 @@ public class OAuthService {
 
 	private final OAuthHttpRequestHelper oAuthHttpRequestHelper;
 	private final OAuthMemberRepository oAuthMemberRepository;
-	private final JwtFactory jwtFactory;
+	private final JwtService jwtService;
 
 	public AppOAuthLoginResponse getByAuthorizationCode(ProviderType providerType, String code) {
 		TokenResponse tokenResponse = oAuthHttpRequestHelper.exchangeToken(providerType, code);
@@ -60,17 +61,11 @@ public class OAuthService {
 
 	private AppOAuthLoginResponse createResponse(OAuthMember member) {
 		Long now = System.currentTimeMillis();
-		Long expiryOfAccessToken = jwtFactory.getExpiryOfAccessToken(now);
-		Long expiryOfRefreshToken = jwtFactory.getExpiryOfRefreshToken(now);
-		Jwt accessToken = jwtFactory.createAuthToken(
-			String.valueOf(member.getId()), member.getRole().name(), new Date(expiryOfAccessToken)
-		);
-		Jwt refreshToken = jwtFactory.createAuthToken(null, new Date(expiryOfRefreshToken));
 
 		return new AppOAuthLoginResponse(
 			member.getId(),
-			accessToken.getEncodedBody(),
-			refreshToken.getEncodedBody(),
+			jwtService.getAccessToken(member, now).getEncodedBody(),
+			jwtService.getRefreshToken(member, now).getEncodedBody(),
 			member.getRole() == RoleType.ROLE_USER
 		);
 	}
