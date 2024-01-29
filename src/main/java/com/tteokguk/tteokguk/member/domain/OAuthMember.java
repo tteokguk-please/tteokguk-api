@@ -4,6 +4,7 @@ import static lombok.AccessLevel.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.tteokguk.tteokguk.item.domain.Item;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
@@ -56,5 +57,11 @@ public class OAuthMember extends Member {
 
 		member.initializeItem(primaryIngredient);
 		return member;
+	}
+
+	@Override
+	public void delete() {
+		super.delete();
+		this.resourceId = this.resourceId + "::deleted::" + UUID.randomUUID().toString().substring(0, 8);
 	}
 }

@@ -47,4 +47,10 @@ public class UserInfoController {
         AppInitResponse response = userInfoService.initialize(id, request.convert());
         return ResponseEntity.ok(WebInitResponse.of(response));
     }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> delete(@AuthId Long id) {
+        userInfoService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
