@@ -8,10 +8,7 @@ import com.tteokguk.tteokguk.tteokguk.application.dto.response.TteokgukResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,6 +24,15 @@ public class TteokgukController {
     ) {
         TteokgukResponse response = tteokgukService.createTteokguk(id, request);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{tteokgukId}")
+    public ResponseEntity<Void> deleteTteokguk(
+            @AuthId Long id,
+            @PathVariable Long tteokgukId
+    ) {
+        tteokgukService.deleteTteokguk(id, tteokgukId);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/use")
