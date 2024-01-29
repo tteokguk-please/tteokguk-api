@@ -4,6 +4,7 @@ import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tteokguk.tteokguk.support.application.dto.response.ReceivedIngredientResponse;
+import com.tteokguk.tteokguk.support.application.dto.response.SupportTteokgukResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +25,7 @@ public class SupportQueryRepository {
             Long id,
             Pageable pageable
     ) {
-        List<Long> supportIds = getSupportIds(id, pageable);
+        List<Long> supportIds = getReceiverSupportIds(id, pageable);
 
         return query
                 .select(getReceivedIngredientResponseConstructorExpression())
@@ -34,10 +35,41 @@ public class SupportQueryRepository {
                 .fetch();
     }
 
-    public List<Long> getSupportIds(Long id, Pageable pageable) {
-        return query.select(support.id)
+    public List<SupportTteokgukResponse> getSupportTteokgukResponse(
+            Long id,
+            Pageable pageable
+    ) {
+        List<Long> supportIds = getSenderSupportIds(id, pageable);
+
+        return query
+                .select(getSupportTteokgukResponseConstructorExpression())
+                .from(support)
+                .where(support.id.in(supportIds))
+                .orderBy(support.id.desc())
+                .fetch();
+    }
+
+    public List<Long> getReceiverSupportIds(
+            Long id,
+            Pageable pageable
+    ) {
+        return query.selectDistinct(support.id)
                 .from(support)
                 .where(support.receiver.id.eq(id))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(support.id.desc())
+                .fetch();
+    }
+
+    public List<Long> getSenderSupportIds(
+            Long id,
+            Pageable pageable
+    ) {
+        return query.select(support.id)
+                .from(support)
+                .where(support.sender.id.eq(id))
+                .groupBy(support.supportedTteokguk.id) // to filter unique Tteokguk
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(support.id.desc())
@@ -53,6 +85,16 @@ public class SupportQueryRepository {
                 support.supportIngredient,
                 support.message,
                 support.access
+        );
+    }
+
+    private ConstructorExpression<SupportTteokgukResponse> getSupportTteokgukResponseConstructorExpression() {
+        return Projections.constructor(
+                SupportTteokgukResponse.class,
+                support.supportedTteokguk.id,
+                support.receiver.nickname,
+                support.supportedTteokguk.completion,
+                Projections.list(support.supportedTteokguk.usedIngredients)
         );
     }
 }

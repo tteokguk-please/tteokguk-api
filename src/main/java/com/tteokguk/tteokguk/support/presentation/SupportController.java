@@ -7,6 +7,7 @@ import com.tteokguk.tteokguk.support.application.dto.SupportRequest;
 import com.tteokguk.tteokguk.support.application.dto.request.SupportPageableRequest;
 import com.tteokguk.tteokguk.support.application.dto.response.ReceivedIngredientResponse;
 import com.tteokguk.tteokguk.support.application.dto.response.SupportResponse;
+import com.tteokguk.tteokguk.support.application.dto.response.SupportTteokgukResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -37,6 +38,16 @@ public class SupportController {
     ) {
         Page<ReceivedIngredientResponse> pagedResponse = supportService.getReceivedIngredientResponse(id, request);
         ApiPageResponse<ReceivedIngredientResponse> pagedApiResponse = ApiPageResponse.of(pagedResponse);
+        return ResponseEntity.ok(pagedApiResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiPageResponse<SupportTteokgukResponse>> getSupportResponse(
+            @AuthId Long id,
+            @Valid SupportPageableRequest request
+    ) {
+        Page<SupportTteokgukResponse> pageResponse = supportService.getSupportTteokgukResponse(id, request);
+        ApiPageResponse<SupportTteokgukResponse> pagedApiResponse = ApiPageResponse.of(pageResponse);
         return ResponseEntity.ok(pagedApiResponse);
     }
 }
