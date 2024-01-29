@@ -1,16 +1,18 @@
 package com.tteokguk.tteokguk.member.domain;
 
+import static lombok.AccessLevel.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import com.tteokguk.tteokguk.item.domain.Item;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
@@ -18,7 +20,6 @@ import static lombok.AccessLevel.PROTECTED;
 public class SimpleMember extends Member {
 
     @Column(name = "email",
-            updatable = false,
             unique = true)
     private String email;
 
@@ -54,4 +55,10 @@ public class SimpleMember extends Member {
         member.initializeItem(primaryIngredient);
         return member;
     }
+
+	@Override
+	public void delete() {
+		super.delete();
+		this.email = this.email + "::deleted::" + UUID.randomUUID().toString().substring(0, 8);
+	}
 }

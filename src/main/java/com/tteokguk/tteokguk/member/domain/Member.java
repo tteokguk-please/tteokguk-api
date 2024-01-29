@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static com.tteokguk.tteokguk.item.exception.ItemError.INSUFFICIENT_INGREDIENTS;
 import static com.tteokguk.tteokguk.item.exception.ItemError.UNKNOWN_INGREDIENT;
@@ -20,11 +21,15 @@ import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Where;
+
 @Entity
 @Getter
 @Table(name = "t_member")
 @NoArgsConstructor(access = PROTECTED)
 @Inheritance
+@Where(clause = "deleted = false")
 public class Member extends BaseEntity {
 
     @Id
@@ -57,6 +62,10 @@ public class Member extends BaseEntity {
 
     @Column(name = "accepts_marketing")
     private Boolean acceptsMarketing;
+
+    @Column(name = "deleted")
+    @ColumnDefault("false")
+    private boolean deleted;
 
     protected Member(
             Ingredient primaryIngredient,
@@ -154,5 +163,10 @@ public class Member extends BaseEntity {
         this.nickname = nickname;
         this.acceptsMarketing = acceptsMarketing;
         this.role = RoleType.ROLE_USER;
+    }
+
+    public void delete() {
+        this.nickname = this.nickname + "::deleted::" + UUID.randomUUID().toString().substring(0, 8);
+        this.deleted = true;
     }
 }
