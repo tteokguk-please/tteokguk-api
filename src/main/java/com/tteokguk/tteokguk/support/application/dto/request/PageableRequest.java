@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-public record SupportPageableRequest(
+public record PageableRequest(
         @Positive(message = "페이지 번호는 양수입니다.")
         @NotNull(message = "페이지 번호는 필수입니다.")
         Integer page,

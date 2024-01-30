@@ -5,7 +5,7 @@ import com.tteokguk.tteokguk.global.exception.BusinessException;
 import com.tteokguk.tteokguk.member.domain.Member;
 import com.tteokguk.tteokguk.member.infra.persistence.MemberRepository;
 import com.tteokguk.tteokguk.support.application.dto.SupportRequest;
-import com.tteokguk.tteokguk.support.application.dto.request.SupportPageableRequest;
+import com.tteokguk.tteokguk.support.application.dto.request.PageableRequest;
 import com.tteokguk.tteokguk.support.application.dto.response.ReceivedIngredientResponse;
 import com.tteokguk.tteokguk.support.application.dto.response.SupportResponse;
 import com.tteokguk.tteokguk.support.application.dto.response.SupportTteokgukResponse;
@@ -63,7 +63,7 @@ public class SupportService {
 
     public Page<ReceivedIngredientResponse> getReceivedIngredientResponse(
             Long id,
-            SupportPageableRequest request
+            PageableRequest request
     ) {
         PageRequest pageable = PageRequest.of(
                 request.page() - 1,
@@ -76,7 +76,7 @@ public class SupportService {
 
     public Page<SupportTteokgukResponse> getSupportTteokgukResponse(
             Long id,
-            SupportPageableRequest request
+            PageableRequest request
     ) {
         PageRequest pageable = PageRequest.of(
                 request.page() - 1,
