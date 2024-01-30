@@ -84,11 +84,12 @@ public class TteokgukService {
         return TteokgukResponseAssembler.toTteokgukResponse(tteokguk);
     }
 
+    //todo resolve paging bugs
     public Page<TteokgukResponse> findNewTteokguks(PageableRequest request) {
         PageRequest pageable = PageRequest.of(
                 request.page() - 1,
                 request.size(),
-                Sort.by(DESC, "tteokguk_id"));
+                Sort.by(DESC, "id"));
 
         List<Tteokguk> newTteokguks = tteokgukRepository.findNewTteokguks();
         List<TteokgukResponse> responses = TteokgukResponseAssembler.toTteokgukResponses(newTteokguks);
@@ -96,11 +97,11 @@ public class TteokgukService {
         return new PageImpl<>(responses, pageable, responses.size());
     }
 
+    //todo resolve paging bugs
     public Page<TteokgukResponse> findCompletionTteokguks(PageableRequest request) {
         PageRequest pageable = PageRequest.of(
                 request.page() - 1,
-                request.size(),
-                Sort.by(DESC, "tteokguk_id"));
+                request.size());
 
         List<Tteokguk> completionTteokguks = tteokgukRepository.findCompletionTteokguks();
         List<TteokgukResponse> responses = TteokgukResponseAssembler.toTteokgukResponses(completionTteokguks);

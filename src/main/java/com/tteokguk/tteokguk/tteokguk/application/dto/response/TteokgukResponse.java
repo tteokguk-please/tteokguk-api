@@ -9,6 +9,7 @@ import java.util.List;
 public record TteokgukResponse(
         Long tteokgukId,
         Long memberId,
+        String nickname,
         String wish,
         boolean access,
         boolean completion,
