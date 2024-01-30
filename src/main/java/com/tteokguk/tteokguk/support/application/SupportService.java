@@ -83,7 +83,7 @@ public class SupportService {
                 request.size(),
                 Sort.by(DESC, "support_id"));
 
-        List<Support> supports = supportRepository.findSupportTteokguks(id);
+        List<Support> supports = supportRepository.findSupportTteokguks(id, pageable);
         List<SupportTteokgukResponse> responses = TteokgukResponseAssembler.toSupportTteokgukResponses(supports);
         return new PageImpl<>(responses, pageable, responses.size());
     }

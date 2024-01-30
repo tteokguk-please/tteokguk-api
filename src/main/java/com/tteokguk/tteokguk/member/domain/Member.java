@@ -8,6 +8,8 @@ import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,9 +22,6 @@ import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
-
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
@@ -169,4 +168,5 @@ public class Member extends BaseEntity {
         this.nickname = this.nickname + "::deleted::" + UUID.randomUUID().toString().substring(0, 8);
         this.deleted = true;
     }
+
 }
