@@ -8,10 +8,12 @@ import com.tteokguk.tteokguk.support.application.dto.SupportRequest;
 import com.tteokguk.tteokguk.support.application.dto.request.SupportPageableRequest;
 import com.tteokguk.tteokguk.support.application.dto.response.ReceivedIngredientResponse;
 import com.tteokguk.tteokguk.support.application.dto.response.SupportResponse;
+import com.tteokguk.tteokguk.support.application.dto.response.SupportTteokgukResponse;
 import com.tteokguk.tteokguk.support.application.dto.response.assembler.SupportResponseAssembler;
 import com.tteokguk.tteokguk.support.domain.Support;
 import com.tteokguk.tteokguk.support.infra.persistence.SupportQueryRepository;
 import com.tteokguk.tteokguk.support.infra.persistence.SupportRepository;
+import com.tteokguk.tteokguk.tteokguk.application.dto.response.assembler.TteokgukResponseAssembler;
 import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
 import com.tteokguk.tteokguk.tteokguk.infra.persistence.TteokgukRepository;
 import lombok.RequiredArgsConstructor;
@@ -69,6 +71,20 @@ public class SupportService {
                 Sort.by(DESC, "support_id"));
 
         List<ReceivedIngredientResponse> responses = supportQueryRepository.getReceivedIngredientResponse(id, pageable);
+        return new PageImpl<>(responses, pageable, responses.size());
+    }
+
+    public Page<SupportTteokgukResponse> getSupportTteokgukResponse(
+            Long id,
+            SupportPageableRequest request
+    ) {
+        PageRequest pageable = PageRequest.of(
+                request.page() - 1,
+                request.size(),
+                Sort.by(DESC, "support_id"));
+
+        List<Support> supports = supportRepository.findSupportTteokguks(id);
+        List<SupportTteokgukResponse> responses = TteokgukResponseAssembler.toSupportTteokgukResponses(supports);
         return new PageImpl<>(responses, pageable, responses.size());
     }
 }

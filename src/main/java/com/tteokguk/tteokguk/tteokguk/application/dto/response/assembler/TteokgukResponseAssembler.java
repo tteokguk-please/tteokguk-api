@@ -1,8 +1,12 @@
 package com.tteokguk.tteokguk.tteokguk.application.dto.response.assembler;
 
+import com.tteokguk.tteokguk.support.application.dto.response.SupportTteokgukResponse;
+import com.tteokguk.tteokguk.support.domain.Support;
 import com.tteokguk.tteokguk.tteokguk.application.dto.response.TteokgukResponse;
 import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -18,5 +22,16 @@ public class TteokgukResponseAssembler {
                 .access(tteokguk.isAccess())
                 .completion(tteokguk.isCompletion())
                 .build();
+    }
+
+    public static List<SupportTteokgukResponse> toSupportTteokgukResponses(List<Support> supports) {
+        return supports.stream()
+                .map(support -> new SupportTteokgukResponse(
+                        support.getSupportedTteokguk().getId(),
+                        support.getReceiver().getNickname(),
+                        support.getSupportedTteokguk().isCompletion(),
+                        support.getSupportedTteokguk().getUsedIngredients()
+                ))
+                .toList();
     }
 }
