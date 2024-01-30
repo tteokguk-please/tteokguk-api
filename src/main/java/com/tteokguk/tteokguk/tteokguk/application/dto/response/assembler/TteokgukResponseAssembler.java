@@ -6,6 +6,7 @@ import com.tteokguk.tteokguk.tteokguk.application.dto.response.TteokgukResponse;
 import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
 import lombok.NoArgsConstructor;
 
+import java.util.Comparator;
 import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -32,6 +33,13 @@ public class TteokgukResponseAssembler {
                         support.getSupportedTteokguk().isCompletion(),
                         support.getSupportedTteokguk().getUsedIngredients()
                 ))
+                .toList();
+    }
+
+    public static List<TteokgukResponse> toTteokgukResponses(List<Tteokguk> tteokguks) {
+        return tteokguks.stream()
+                .map(TteokgukResponseAssembler::toTteokgukResponse)
+                .sorted(Comparator.comparing(TteokgukResponse::tteokgukId).reversed())
                 .toList();
     }
 }

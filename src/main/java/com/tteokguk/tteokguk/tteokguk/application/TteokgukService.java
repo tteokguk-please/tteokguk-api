@@ -3,6 +3,7 @@ package com.tteokguk.tteokguk.tteokguk.application;
 import com.tteokguk.tteokguk.global.exception.BusinessException;
 import com.tteokguk.tteokguk.member.domain.Member;
 import com.tteokguk.tteokguk.member.infra.persistence.SimpleMemberRepository;
+import com.tteokguk.tteokguk.support.application.dto.request.PageableRequest;
 import com.tteokguk.tteokguk.tteokguk.application.dto.request.CreateTteokgukRequest;
 import com.tteokguk.tteokguk.tteokguk.application.dto.request.IngredientRequest;
 import com.tteokguk.tteokguk.tteokguk.application.dto.response.TteokgukResponse;
@@ -11,6 +12,11 @@ import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
 import com.tteokguk.tteokguk.tteokguk.infra.persistence.TteokgukRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +24,9 @@ import java.util.List;
 
 import static com.tteokguk.tteokguk.member.exception.MemberError.MEMBER_NOT_FOUND;
 import static com.tteokguk.tteokguk.tteokguk.exception.TteokgukError.NOT_OWNER;
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -74,5 +82,29 @@ public class TteokgukService {
         tteokguk.useIngredients(request.ingredients());
 
         return TteokgukResponseAssembler.toTteokgukResponse(tteokguk);
+    }
+
+    public Page<TteokgukResponse> findNewTteokguks(PageableRequest request) {
+        PageRequest pageable = PageRequest.of(
+                request.page() - 1,
+                request.size(),
+                Sort.by(DESC, "tteokguk_id"));
+
+        List<Tteokguk> newTteokguks = tteokgukRepository.findNewTteokguks();
+        List<TteokgukResponse> responses = TteokgukResponseAssembler.toTteokgukResponses(newTteokguks);
+        responses.forEach(response -> log.warn("{}", response));
+        return new PageImpl<>(responses, pageable, responses.size());
+    }
+
+    public Page<TteokgukResponse> findCompletionTteokguks(PageableRequest request) {
+        PageRequest pageable = PageRequest.of(
+                request.page() - 1,
+                request.size(),
+                Sort.by(DESC, "tteokguk_id"));
+
+        List<Tteokguk> completionTteokguks = tteokgukRepository.findCompletionTteokguks();
+        List<TteokgukResponse> responses = TteokgukResponseAssembler.toTteokgukResponses(completionTteokguks);
+        responses.forEach(response -> log.warn("{}", response));
+        return new PageImpl<>(responses, pageable, responses.size());
     }
 }

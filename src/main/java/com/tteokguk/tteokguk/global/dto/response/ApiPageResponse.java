@@ -22,6 +22,8 @@ public class ApiPageResponse<T> {
     @Builder
     private ApiPageResponse(Page<T> data) {
         this.data = data.getContent();
+        log.warn("페이지넘버 : {}", data.getPageable().getPageSize());
+        log.warn("페이지사이즈 : {}", data.getPageable().getPageNumber());
         this.pageInfo = PageInfo.of(data.getPageable(), data.getTotalPages());
     }
 
@@ -50,6 +52,7 @@ public class ApiPageResponse<T> {
                 Pageable pageable,
                 Integer page
         ) {
+            log.warn("realPage : {}", page);
             return PageInfo.builder()
                     .pageable(pageable)
                     .page(page)
