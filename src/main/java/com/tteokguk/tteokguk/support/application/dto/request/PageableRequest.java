@@ -9,8 +9,8 @@ public record PageableRequest(
         @NotNull(message = "페이지 번호는 필수입니다.")
         Integer page,
 
-        @Min(value = 1, message = "페이지 수는 최소 1개 이상입니다.")
-        @NotNull(message = "페이지 수는 필수입니다.")
+        @Min(value = 1, message = "조회 사이즈는 최소 1개 이상입니다.")
+        @NotNull(message = "조회 사이즈는 필수입니다.")
         Integer size
 ) {
 }

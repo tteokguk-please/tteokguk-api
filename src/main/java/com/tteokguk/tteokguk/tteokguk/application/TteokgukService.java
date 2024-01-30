@@ -12,6 +12,7 @@ import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
 import com.tteokguk.tteokguk.tteokguk.infra.persistence.TteokgukRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +26,7 @@ import static com.tteokguk.tteokguk.member.exception.MemberError.MEMBER_NOT_FOUN
 import static com.tteokguk.tteokguk.tteokguk.exception.TteokgukError.NOT_OWNER;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -90,6 +92,19 @@ public class TteokgukService {
 
         List<Tteokguk> newTteokguks = tteokgukRepository.findNewTteokguks();
         List<TteokgukResponse> responses = TteokgukResponseAssembler.toTteokgukResponses(newTteokguks);
-        return new PageImpl<>(responses, pageable, request.size());
+        responses.forEach(response -> log.warn("{}", response));
+        return new PageImpl<>(responses, pageable, responses.size());
+    }
+
+    public Page<TteokgukResponse> findCompletionTteokguks(PageableRequest request) {
+        PageRequest pageable = PageRequest.of(
+                request.page() - 1,
+                request.size(),
+                Sort.by(DESC, "tteokguk_id"));
+
+        List<Tteokguk> completionTteokguks = tteokgukRepository.findCompletionTteokguks();
+        List<TteokgukResponse> responses = TteokgukResponseAssembler.toTteokgukResponses(completionTteokguks);
+        responses.forEach(response -> log.warn("{}", response));
+        return new PageImpl<>(responses, pageable, responses.size());
     }
 }
