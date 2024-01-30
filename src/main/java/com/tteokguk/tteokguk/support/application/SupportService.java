@@ -13,6 +13,7 @@ import com.tteokguk.tteokguk.support.application.dto.response.assembler.SupportR
 import com.tteokguk.tteokguk.support.domain.Support;
 import com.tteokguk.tteokguk.support.infra.persistence.SupportQueryRepository;
 import com.tteokguk.tteokguk.support.infra.persistence.SupportRepository;
+import com.tteokguk.tteokguk.tteokguk.application.dto.response.assembler.TteokgukResponseAssembler;
 import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
 import com.tteokguk.tteokguk.tteokguk.infra.persistence.TteokgukRepository;
 import lombok.RequiredArgsConstructor;
@@ -82,7 +83,8 @@ public class SupportService {
                 request.size(),
                 Sort.by(DESC, "support_id"));
 
-        List<SupportTteokgukResponse> responses = supportQueryRepository.getSupportTteokgukResponse(id, pageable);
+        List<Support> supports = supportRepository.findSupportTteokguks(id);
+        List<SupportTteokgukResponse> responses = TteokgukResponseAssembler.toSupportTteokgukResponses(supports);
         return new PageImpl<>(responses, pageable, responses.size());
     }
 }

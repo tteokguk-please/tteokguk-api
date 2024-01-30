@@ -4,7 +4,6 @@ import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tteokguk.tteokguk.support.application.dto.response.ReceivedIngredientResponse;
-import com.tteokguk.tteokguk.support.application.dto.response.SupportTteokgukResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -35,19 +34,6 @@ public class SupportQueryRepository {
                 .fetch();
     }
 
-    public List<SupportTteokgukResponse> getSupportTteokgukResponse(
-            Long id,
-            Pageable pageable
-    ) {
-        List<Long> supportIds = getSenderSupportIds(id, pageable);
-
-        return query
-                .select(getSupportTteokgukResponseConstructorExpression())
-                .from(support)
-                .where(support.id.in(supportIds))
-                .orderBy(support.id.desc())
-                .fetch();
-    }
 
     public List<Long> getReceiverSupportIds(
             Long id,
@@ -85,16 +71,6 @@ public class SupportQueryRepository {
                 support.supportIngredient,
                 support.message,
                 support.access
-        );
-    }
-
-    private ConstructorExpression<SupportTteokgukResponse> getSupportTteokgukResponseConstructorExpression() {
-        return Projections.constructor(
-                SupportTteokgukResponse.class,
-                support.supportedTteokguk.id,
-                support.receiver.nickname,
-                support.supportedTteokguk.completion,
-                Projections.list(support.supportedTteokguk.usedIngredients)
         );
     }
 }
