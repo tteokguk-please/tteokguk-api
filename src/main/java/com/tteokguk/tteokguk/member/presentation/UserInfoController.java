@@ -53,4 +53,10 @@ public class UserInfoController {
         userInfoService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/by-nickname/{nickname}")
+    public ResponseEntity<UserInfoResponse> getUserInfoByNickname(@PathVariable String nickname) {
+        UserInfoResponse userInfo = userInfoService.getUserInfoByNickname(nickname);
+        return ResponseEntity.ok(userInfo);
+    }
 }

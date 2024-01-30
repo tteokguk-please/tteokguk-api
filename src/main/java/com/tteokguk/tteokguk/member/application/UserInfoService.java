@@ -61,4 +61,11 @@ public class UserInfoService {
 
         member.delete();
     }
+
+    public UserInfoResponse getUserInfoByNickname(String nickname) {
+        Member member = memberRepository.findByNickname(nickname)
+            .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
+
+        return UserInfoResponseAssembler.transferToUserInfoResponse(member);
+    }
 }
