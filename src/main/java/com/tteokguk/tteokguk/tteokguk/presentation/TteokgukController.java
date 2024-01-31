@@ -41,6 +41,16 @@ public class TteokgukController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/{tteokgukId}")
+    public ResponseEntity<TteokgukResponse> getTteokguk(
+            @AuthId Long id,
+            @PathVariable Long tteokgukId
+    ) {
+        TteokgukResponse response = tteokgukService.getTteokguk(id, tteokgukId);
+        return ResponseEntity.ok(response);
+    }
+
+
     @PostMapping("/use")
     public ResponseEntity<TteokgukResponse> useIngredient(
             @AuthId Long id,
@@ -55,8 +65,6 @@ public class TteokgukController {
             @AuthId Long id,
             @Valid PageableRequest request
     ) {
-        log.warn("size : {}", request.size());
-        log.warn("page : {}", request.page());
         Page<TteokgukResponse> response = tteokgukService.findNewTteokguks(request);
         ApiPageResponse<TteokgukResponse> pagedApiResponse = ApiPageResponse.of(response);
         return ResponseEntity.ok(pagedApiResponse);
@@ -67,8 +75,6 @@ public class TteokgukController {
             @AuthId Long id,
             @Valid PageableRequest request
     ) {
-        log.warn("size : {}", request.size());
-        log.warn("page : {}", request.page());
         Page<TteokgukResponse> response = tteokgukService.findCompletionTteokguks(request);
         ApiPageResponse<TteokgukResponse> pagedApiResponse = ApiPageResponse.of(response);
         return ResponseEntity.ok(pagedApiResponse);

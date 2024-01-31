@@ -13,7 +13,8 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public enum TteokgukError implements ErrorCode {
 
     TTEOKGUK_NOT_FOUND("해당 떡국을 찾을 수 없습니다.", NOT_FOUND, "T_001"),
-    NOT_OWNER("해당 떡국의 주인이 아닙니다.", BAD_REQUEST, "T_002");
+    NOT_OWNER("해당 떡국의 주인이 아닙니다.", BAD_REQUEST, "T_002"),
+    NOT_ALLOWED("해당 떡국에 접근할 권한이 없습니다.", BAD_REQUEST, "T_003");
 
     private final String message;
     private final HttpStatus status;

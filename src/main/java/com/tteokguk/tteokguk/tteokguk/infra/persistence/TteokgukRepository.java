@@ -11,7 +11,7 @@ import java.util.List;
 @Transactional
 public interface TteokgukRepository extends JpaRepository<Tteokguk, Long> {
 
-    @Query("SELECT t FROM Tteokguk t WHERE t.access = true and t.member.deleted = false ORDER BY t.id DESC")
+    @Query("SELECT t FROM Tteokguk t WHERE t.access = true and t.member.deleted = false and t.completion = false ORDER BY t.id DESC")
     List<Tteokguk> findNewTteokguks(Pageable pageable);
 
     @Query("SELECT t FROM Tteokguk t WHERE t.access = true and t.member.deleted = false and t.completion = true ORDER BY t.id DESC")
