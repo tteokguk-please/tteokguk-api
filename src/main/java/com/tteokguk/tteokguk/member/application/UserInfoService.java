@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tteokguk.tteokguk.global.exception.BusinessException;
+import com.tteokguk.tteokguk.global.security.jwt.Jwt;
+import com.tteokguk.tteokguk.global.security.jwt.JwtService;
 import com.tteokguk.tteokguk.member.application.dto.request.AppInitRequest;
 import com.tteokguk.tteokguk.member.application.dto.response.AppInitResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
@@ -23,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class UserInfoService {
 
     private final MemberRepository memberRepository;
+    private final JwtService jwtService;
 
     public MyPageResponse getMyPageInfo(Long memberId) {
         Member member = memberRepository.findById(memberId)
@@ -52,7 +55,11 @@ public class UserInfoService {
 
         member.initialize(request.nickname(), request.acceptsMarketing());
 
-        return AppInitResponse.of(member);
+        Long now = System.currentTimeMillis();
+        Jwt accessToken = jwtService.getAccessToken(member, now);
+        Jwt refreshToken = jwtService.getRefreshToken(member, now);
+
+        return AppInitResponse.of(member, accessToken.getEncodedBody(), refreshToken.getEncodedBody());
     }
 
     public void delete(Long memberId) {
