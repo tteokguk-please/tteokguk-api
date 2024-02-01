@@ -164,6 +164,10 @@ public class Member extends BaseEntity {
         this.role = RoleType.ROLE_USER;
     }
 
+    public boolean isInitialized() {
+        return this.role != RoleType.ROLE_TEMP_USER;
+    }
+
     public void delete() {
         this.nickname = this.nickname + "::deleted::" + UUID.randomUUID().toString().substring(0, 8);
         this.deleted = true;

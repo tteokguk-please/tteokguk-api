@@ -12,7 +12,6 @@ import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.UserInfoResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.assembler.UserInfoResponseAssembler;
 import com.tteokguk.tteokguk.member.domain.Member;
-import com.tteokguk.tteokguk.member.exception.MemberError;
 import com.tteokguk.tteokguk.member.infra.persistence.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -44,11 +43,14 @@ public class UserInfoService {
     }
 
     public AppInitResponse initialize(Long memberId, AppInitRequest request) {
-        if (memberRepository.existsByNickname(request.nickname()))
-            throw new BusinessException(MemberError.DUPLICATE_EMAIL);
-
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
+
+        if (member.isInitialized())
+            throw new BusinessException(ALREADY_INITIALIZED_USER);
+
+        if (memberRepository.existsByNickname(request.nickname()))
+            throw new BusinessException(DUPLICATE_NICKNAME);
 
         member.initialize(request.nickname(), request.acceptsMarketing());
 
