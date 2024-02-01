@@ -18,6 +18,7 @@ public class CustomRequestMatcher {
     public RequestMatcher mainPageEndPoints() {
         return new OrRequestMatcher(
                 new AntPathRequestMatcher("/api/v1/tteokguk/new/**"),
+                new AntPathRequestMatcher("/api/v1/tteokguk/find/**"),
                 new AntPathRequestMatcher("/api/v1/tteokguk/completion/**")
         );
     }

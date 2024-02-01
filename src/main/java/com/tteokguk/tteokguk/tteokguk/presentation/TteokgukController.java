@@ -41,12 +41,11 @@ public class TteokgukController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{tteokgukId}")
+    @GetMapping("/find/{tteokgukId}")
     public ResponseEntity<TteokgukResponse> getTteokguk(
-            @AuthId Long id,
             @PathVariable Long tteokgukId
     ) {
-        TteokgukResponse response = tteokgukService.getTteokguk(id, tteokgukId);
+        TteokgukResponse response = tteokgukService.getTteokguk(tteokgukId);
         return ResponseEntity.ok(response);
     }
 

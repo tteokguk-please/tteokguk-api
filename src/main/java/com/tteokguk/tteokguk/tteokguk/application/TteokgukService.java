@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 import static com.tteokguk.tteokguk.member.exception.MemberError.MEMBER_NOT_FOUND;
 import static com.tteokguk.tteokguk.tteokguk.exception.TteokgukError.*;
@@ -110,17 +109,13 @@ public class TteokgukService {
         return new PageImpl<>(responses, pageable, responses.size());
     }
 
-    public TteokgukResponse getTteokguk(
-            Long id,
-            Long tteokgukId
-    ) {
+    public TteokgukResponse getTteokguk(Long tteokgukId) {
         Tteokguk tteokguk = tteokgukRepository.findById(tteokgukId)
                 .orElseThrow(() -> BusinessException.of(TTEOKGUK_NOT_FOUND));
 
-        if (!tteokguk.isAccess() && !Objects.equals(tteokguk.getMember().getId(), id)) {
+        if (!tteokguk.isAccess()) {
             throw BusinessException.of(NOT_ALLOWED);
         }
-
         return TteokgukResponseAssembler.toTteokgukResponse(tteokguk);
     }
 }
