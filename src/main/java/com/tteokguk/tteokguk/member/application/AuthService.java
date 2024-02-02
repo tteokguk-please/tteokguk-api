@@ -9,6 +9,7 @@ import com.tteokguk.tteokguk.member.application.dto.response.AppJoinResponse;
 import com.tteokguk.tteokguk.member.domain.RoleType;
 import com.tteokguk.tteokguk.member.domain.SimpleMember;
 import com.tteokguk.tteokguk.member.exception.MemberError;
+import com.tteokguk.tteokguk.member.infra.persistence.MemberRepository;
 import com.tteokguk.tteokguk.member.infra.persistence.SimpleMemberRepository;
 
 import jakarta.transaction.Transactional;
@@ -21,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class AuthService {
 
+	private final MemberRepository memberRepository;
 	private final SimpleMemberRepository simpleMemberRepository;
 	private final PasswordEncoder encoder;
 
@@ -48,6 +50,6 @@ public class AuthService {
 	}
 
 	public boolean existsByNickname(String nickname) {
-		return simpleMemberRepository.existsByNickname(nickname);
+		return memberRepository.existsByNickname(nickname);
 	}
 }
