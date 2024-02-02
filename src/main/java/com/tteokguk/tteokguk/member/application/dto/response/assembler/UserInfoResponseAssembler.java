@@ -2,6 +2,7 @@ package com.tteokguk.tteokguk.member.application.dto.response.assembler;
 
 import com.tteokguk.tteokguk.item.application.dto.response.ItemResponse;
 import com.tteokguk.tteokguk.item.domain.Item;
+import com.tteokguk.tteokguk.member.application.dto.response.MemberResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.UserInfoResponse;
 import com.tteokguk.tteokguk.member.domain.Member;
@@ -41,6 +42,21 @@ public class UserInfoResponseAssembler {
                 .primaryIngredient(member.getPrimaryIngredient())
                 .tteokguks(accessibleTteokgukResponses)
                 .build();
+    }
+
+    public static MemberResponse transferToMemberResponse(Member member) {
+        List<SimpleTteokgukResponse> tteokgukResponses = transferToTteokgukResponses(member.getTteokguks());
+        List<SimpleTteokgukResponse> accessibleTteokgukResponses =
+            tteokgukResponses.stream()
+                .filter(SimpleTteokgukResponse::access)
+                .toList();
+
+        return new MemberResponse(
+            member.getId(),
+            member.getNickname(),
+            member.getPrimaryIngredient(),
+            accessibleTteokgukResponses
+        );
     }
 
     //== Tteokguk Response ==//

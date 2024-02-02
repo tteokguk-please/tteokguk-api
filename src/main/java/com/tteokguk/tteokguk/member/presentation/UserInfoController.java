@@ -1,13 +1,19 @@
 package com.tteokguk.tteokguk.member.presentation;
 
+import com.tteokguk.tteokguk.global.dto.response.ApiPageResponse;
 import com.tteokguk.tteokguk.global.security.annotation.AuthId;
 import com.tteokguk.tteokguk.member.application.UserInfoService;
 import com.tteokguk.tteokguk.member.application.dto.response.AppInitResponse;
+import com.tteokguk.tteokguk.member.application.dto.response.MemberResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.UserInfoResponse;
 import com.tteokguk.tteokguk.member.presentation.dto.WebInitRequest;
 import com.tteokguk.tteokguk.member.presentation.dto.WebInitResponse;
+import com.tteokguk.tteokguk.support.application.dto.request.PageableRequest;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,5 +64,14 @@ public class UserInfoController {
     public ResponseEntity<UserInfoResponse> getUserInfoByNickname(@PathVariable String nickname) {
         UserInfoResponse userInfo = userInfoService.getUserInfoByNickname(nickname);
         return ResponseEntity.ok(userInfo);
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiPageResponse<MemberResponse>> searchByNickname(
+        @RequestParam String nickname, @Valid PageableRequest pageableRequest
+    ) {
+        ApiPageResponse<MemberResponse> response =
+            userInfoService.getMembersByNickname(nickname, pageableRequest.page(), pageableRequest.size());
+        return ResponseEntity.ok(response);
     }
 }
