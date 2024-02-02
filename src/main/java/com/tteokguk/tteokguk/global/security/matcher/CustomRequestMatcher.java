@@ -1,5 +1,6 @@
 package com.tteokguk.tteokguk.global.security.matcher;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -24,18 +25,22 @@ public class CustomRequestMatcher {
     }
 
     public RequestMatcher healthEndpoints() {
-        return new AntPathRequestMatcher("/actuator/health");
+        return new AntPathRequestMatcher("/actuator/health", HttpMethod.GET.toString());
     }
 
     public RequestMatcher serverInfoEndpoints() {
-        return new AntPathRequestMatcher("/actuator/info");
+        return new AntPathRequestMatcher("/actuator/info", HttpMethod.GET.toString());
+    }
+
+    public RequestMatcher userEndpoints() {
+        return new AntPathRequestMatcher("/api/v1/user", HttpMethod.GET.toString());
     }
 
     public RequestMatcher tempUserEndpoints() {
-        return new AntPathRequestMatcher("/api/v1/user/initialization");
+        return new AntPathRequestMatcher("/api/v1/user/initialization", HttpMethod.POST.toString());
     }
 
     public RequestMatcher errorEndpoints() {
-        return new AntPathRequestMatcher("/error");
+        return new AntPathRequestMatcher("/error", HttpMethod.GET.toString());
     }
 }
