@@ -2,14 +2,22 @@ package com.tteokguk.tteokguk.member.application;
 
 import static com.tteokguk.tteokguk.member.exception.MemberError.*;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tteokguk.tteokguk.global.dto.response.ApiPageResponse;
 import com.tteokguk.tteokguk.global.exception.BusinessException;
 import com.tteokguk.tteokguk.global.security.jwt.Jwt;
 import com.tteokguk.tteokguk.global.security.jwt.JwtService;
 import com.tteokguk.tteokguk.member.application.dto.request.AppInitRequest;
 import com.tteokguk.tteokguk.member.application.dto.response.AppInitResponse;
+import com.tteokguk.tteokguk.member.application.dto.response.MemberResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.UserInfoResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.assembler.UserInfoResponseAssembler;
@@ -76,5 +84,15 @@ public class UserInfoService {
             .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
         return UserInfoResponseAssembler.transferToUserInfoResponse(member);
+    }
+
+    public ApiPageResponse<MemberResponse> getMembersByNickname(String nickname, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Page<Member> members = memberRepository.findByNicknameStartingWith(nickname, pageable);
+
+        List<MemberResponse> content =
+            members.map(UserInfoResponseAssembler::transferToMemberResponse).getContent();
+        return ApiPageResponse.of(new PageImpl<>(content, pageable, content.size()));
     }
 }
