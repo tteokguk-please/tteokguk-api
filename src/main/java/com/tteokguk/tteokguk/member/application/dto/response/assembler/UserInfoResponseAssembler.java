@@ -45,17 +45,9 @@ public class UserInfoResponseAssembler {
     }
 
     public static MemberResponse transferToMemberResponse(Member member) {
-        List<SimpleTteokgukResponse> tteokgukResponses = transferToTteokgukResponses(member.getTteokguks());
-        List<SimpleTteokgukResponse> accessibleTteokgukResponses =
-            tteokgukResponses.stream()
-                .filter(SimpleTteokgukResponse::access)
-                .toList();
-
         return new MemberResponse(
             member.getId(),
-            member.getNickname(),
-            member.getPrimaryIngredient(),
-            accessibleTteokgukResponses
+            member.getNickname()
         );
     }
 
