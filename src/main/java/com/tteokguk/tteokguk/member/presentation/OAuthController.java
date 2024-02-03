@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tteokguk.tteokguk.global.exception.BusinessException;
 import com.tteokguk.tteokguk.member.application.OAuthService;
+import com.tteokguk.tteokguk.member.application.UserInfoService;
 import com.tteokguk.tteokguk.member.application.dto.response.AppOAuthLoginResponse;
+import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
 import com.tteokguk.tteokguk.member.domain.ProviderType;
 import com.tteokguk.tteokguk.member.exception.AuthError;
 import com.tteokguk.tteokguk.member.presentation.dto.WebOAuthLoginRequest;
@@ -31,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class OAuthController {
 
 	private final OAuthService oAuthService;
+	private final UserInfoService userInfoService;
 
 	@GetMapping("/{provider}/login")
 	public String oAuthLogin(@PathVariable String provider, @RequestParam String code, HttpServletRequest request) {
@@ -59,6 +62,7 @@ public class OAuthController {
 		AppOAuthLoginResponse response = oAuthService.getByAccessToken(
 			ProviderType.valueOf(provider.toUpperCase()), request.accessToken()
 		);
-		return ResponseEntity.ok(WebOAuthLoginResponse.of(response));
+		MyPageResponse myPageInfo = userInfoService.getMyPageInfo(response.id());
+		return ResponseEntity.ok(WebOAuthLoginResponse.of(response, myPageInfo));
 	}
 }
