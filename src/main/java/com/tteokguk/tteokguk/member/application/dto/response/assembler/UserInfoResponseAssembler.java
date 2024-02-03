@@ -34,7 +34,7 @@ public class UserInfoResponseAssembler {
         List<SimpleTteokgukResponse> tteokgukResponses = transferToTteokgukResponses(member.getTteokguks());
         List<SimpleTteokgukResponse> accessibleTteokgukResponses =
                 tteokgukResponses.stream()
-                        .filter(tteokgukResponse -> tteokgukResponse.access())
+                        .filter(SimpleTteokgukResponse::access)
                         .toList();
 
         return UserInfoResponse.builder()

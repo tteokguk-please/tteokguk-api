@@ -3,6 +3,7 @@ package com.tteokguk.tteokguk.tteokguk.domain;
 import com.tteokguk.tteokguk.global.auditing.BaseEntity;
 import com.tteokguk.tteokguk.global.exception.BusinessException;
 import com.tteokguk.tteokguk.member.domain.Member;
+import com.tteokguk.tteokguk.tteokguk.constants.BackgroundColor;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -70,6 +71,10 @@ public class Tteokguk extends BaseEntity {
     )
     private List<Ingredient> usedIngredients = new ArrayList<>();
 
+    @Column(name = "background_color")
+    @Enumerated(STRING)
+    private BackgroundColor backgroundColor;
+
     @Builder(access = PROTECTED)
     private Tteokguk(
             String wish,
@@ -85,6 +90,7 @@ public class Tteokguk extends BaseEntity {
         this.access = access;
         this.deleted = false;
         this.completion = false;
+        this.backgroundColor = BackgroundColor.random();
     }
 
     public static Tteokguk of(
