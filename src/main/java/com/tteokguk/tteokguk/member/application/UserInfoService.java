@@ -2,6 +2,7 @@ package com.tteokguk.tteokguk.member.application;
 
 import static com.tteokguk.tteokguk.member.exception.MemberError.*;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.tteokguk.tteokguk.global.dto.response.ApiPageResponse;
 import com.tteokguk.tteokguk.global.exception.BusinessException;
@@ -87,6 +89,10 @@ public class UserInfoService {
     }
 
     public ApiPageResponse<MemberResponse> getMembersByNickname(String nickname, int page, int size) {
+        if (!StringUtils.hasText(nickname)) {
+            return ApiPageResponse.of(new PageImpl<>(Collections.emptyList()));
+        }
+
         Pageable pageable = PageRequest.of(page - 1, size);
 
         Page<Member> members = memberRepository.findByNicknameStartingWith(nickname, pageable);
@@ -97,6 +103,9 @@ public class UserInfoService {
     }
 
     public List<MemberResponse> getAllMembersByNickname(String nickname) {
+        if (!StringUtils.hasText(nickname))
+            return Collections.emptyList();
+
         List<Member> members = memberRepository.findAllByNicknameStartingWith(nickname);
 
         return members.stream()

@@ -22,9 +22,13 @@ public class ApiPageResponse<T> {
     @Builder
     private ApiPageResponse(Page<T> data) {
         this.data = data.getContent();
-        log.warn("페이지넘버 : {}", data.getPageable().getPageSize());
-        log.warn("페이지사이즈 : {}", data.getPageable().getPageNumber());
-        this.pageInfo = PageInfo.of(data.getPageable(), data.getTotalPages());
+        if (data.isEmpty()) {
+            this.pageInfo = PageInfo.of(0, 0);
+        } else {
+            log.warn("페이지넘버 : {}", data.getPageable().getPageSize());
+            log.warn("페이지사이즈 : {}", data.getPageable().getPageNumber());
+            this.pageInfo = PageInfo.of(data.getPageable(), data.getTotalPages());
+        }
     }
 
     public static <T> ApiPageResponse<T> of(Page<T> data) {
@@ -48,6 +52,11 @@ public class ApiPageResponse<T> {
             this.size = pageable.getPageSize();
         }
 
+        private PageInfo(Integer page, Integer size) {
+            this.page = page;
+            this.size = size;
+        }
+
         public static PageInfo of(
                 Pageable pageable,
                 Integer page
@@ -57,6 +66,11 @@ public class ApiPageResponse<T> {
                     .pageable(pageable)
                     .page(page)
                     .build();
+        }
+
+        public static PageInfo of(Integer page, Integer size) {
+            log.warn("realPage : {}", page);
+            return new PageInfo(page, size);
         }
     }
 }
