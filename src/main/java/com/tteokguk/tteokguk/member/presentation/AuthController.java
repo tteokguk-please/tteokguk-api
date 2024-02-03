@@ -12,11 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tteokguk.tteokguk.member.application.AuthService;
 import com.tteokguk.tteokguk.member.application.RefreshTokenService;
-import com.tteokguk.tteokguk.member.application.UserInfoService;
 import com.tteokguk.tteokguk.member.application.dto.response.AppIssuedTokensResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.AppJoinResponse;
-import com.tteokguk.tteokguk.member.application.dto.response.AppMyIngredientResponse;
-import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
 import com.tteokguk.tteokguk.member.presentation.dto.WebCheckEmailRequest;
 import com.tteokguk.tteokguk.member.presentation.dto.WebCheckNicknameRequest;
 import com.tteokguk.tteokguk.member.presentation.dto.WebExistedResourceResponse;
@@ -35,7 +32,6 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthController {
 
 	private final AuthService authService;
-	private final UserInfoService userInfoService;
 	private final RefreshTokenService refreshTokenService;
 
 	@PostMapping("/join")
@@ -60,9 +56,6 @@ public class AuthController {
 	@PostMapping("/token")
 	public ResponseEntity<WebIssuedTokensResponse> reIssueTokens(@RequestBody WebIssuedTokensRequest request) {
 		AppIssuedTokensResponse issuedTokensResponse = refreshTokenService.issueTokens(request.refreshToken());
-		AppMyIngredientResponse myInfoResponse = userInfoService.getMyIngredients(issuedTokensResponse.id());
-		return ResponseEntity.ok(
-			WebIssuedTokensResponse.of(issuedTokensResponse, myInfoResponse)
-		);
+		return ResponseEntity.ok(WebIssuedTokensResponse.of(issuedTokensResponse));
 	}
 }
