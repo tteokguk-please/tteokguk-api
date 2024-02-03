@@ -1,5 +1,7 @@
 package com.tteokguk.tteokguk.member.presentation;
 
+import java.util.List;
+
 import com.tteokguk.tteokguk.global.dto.response.ApiPageResponse;
 import com.tteokguk.tteokguk.global.security.annotation.AuthId;
 import com.tteokguk.tteokguk.member.application.UserInfoService;
@@ -73,5 +75,10 @@ public class UserInfoController {
         ApiPageResponse<MemberResponse> response =
             userInfoService.getMembersByNickname(nickname, pageableRequest.page(), pageableRequest.size());
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<MemberResponse>> searchAllByNickname(@RequestParam String nickname) {
+        return ResponseEntity.ok(userInfoService.getAllMembersByNickname(nickname));
     }
 }

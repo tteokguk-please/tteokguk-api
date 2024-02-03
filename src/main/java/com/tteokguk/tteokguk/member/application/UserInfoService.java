@@ -95,4 +95,12 @@ public class UserInfoService {
             members.map(UserInfoResponseAssembler::transferToMemberResponse).getContent();
         return ApiPageResponse.of(new PageImpl<>(content, pageable, content.size()));
     }
+
+    public List<MemberResponse> getAllMembersByNickname(String nickname) {
+        List<Member> members = memberRepository.findAllByNicknameStartingWith(nickname);
+
+        return members.stream()
+            .map(UserInfoResponseAssembler::transferToMemberResponse)
+            .toList();
+    }
 }
