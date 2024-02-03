@@ -6,11 +6,13 @@ import com.tteokguk.tteokguk.global.dto.response.ApiPageResponse;
 import com.tteokguk.tteokguk.global.security.annotation.AuthId;
 import com.tteokguk.tteokguk.member.application.UserInfoService;
 import com.tteokguk.tteokguk.member.application.dto.response.AppInitResponse;
+import com.tteokguk.tteokguk.member.application.dto.response.AppMyIngredientResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.MemberResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.UserInfoResponse;
 import com.tteokguk.tteokguk.member.presentation.dto.WebInitRequest;
 import com.tteokguk.tteokguk.member.presentation.dto.WebInitResponse;
+import com.tteokguk.tteokguk.member.presentation.dto.WebMyIngredientResponse;
 import com.tteokguk.tteokguk.support.application.dto.request.PageableRequest;
 
 import jakarta.validation.Valid;
@@ -80,5 +82,11 @@ public class UserInfoController {
     @GetMapping("/all")
     public ResponseEntity<List<MemberResponse>> searchAllByNickname(@RequestParam String nickname) {
         return ResponseEntity.ok(userInfoService.getAllMembersByNickname(nickname));
+    }
+
+    @GetMapping("/my-ingredients")
+    public ResponseEntity<WebMyIngredientResponse> getMyIngredients(@AuthId Long id) {
+        AppMyIngredientResponse response = userInfoService.getMyIngredients(id);
+        return ResponseEntity.ok(WebMyIngredientResponse.of(response));
     }
 }
