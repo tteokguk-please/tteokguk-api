@@ -2,6 +2,7 @@ package com.tteokguk.tteokguk.member.application;
 
 import static com.tteokguk.tteokguk.member.exception.MemberError.*;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.tteokguk.tteokguk.global.dto.response.ApiPageResponse;
 import com.tteokguk.tteokguk.global.exception.BusinessException;
@@ -17,6 +19,7 @@ import com.tteokguk.tteokguk.global.security.jwt.Jwt;
 import com.tteokguk.tteokguk.global.security.jwt.JwtService;
 import com.tteokguk.tteokguk.member.application.dto.request.AppInitRequest;
 import com.tteokguk.tteokguk.member.application.dto.response.AppInitResponse;
+import com.tteokguk.tteokguk.member.application.dto.response.AppMyIngredientResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.MemberResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.UserInfoResponse;
@@ -87,6 +90,10 @@ public class UserInfoService {
     }
 
     public ApiPageResponse<MemberResponse> getMembersByNickname(String nickname, int page, int size) {
+        if (!StringUtils.hasText(nickname)) {
+            return ApiPageResponse.of(new PageImpl<>(Collections.emptyList()));
+        }
+
         Pageable pageable = PageRequest.of(page - 1, size);
 
         Page<Member> members = memberRepository.findByNicknameStartingWith(nickname, pageable);
@@ -97,10 +104,20 @@ public class UserInfoService {
     }
 
     public List<MemberResponse> getAllMembersByNickname(String nickname) {
+        if (!StringUtils.hasText(nickname))
+            return Collections.emptyList();
+
         List<Member> members = memberRepository.findAllByNicknameStartingWith(nickname);
 
         return members.stream()
             .map(UserInfoResponseAssembler::transferToMemberResponse)
             .toList();
+    }
+
+    public AppMyIngredientResponse getMyIngredients(Long id) {
+        Member member = memberRepository.findById(id)
+            .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
+
+        return AppMyIngredientResponse.of(member);
     }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.tteokguk.tteokguk.item.application.dto.response.ItemResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.AppIssuedTokensResponse;
+import com.tteokguk.tteokguk.member.application.dto.response.AppMyIngredientResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 
@@ -15,7 +16,7 @@ public record WebIssuedTokensResponse(
 	String accessToken,
 	String refreshToken
 ) {
-	public static WebIssuedTokensResponse of(AppIssuedTokensResponse response, MyPageResponse myInfo) {
+	public static WebIssuedTokensResponse of(AppIssuedTokensResponse response, AppMyIngredientResponse myInfo) {
 		return new WebIssuedTokensResponse(
 			response.id(),
 			myInfo.nickname(),

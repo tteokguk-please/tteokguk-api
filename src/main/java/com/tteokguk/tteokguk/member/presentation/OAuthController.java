@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tteokguk.tteokguk.global.exception.BusinessException;
 import com.tteokguk.tteokguk.member.application.OAuthService;
 import com.tteokguk.tteokguk.member.application.UserInfoService;
+import com.tteokguk.tteokguk.member.application.dto.response.AppMyIngredientResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.AppOAuthLoginResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
 import com.tteokguk.tteokguk.member.domain.ProviderType;
@@ -62,7 +63,7 @@ public class OAuthController {
 		AppOAuthLoginResponse response = oAuthService.getByAccessToken(
 			ProviderType.valueOf(provider.toUpperCase()), request.accessToken()
 		);
-		MyPageResponse myPageInfo = userInfoService.getMyPageInfo(response.id());
-		return ResponseEntity.ok(WebOAuthLoginResponse.of(response, myPageInfo));
+		AppMyIngredientResponse myIngredientResponse= userInfoService.getMyIngredients(response.id());
+		return ResponseEntity.ok(WebOAuthLoginResponse.of(response, myIngredientResponse));
 	}
 }
