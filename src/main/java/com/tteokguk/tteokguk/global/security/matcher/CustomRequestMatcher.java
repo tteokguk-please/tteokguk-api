@@ -33,7 +33,10 @@ public class CustomRequestMatcher {
     }
 
     public RequestMatcher userEndpoints() {
-        return new AntPathRequestMatcher("/api/v1/user", HttpMethod.GET.toString());
+        return new OrRequestMatcher(
+            new AntPathRequestMatcher("/api/v1/user", HttpMethod.GET.toString()),
+            new AntPathRequestMatcher("/api/v1/user/all", HttpMethod.GET.toString())
+        );
     }
 
     public RequestMatcher tempUserEndpoints() {
