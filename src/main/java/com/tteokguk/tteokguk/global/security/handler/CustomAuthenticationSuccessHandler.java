@@ -2,6 +2,7 @@ package com.tteokguk.tteokguk.global.security.handler;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.CharsetEncoder;
 import java.util.Date;
 
 import org.springframework.security.core.Authentication;
@@ -9,6 +10,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 import org.springframework.util.MimeTypeUtils;
 
+import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -19,6 +21,8 @@ import com.tteokguk.tteokguk.global.security.jwt.JwtService;
 import com.tteokguk.tteokguk.global.security.model.PrincipalDetails;
 import com.tteokguk.tteokguk.global.utils.LocalDateTimeUtils;
 import com.tteokguk.tteokguk.member.application.RefreshTokenService;
+import com.tteokguk.tteokguk.member.application.UserInfoService;
+import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
 import com.tteokguk.tteokguk.member.domain.Member;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,6 +37,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
 	private final ObjectMapper om;
 	private final JwtService jwtService;
+	private final UserInfoService userInfoService;
 
 	@Override
 	public void onAuthenticationSuccess(
@@ -41,8 +46,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		Authentication authentication
 	) throws IOException {
 		PrincipalDetails details = (PrincipalDetails)authentication.getPrincipal();
-		writeResponseBody(response, getJsonResponse(details.getMember()));
 		response.setContentType(MimeTypeUtils.APPLICATION_JSON_VALUE);
+		response.setCharacterEncoding("utf-8");
+		writeResponseBody(response, getJsonResponse(details.getMember()));
 	}
 
 	private void writeResponseBody(HttpServletResponse response, String jsonResponse) throws IOException {
@@ -58,9 +64,18 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		String accessToken = jwtService.getAccessToken(member, now).getEncodedBody();
 		String refreshToken = jwtService.getRefreshToken(member, now).getEncodedBody();
 
+		MyPageResponse myInfo = userInfoService.getMyPageInfo(member.getId());
+
 		return om.writerWithDefaultPrettyPrinter()
 			.writeValueAsString(
-				new WebLoginResponse(member.getId(), accessToken, refreshToken)
+				new WebLoginResponse(
+					member.getId(),
+					myInfo.nickname(),
+					myInfo.primaryIngredient(),
+					myInfo.items(),
+					accessToken,
+					refreshToken
+				)
 			);
 	}
 }
