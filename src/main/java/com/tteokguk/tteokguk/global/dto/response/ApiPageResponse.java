@@ -25,8 +25,6 @@ public class ApiPageResponse<T> {
         if (data.isEmpty()) {
             this.pageInfo = PageInfo.of(0, 0);
         } else {
-            log.warn("페이지넘버 : {}", data.getPageable().getPageSize());
-            log.warn("페이지사이즈 : {}", data.getPageable().getPageNumber());
             this.pageInfo = PageInfo.of(data.getPageable(), data.getTotalPages());
         }
     }
@@ -61,7 +59,6 @@ public class ApiPageResponse<T> {
                 Pageable pageable,
                 Integer page
         ) {
-            log.warn("realPage : {}", page);
             return PageInfo.builder()
                     .pageable(pageable)
                     .page(page)
@@ -69,7 +66,6 @@ public class ApiPageResponse<T> {
         }
 
         public static PageInfo of(Integer page, Integer size) {
-            log.warn("realPage : {}", page);
             return new PageInfo(page, size);
         }
     }
