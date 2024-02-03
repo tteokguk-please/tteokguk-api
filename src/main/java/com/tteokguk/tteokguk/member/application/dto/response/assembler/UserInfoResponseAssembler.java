@@ -47,7 +47,8 @@ public class UserInfoResponseAssembler {
     public static MemberResponse transferToMemberResponse(Member member) {
         return new MemberResponse(
             member.getId(),
-            member.getNickname()
+            member.getNickname(),
+            member.getPrimaryIngredient()
         );
     }
 
