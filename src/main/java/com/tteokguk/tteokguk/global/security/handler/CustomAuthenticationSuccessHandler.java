@@ -22,6 +22,7 @@ import com.tteokguk.tteokguk.global.security.model.PrincipalDetails;
 import com.tteokguk.tteokguk.global.utils.LocalDateTimeUtils;
 import com.tteokguk.tteokguk.member.application.RefreshTokenService;
 import com.tteokguk.tteokguk.member.application.UserInfoService;
+import com.tteokguk.tteokguk.member.application.dto.response.AppMyIngredientResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
 import com.tteokguk.tteokguk.member.domain.Member;
 
@@ -64,7 +65,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		String accessToken = jwtService.getAccessToken(member, now).getEncodedBody();
 		String refreshToken = jwtService.getRefreshToken(member, now).getEncodedBody();
 
-		MyPageResponse myInfo = userInfoService.getMyPageInfo(member.getId());
+		AppMyIngredientResponse myInfo = userInfoService.getMyIngredients(member.getId());
 
 		return om.writerWithDefaultPrettyPrinter()
 			.writeValueAsString(
