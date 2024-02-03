@@ -46,9 +46,9 @@ public class UserInfoResponseAssembler {
 
     public static MemberResponse transferToMemberResponse(Member member) {
         return new MemberResponse(
-            member.getId(),
-            member.getNickname(),
-            member.getPrimaryIngredient()
+                member.getId(),
+                member.getNickname(),
+                member.getPrimaryIngredient()
         );
     }
 
@@ -66,6 +66,8 @@ public class UserInfoResponseAssembler {
                 .access(tteokguk.isAccess())
                 .completion(tteokguk.isCompletion())
                 .ingredients(tteokguk.getIngredients())
+                .visibleIngredient1(tteokguk.getVisibleIngredient1())
+                .visibleIngredient2(tteokguk.getVisibleIngredient2())
                 .build();
     }
 
