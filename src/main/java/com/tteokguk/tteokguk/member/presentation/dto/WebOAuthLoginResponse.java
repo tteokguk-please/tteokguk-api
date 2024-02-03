@@ -10,19 +10,13 @@ import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 
 public record WebOAuthLoginResponse(
 	Long id,
-	String nickname,
-	Ingredient primaryIngredient,
-	List<ItemResponse> items,
 	String accessToken,
 	String refreshToken,
 	boolean isInitialized
 ) {
-	public static WebOAuthLoginResponse of(AppOAuthLoginResponse response, AppMyIngredientResponse myInfo) {
+	public static WebOAuthLoginResponse of(AppOAuthLoginResponse response) {
 		return new WebOAuthLoginResponse(
 			response.id(),
-			myInfo.nickname(),
-			myInfo.primaryIngredient(),
-			myInfo.items(),
 			response.accessToken(),
 			response.refreshToken(),
 			response.isInitialized()

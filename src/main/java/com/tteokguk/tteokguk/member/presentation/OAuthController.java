@@ -34,7 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 public class OAuthController {
 
 	private final OAuthService oAuthService;
-	private final UserInfoService userInfoService;
 
 	@GetMapping("/{provider}/login")
 	public String oAuthLogin(@PathVariable String provider, @RequestParam String code, HttpServletRequest request) {
@@ -63,7 +62,6 @@ public class OAuthController {
 		AppOAuthLoginResponse response = oAuthService.getByAccessToken(
 			ProviderType.valueOf(provider.toUpperCase()), request.accessToken()
 		);
-		AppMyIngredientResponse myIngredientResponse= userInfoService.getMyIngredients(response.id());
-		return ResponseEntity.ok(WebOAuthLoginResponse.of(response, myIngredientResponse));
+		return ResponseEntity.ok(WebOAuthLoginResponse.of(response));
 	}
 }
