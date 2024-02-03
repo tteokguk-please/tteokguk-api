@@ -3,12 +3,14 @@ package com.tteokguk.tteokguk.global.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.tteokguk.tteokguk.global.exception.error.ErrorCode;
 import com.tteokguk.tteokguk.global.exception.error.ErrorResponse;
+import com.tteokguk.tteokguk.global.exception.error.GlobalError;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,6 +22,12 @@ public class ApiExceptionHandler {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
 		return ErrorResponse.of(ex.getFieldErrors());
+	}
+
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(MissingServletRequestParameterException.class)
+	public ErrorResponse missingServletRequestParameterException() {
+		return ErrorResponse.of(GlobalError.INVALID_REQUEST_PARAM);
 	}
 
 	@ExceptionHandler(BusinessException.class)
