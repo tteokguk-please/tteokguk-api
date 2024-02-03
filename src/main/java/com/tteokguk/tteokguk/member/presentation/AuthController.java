@@ -15,6 +15,7 @@ import com.tteokguk.tteokguk.member.application.RefreshTokenService;
 import com.tteokguk.tteokguk.member.application.UserInfoService;
 import com.tteokguk.tteokguk.member.application.dto.response.AppIssuedTokensResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.AppJoinResponse;
+import com.tteokguk.tteokguk.member.application.dto.response.AppMyIngredientResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
 import com.tteokguk.tteokguk.member.presentation.dto.WebCheckEmailRequest;
 import com.tteokguk.tteokguk.member.presentation.dto.WebCheckNicknameRequest;
@@ -59,7 +60,7 @@ public class AuthController {
 	@PostMapping("/token")
 	public ResponseEntity<WebIssuedTokensResponse> reIssueTokens(@RequestBody WebIssuedTokensRequest request) {
 		AppIssuedTokensResponse issuedTokensResponse = refreshTokenService.issueTokens(request.refreshToken());
-		MyPageResponse myInfoResponse = userInfoService.getMyPageInfo(issuedTokensResponse.id());
+		AppMyIngredientResponse myInfoResponse = userInfoService.getMyIngredients(issuedTokensResponse.id());
 		return ResponseEntity.ok(
 			WebIssuedTokensResponse.of(issuedTokensResponse, myInfoResponse)
 		);
