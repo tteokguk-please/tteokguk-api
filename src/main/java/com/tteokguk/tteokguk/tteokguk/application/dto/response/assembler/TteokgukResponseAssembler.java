@@ -27,6 +27,7 @@ public class TteokgukResponseAssembler {
                     .usedIngredients(tteokguk.getUsedIngredients())
                     .access(tteokguk.isAccess())
                     .completion(tteokguk.isCompletion())
+                    .backgroundColor(tteokguk.getBackgroundColor())
                     .build();
         } catch (EntityNotFoundException e) {
             // 탈퇴한 사용자일 경우
@@ -39,6 +40,7 @@ public class TteokgukResponseAssembler {
                     .usedIngredients(tteokguk.getUsedIngredients())
                     .access(tteokguk.isAccess())
                     .completion(tteokguk.isCompletion())
+                    .backgroundColor(tteokguk.getBackgroundColor())
                     .build();
         }
     }

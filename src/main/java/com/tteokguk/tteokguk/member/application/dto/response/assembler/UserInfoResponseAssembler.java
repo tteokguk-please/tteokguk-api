@@ -34,7 +34,7 @@ public class UserInfoResponseAssembler {
         List<SimpleTteokgukResponse> tteokgukResponses = transferToTteokgukResponses(member.getTteokguks());
         List<SimpleTteokgukResponse> accessibleTteokgukResponses =
                 tteokgukResponses.stream()
-                        .filter(tteokgukResponse -> tteokgukResponse.access())
+                        .filter(SimpleTteokgukResponse::access)
                         .toList();
 
         return UserInfoResponse.builder()
@@ -46,8 +46,8 @@ public class UserInfoResponseAssembler {
 
     public static MemberResponse transferToMemberResponse(Member member) {
         return new MemberResponse(
-            member.getId(),
-            member.getNickname()
+                member.getId(),
+                member.getNickname()
         );
     }
 
@@ -65,6 +65,7 @@ public class UserInfoResponseAssembler {
                 .access(tteokguk.isAccess())
                 .completion(tteokguk.isCompletion())
                 .ingredients(tteokguk.getIngredients())
+                .backgroundColor(tteokguk.getBackgroundColor())
                 .build();
     }
 

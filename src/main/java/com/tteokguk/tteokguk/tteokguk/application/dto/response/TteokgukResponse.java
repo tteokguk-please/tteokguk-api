@@ -1,5 +1,6 @@
 package com.tteokguk.tteokguk.tteokguk.application.dto.response;
 
+import com.tteokguk.tteokguk.tteokguk.constants.BackgroundColor;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 import lombok.Builder;
 
@@ -14,6 +15,7 @@ public record TteokgukResponse(
         boolean access,
         boolean completion,
         List<Ingredient> ingredients,
-        List<Ingredient> usedIngredients
+        List<Ingredient> usedIngredients,
+        BackgroundColor backgroundColor
 ) {
 }
