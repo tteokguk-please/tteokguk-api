@@ -1,5 +1,6 @@
 package com.tteokguk.tteokguk.member.infra.persistence;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.tteokguk.tteokguk.member.domain.Member;
@@ -21,4 +22,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByNickname(String nickname);
 
     Page<Member> findByNicknameStartingWith(String nickname, Pageable pageable);
+
+    List<Member> findAllByNicknameStartingWith(String nickname);
 }
