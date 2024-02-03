@@ -28,6 +28,8 @@ public class TteokgukResponseAssembler {
                     .access(tteokguk.isAccess())
                     .completion(tteokguk.isCompletion())
                     .backgroundColor(tteokguk.getBackgroundColor())
+                    .visibleIngredient1(tteokguk.getVisibleIngredient1())
+                    .visibleIngredient2(tteokguk.getVisibleIngredient2())
                     .build();
         } catch (EntityNotFoundException e) {
             // 탈퇴한 사용자일 경우
@@ -41,6 +43,8 @@ public class TteokgukResponseAssembler {
                     .access(tteokguk.isAccess())
                     .completion(tteokguk.isCompletion())
                     .backgroundColor(tteokguk.getBackgroundColor())
+                    .visibleIngredient1(tteokguk.getVisibleIngredient1())
+                    .visibleIngredient2(tteokguk.getVisibleIngredient2())
                     .build();
         }
     }
@@ -51,7 +55,10 @@ public class TteokgukResponseAssembler {
                         support.getSupportedTteokguk().getId(),
                         support.getReceiver().getNickname(),
                         support.getSupportedTteokguk().isCompletion(),
-                        support.getSupportedTteokguk().getUsedIngredients()
+                        support.getSupportedTteokguk().getUsedIngredients(),
+                        support.getSupportedTteokguk().getBackgroundColor(),
+                        support.getSupportedTteokguk().getVisibleIngredient1(),
+                        support.getSupportedTteokguk().getVisibleIngredient2()
                 ))
                 .toList();
     }

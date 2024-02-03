@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +27,6 @@ import java.util.List;
 
 import static com.tteokguk.tteokguk.member.exception.MemberError.MEMBER_NOT_FOUND;
 import static com.tteokguk.tteokguk.tteokguk.exception.TteokgukError.TTEOKGUK_NOT_FOUND;
-import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Service
 @Transactional
@@ -67,8 +65,7 @@ public class SupportService {
     ) {
         PageRequest pageable = PageRequest.of(
                 request.page() - 1,
-                request.size(),
-                Sort.by(DESC, "support_id"));
+                request.size());
 
         List<ReceivedIngredientResponse> responses = supportQueryRepository.getReceivedIngredientResponse(id, pageable);
         return new PageImpl<>(responses, pageable, responses.size());
@@ -80,8 +77,7 @@ public class SupportService {
     ) {
         PageRequest pageable = PageRequest.of(
                 request.page() - 1,
-                request.size(),
-                Sort.by(DESC, "support_id"));
+                request.size());
 
         List<Support> supports = supportRepository.findSupportTteokguks(id, pageable);
         List<SupportTteokgukResponse> responses = TteokgukResponseAssembler.toSupportTteokgukResponses(supports);

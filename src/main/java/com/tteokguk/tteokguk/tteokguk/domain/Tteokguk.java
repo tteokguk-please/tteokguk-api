@@ -75,6 +75,14 @@ public class Tteokguk extends BaseEntity {
     @Enumerated(STRING)
     private BackgroundColor backgroundColor;
 
+    @Column(name = "visible_ingredient1")
+    @Enumerated(STRING)
+    private Ingredient visibleIngredient1;
+
+    @Column(name = "visible_ingredient2")
+    @Enumerated(STRING)
+    private Ingredient visibleIngredient2;
+
     @Builder(access = PROTECTED)
     private Tteokguk(
             String wish,
@@ -91,6 +99,17 @@ public class Tteokguk extends BaseEntity {
         this.deleted = false;
         this.completion = false;
         this.backgroundColor = BackgroundColor.random();
+
+        if (ingredients.contains(Ingredient.RICE_CAKE)) {
+            visibleIngredient1 = Ingredient.RICE_CAKE;
+            visibleIngredient2 = ingredients.stream()
+                    .filter(ingredient -> !ingredient.equals(Ingredient.RICE_CAKE))
+                    .toList()
+                    .get(0);
+        } else {
+            visibleIngredient1 = ingredients.get(0);
+            visibleIngredient2 = ingredients.get(1);
+        }
     }
 
     public static Tteokguk of(

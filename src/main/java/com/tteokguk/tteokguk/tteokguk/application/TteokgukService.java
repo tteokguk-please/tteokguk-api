@@ -20,6 +20,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.tteokguk.tteokguk.member.exception.MemberError.MEMBER_NOT_FOUND;
@@ -43,9 +45,11 @@ public class TteokgukService {
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
         List<Ingredient> ingredients = Ingredient.toIngredients(request.ingredients());
+        List<Ingredient> mutableIngredients = new ArrayList<>(ingredients);
+        Collections.shuffle(mutableIngredients);
 
         Tteokguk savedTteokguk = tteokgukRepository.save(
-                Tteokguk.of(request.wish(), ingredients, member, request.access()));
+                Tteokguk.of(request.wish(), mutableIngredients, member, request.access()));
 
         member.addTteokguk(savedTteokguk);
         return TteokgukResponseAssembler.toTteokgukResponse(savedTteokguk);
