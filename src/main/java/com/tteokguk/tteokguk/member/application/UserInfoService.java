@@ -19,6 +19,7 @@ import com.tteokguk.tteokguk.global.security.jwt.Jwt;
 import com.tteokguk.tteokguk.global.security.jwt.JwtService;
 import com.tteokguk.tteokguk.member.application.dto.request.AppInitRequest;
 import com.tteokguk.tteokguk.member.application.dto.response.AppInitResponse;
+import com.tteokguk.tteokguk.member.application.dto.response.AppMyIngredientResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.MemberResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
 import com.tteokguk.tteokguk.member.application.dto.response.UserInfoResponse;
@@ -111,5 +112,12 @@ public class UserInfoService {
         return members.stream()
             .map(UserInfoResponseAssembler::transferToMemberResponse)
             .toList();
+    }
+
+    public AppMyIngredientResponse getMyIngredients(Long id) {
+        Member member = memberRepository.findById(id)
+            .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
+
+        return AppMyIngredientResponse.of(member);
     }
 }
