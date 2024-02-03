@@ -38,7 +38,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
 	private final ObjectMapper om;
 	private final JwtService jwtService;
-	private final UserInfoService userInfoService;
 
 	@Override
 	public void onAuthenticationSuccess(
@@ -65,15 +64,10 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		String accessToken = jwtService.getAccessToken(member, now).getEncodedBody();
 		String refreshToken = jwtService.getRefreshToken(member, now).getEncodedBody();
 
-		AppMyIngredientResponse myInfo = userInfoService.getMyIngredients(member.getId());
-
 		return om.writerWithDefaultPrettyPrinter()
 			.writeValueAsString(
 				new WebLoginResponse(
 					member.getId(),
-					myInfo.nickname(),
-					myInfo.primaryIngredient(),
-					myInfo.items(),
 					accessToken,
 					refreshToken
 				)
