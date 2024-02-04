@@ -16,6 +16,7 @@ public record TteokgukResponse(
         boolean completion,
         List<Ingredient> ingredients,
         List<Ingredient> usedIngredients,
+        List<Ingredient> requiredIngredients,
         BackgroundColor backgroundColor,
         Ingredient visibleIngredient1,
         Ingredient visibleIngredient2

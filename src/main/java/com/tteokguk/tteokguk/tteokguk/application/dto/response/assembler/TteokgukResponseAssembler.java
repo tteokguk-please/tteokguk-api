@@ -3,6 +3,7 @@ package com.tteokguk.tteokguk.tteokguk.application.dto.response.assembler;
 import com.tteokguk.tteokguk.support.application.dto.response.SupportTteokgukResponse;
 import com.tteokguk.tteokguk.support.domain.Support;
 import com.tteokguk.tteokguk.tteokguk.application.dto.response.TteokgukResponse;
+import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.NoArgsConstructor;
@@ -17,14 +18,21 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class TteokgukResponseAssembler {
     public static TteokgukResponse toTteokgukResponse(Tteokguk tteokguk) {
+        List<Ingredient> ingredients = tteokguk.getIngredients();
+        List<Ingredient> usedIngredients = tteokguk.getUsedIngredients();
+        List<Ingredient> requiredIngredients = ingredients.stream()
+                .filter(ingredient -> !usedIngredients.contains(ingredient))
+                .toList();
+
         try {
             return TteokgukResponse.builder()
                     .tteokgukId(tteokguk.getId())
                     .memberId(tteokguk.getMember().getId())
                     .nickname(tteokguk.getMember().getNickname())
                     .wish(tteokguk.getWish())
-                    .ingredients(tteokguk.getIngredients())
-                    .usedIngredients(tteokguk.getUsedIngredients())
+                    .ingredients(ingredients)
+                    .usedIngredients(usedIngredients)
+                    .requiredIngredients(requiredIngredients)
                     .access(tteokguk.isAccess())
                     .completion(tteokguk.isCompletion())
                     .backgroundColor(tteokguk.getBackgroundColor())
@@ -38,8 +46,9 @@ public class TteokgukResponseAssembler {
                     .memberId(tteokguk.getMember().getId())
                     .nickname("탈퇴한 사용자")
                     .wish(tteokguk.getWish())
-                    .ingredients(tteokguk.getIngredients())
-                    .usedIngredients(tteokguk.getUsedIngredients())
+                    .ingredients(ingredients)
+                    .usedIngredients(usedIngredients)
+                    .requiredIngredients(requiredIngredients)
                     .access(tteokguk.isAccess())
                     .completion(tteokguk.isCompletion())
                     .backgroundColor(tteokguk.getBackgroundColor())
