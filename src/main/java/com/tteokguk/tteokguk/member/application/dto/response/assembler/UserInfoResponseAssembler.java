@@ -66,6 +66,7 @@ public class UserInfoResponseAssembler {
                 .access(tteokguk.isAccess())
                 .completion(tteokguk.isCompletion())
                 .ingredients(tteokguk.getIngredients())
+                .backgroundColor(tteokguk.getBackgroundColor())
                 .visibleIngredient1(tteokguk.getVisibleIngredient1())
                 .visibleIngredient2(tteokguk.getVisibleIngredient2())
                 .build();
