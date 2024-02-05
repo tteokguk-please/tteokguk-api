@@ -4,6 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.tteokguk.tteokguk.global.exception.BusinessException;
+import com.tteokguk.tteokguk.global.security.jwt.JwtService;
 import com.tteokguk.tteokguk.member.application.dto.request.AppJoinRequest;
 import com.tteokguk.tteokguk.member.application.dto.response.AppJoinResponse;
 import com.tteokguk.tteokguk.member.domain.RoleType;
@@ -25,6 +26,7 @@ public class AuthService {
 	private final MemberRepository memberRepository;
 	private final SimpleMemberRepository simpleMemberRepository;
 	private final PasswordEncoder encoder;
+	private final JwtService jwtService;
 
 	public AppJoinResponse join(AppJoinRequest request) {
 		if (existsByEmail(request.email()))
@@ -42,7 +44,11 @@ public class AuthService {
 				request.acceptsMarketing()
 			)
 		);
-		return AppJoinResponse.of(entity);
+
+		Long now = System.currentTimeMillis();
+		String accessToken = jwtService.getAccessToken(entity, now).getEncodedBody();
+		String refreshToken = jwtService.getRefreshToken(entity, now).getEncodedBody();
+		return AppJoinResponse.of(entity, accessToken, refreshToken);
 	}
 
 	public boolean existsByEmail(String email) {
