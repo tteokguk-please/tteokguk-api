@@ -11,7 +11,7 @@ public record SupportTteokgukResponse(
         Boolean completion,
         List<?> ingredients,
         BackgroundColor backgroundColor,
-        Ingredient visibleIngredient1,
-        Ingredient visibleIngredient2
+        Ingredient frontGarnish,
+        Ingredient backGarnish
 ) {
 }

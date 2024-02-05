@@ -36,8 +36,8 @@ public class TteokgukResponseAssembler {
                     .access(tteokguk.isAccess())
                     .completion(tteokguk.isCompletion())
                     .backgroundColor(tteokguk.getBackgroundColor())
-                    .visibleIngredient1(tteokguk.getVisibleIngredient1())
-                    .visibleIngredient2(tteokguk.getVisibleIngredient2())
+                    .frontGarnish(tteokguk.getVisibleIngredient1())
+                    .backGarnish(tteokguk.getVisibleIngredient2())
                     .build();
         } catch (EntityNotFoundException e) {
             // 탈퇴한 사용자일 경우
@@ -52,8 +52,8 @@ public class TteokgukResponseAssembler {
                     .access(tteokguk.isAccess())
                     .completion(tteokguk.isCompletion())
                     .backgroundColor(tteokguk.getBackgroundColor())
-                    .visibleIngredient1(tteokguk.getVisibleIngredient1())
-                    .visibleIngredient2(tteokguk.getVisibleIngredient2())
+                    .frontGarnish(tteokguk.getVisibleIngredient1())
+                    .backGarnish(tteokguk.getVisibleIngredient2())
                     .build();
         }
     }

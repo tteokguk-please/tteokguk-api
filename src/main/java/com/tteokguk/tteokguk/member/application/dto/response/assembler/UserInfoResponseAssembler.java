@@ -67,8 +67,8 @@ public class UserInfoResponseAssembler {
                 .completion(tteokguk.isCompletion())
                 .ingredients(tteokguk.getIngredients())
                 .backgroundColor(tteokguk.getBackgroundColor())
-                .visibleIngredient1(tteokguk.getVisibleIngredient1())
-                .visibleIngredient2(tteokguk.getVisibleIngredient2())
+                .frontGarnish(tteokguk.getVisibleIngredient1())
+                .backGarnish(tteokguk.getVisibleIngredient2())
                 .build();
     }
 

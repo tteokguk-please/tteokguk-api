@@ -18,7 +18,7 @@ public record TteokgukResponse(
         List<Ingredient> usedIngredients,
         List<Ingredient> requiredIngredients,
         BackgroundColor backgroundColor,
-        Ingredient visibleIngredient1,
-        Ingredient visibleIngredient2
+        Ingredient frontGarnish,
+        Ingredient backGarnish
 ) {
 }

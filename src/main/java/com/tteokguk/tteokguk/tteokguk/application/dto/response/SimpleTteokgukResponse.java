@@ -14,7 +14,7 @@ public record SimpleTteokgukResponse(
         boolean completion,
         List<Ingredient> ingredients,
         BackgroundColor backgroundColor,
-        Ingredient visibleIngredient1,
-        Ingredient visibleIngredient2
+        Ingredient frontGarnish,
+        Ingredient backGarnish
 ) {
 }
