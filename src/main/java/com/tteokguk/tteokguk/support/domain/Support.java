@@ -87,6 +87,7 @@ public class Support {
 
         sender.sendIngredient(receiver, supportIngredient);
         sender.giftToSender(rewardIngredient, rewardQuantity);
+        supportedTteokguk.useIngredients(List.of(supportIngredient));
     }
 
     public static Support of(
