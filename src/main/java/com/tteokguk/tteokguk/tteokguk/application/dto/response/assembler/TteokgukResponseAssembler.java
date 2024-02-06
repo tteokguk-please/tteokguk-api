@@ -5,7 +5,6 @@ import com.tteokguk.tteokguk.support.domain.Support;
 import com.tteokguk.tteokguk.tteokguk.application.dto.response.TteokgukResponse;
 import com.tteokguk.tteokguk.tteokguk.constants.Ingredient;
 import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,38 +23,20 @@ public class TteokgukResponseAssembler {
                 .filter(ingredient -> !usedIngredients.contains(ingredient))
                 .toList();
 
-        try {
-            return TteokgukResponse.builder()
-                    .tteokgukId(tteokguk.getId())
-                    .memberId(tteokguk.getMember().getId())
-                    .nickname(tteokguk.getMember().getNickname())
-                    .wish(tteokguk.getWish())
-                    .ingredients(ingredients)
-                    .usedIngredients(usedIngredients)
-                    .requiredIngredients(requiredIngredients)
-                    .access(tteokguk.isAccess())
-                    .completion(tteokguk.isCompletion())
-                    .backgroundColor(tteokguk.getBackgroundColor())
-                    .frontGarnish(tteokguk.getVisibleIngredient1())
-                    .backGarnish(tteokguk.getVisibleIngredient2())
-                    .build();
-        } catch (EntityNotFoundException e) {
-            // 탈퇴한 사용자일 경우
-            return TteokgukResponse.builder()
-                    .tteokgukId(null)
-                    .memberId(tteokguk.getMember().getId())
-                    .nickname("탈퇴한 사용자")
-                    .wish(tteokguk.getWish())
-                    .ingredients(ingredients)
-                    .usedIngredients(usedIngredients)
-                    .requiredIngredients(requiredIngredients)
-                    .access(tteokguk.isAccess())
-                    .completion(tteokguk.isCompletion())
-                    .backgroundColor(tteokguk.getBackgroundColor())
-                    .frontGarnish(tteokguk.getVisibleIngredient1())
-                    .backGarnish(tteokguk.getVisibleIngredient2())
-                    .build();
-        }
+        return TteokgukResponse.builder()
+                .tteokgukId(tteokguk.getId())
+                .memberId(tteokguk.getMember().getId())
+                .nickname(tteokguk.getMember().getNickname())
+                .wish(tteokguk.getWish())
+                .ingredients(ingredients)
+                .usedIngredients(usedIngredients)
+                .requiredIngredients(requiredIngredients)
+                .access(tteokguk.isAccess())
+                .completion(tteokguk.isCompletion())
+                .backgroundColor(tteokguk.getBackgroundColor())
+                .frontGarnish(tteokguk.getVisibleIngredient1())
+                .backGarnish(tteokguk.getVisibleIngredient2())
+                .build();
     }
 
     public static List<SupportTteokgukResponse> toSupportTteokgukResponses(List<Support> supports) {
