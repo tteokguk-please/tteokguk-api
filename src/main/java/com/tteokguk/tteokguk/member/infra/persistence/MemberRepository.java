@@ -21,7 +21,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByNickname(String nickname);
 
-    Page<Member> findByNicknameStartingWith(String nickname, Pageable pageable);
+    Page<Member> findByNicknameStartingWithAndDeleted(String nickname, Pageable pageable, boolean deleted);
 
-    List<Member> findAllByNicknameStartingWith(String nickname);
+    List<Member> findAllByNicknameStartingWithAndDeleted(String nickname, boolean deleted);
 }
