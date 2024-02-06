@@ -124,7 +124,7 @@ public class Member extends BaseEntity {
 
     public synchronized void useIngredients(List<Ingredient> ingredients) {
         items.stream()
-                .filter(item -> ingredients.contains(item.getIngredient()))
+                .filter(item -> ingredients.contains(item.getIngredient()) && isNotPrimaryIngredient(item.getIngredient()))
                 .forEach(Item::minus);
     }
 
@@ -135,7 +135,9 @@ public class Member extends BaseEntity {
         Item senderItem = findItemByIngredient(this, ingredient);
         Item receiverItem = findItemByIngredient(receiver, ingredient);
 
-        senderItem.minus();
+        if (!isNotPrimaryIngredient(senderItem)) {
+            senderItem.minus();
+        }
         receiverItem.plus();
     }
 
