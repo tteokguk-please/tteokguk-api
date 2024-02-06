@@ -28,7 +28,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "t_member")
 @NoArgsConstructor(access = PROTECTED)
 @Inheritance
-@Where(clause = "deleted = false")
 public class Member extends BaseEntity {
 
     @Id
