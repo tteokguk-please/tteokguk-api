@@ -11,6 +11,13 @@ import java.util.List;
 @Transactional
 public interface SupportRepository extends JpaRepository<Support, Long> {
 
-    @Query("SELECT s FROM Support s GROUP BY s.supportedTteokguk.id HAVING s.sender.id = :id")
+    @Query("""
+        SELECT s 
+        FROM Support s JOIN FETCH Tteokguk t 
+        ON s.supportedTteokguk.id = t.id 
+        WHERE t.deleted = false 
+        GROUP BY s.supportedTteokguk.id 
+        HAVING s.sender.id = :id
+    """)
     List<Support> findSupportTteokguks(Long id, Pageable pageable);
 }
