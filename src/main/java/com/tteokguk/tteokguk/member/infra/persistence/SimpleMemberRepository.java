@@ -1,15 +1,16 @@
 package com.tteokguk.tteokguk.member.infra.persistence;
 
-import java.util.Optional;
-
+import com.tteokguk.tteokguk.member.domain.SimpleMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.tteokguk.tteokguk.member.domain.SimpleMember;
+import java.util.Optional;
 
 public interface SimpleMemberRepository extends JpaRepository<SimpleMember, Long> {
-	boolean existsByEmail(String email);
+    boolean existsByEmail(String email);
 
-	Optional<SimpleMember> findByEmail(String email);
+    Optional<SimpleMember> findByIdAndDeleted(Long id, boolean deleted);
 
-	boolean existsByNickname(String nickname);
+    Optional<SimpleMember> findByEmail(String email);
+
+    boolean existsByNickname(String nickname);
 }

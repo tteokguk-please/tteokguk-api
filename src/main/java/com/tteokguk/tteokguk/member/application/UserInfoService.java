@@ -32,7 +32,7 @@ public class UserInfoService {
     private final JwtService jwtService;
 
     public MyPageResponse getMyPageInfo(Long memberId) {
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByIdAndDeleted(memberId, false)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
         if (member.isDeleted())
@@ -42,7 +42,7 @@ public class UserInfoService {
     }
 
     public UserInfoResponse getUserInfo(Long memberId) {
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByIdAndDeleted(memberId, false)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
         if (member.isDeleted())
@@ -57,7 +57,7 @@ public class UserInfoService {
     }
 
     public AppInitResponse initialize(Long memberId, AppInitRequest request) {
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByIdAndDeleted(memberId, false)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
         if (member.isInitialized())
@@ -76,7 +76,7 @@ public class UserInfoService {
     }
 
     public void delete(Long memberId) {
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByIdAndDeleted(memberId, false)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
         member.delete();
@@ -115,7 +115,7 @@ public class UserInfoService {
     }
 
     public AppMyIngredientResponse getMyIngredients(Long id) {
-        Member member = memberRepository.findById(id)
+        Member member = memberRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
         if (member.isDeleted())

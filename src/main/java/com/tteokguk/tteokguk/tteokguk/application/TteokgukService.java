@@ -41,7 +41,7 @@ public class TteokgukService {
             Long id,
             CreateTteokgukRequest request
     ) {
-        Member member = memberRepository.findById(id)
+        Member member = memberRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
         List<Ingredient> ingredients = Ingredient.toIngredients(request.ingredients());
@@ -59,7 +59,7 @@ public class TteokgukService {
             Long id,
             Long tteokgukId
     ) {
-        Member member = memberRepository.findById(id)
+        Member member = memberRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
         Tteokguk tteokguk = member.getTteokguks().stream()
@@ -74,7 +74,7 @@ public class TteokgukService {
             Long id,
             IngredientRequest request
     ) {
-        Member member = memberRepository.findById(id)
+        Member member = memberRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
         Tteokguk tteokguk = member.getTteokguks()
@@ -114,7 +114,7 @@ public class TteokgukService {
     }
 
     public TteokgukResponse getTteokguk(Long tteokgukId) {
-        Tteokguk tteokguk = tteokgukRepository.findById(tteokgukId)
+        Tteokguk tteokguk = tteokgukRepository.findByIdAndDeleted(tteokgukId, false)
                 .orElseThrow(() -> BusinessException.of(TTEOKGUK_NOT_FOUND));
 
         if (!tteokguk.isAccess()) {

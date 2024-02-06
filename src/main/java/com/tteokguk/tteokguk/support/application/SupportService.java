@@ -42,7 +42,7 @@ public class SupportService {
             Long id,
             SupportRequest request
     ) {
-        Member sender = memberRepository.findById(id)
+        Member sender = memberRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
         Tteokguk supportedTteokguk = tteokgukRepository.findById(request.tteokgukId())

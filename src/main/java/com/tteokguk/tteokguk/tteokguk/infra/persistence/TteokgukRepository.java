@@ -7,9 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 public interface TteokgukRepository extends JpaRepository<Tteokguk, Long> {
+
+    Optional<Tteokguk> findByIdAndDeleted(Long id, boolean deleted);
 
     @Query("SELECT t FROM Tteokguk t WHERE t.access = true and t.member.deleted = false and t.completion = false ORDER BY t.id DESC")
     List<Tteokguk> findNewTteokguks(Pageable pageable);
