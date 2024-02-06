@@ -9,7 +9,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -174,4 +173,9 @@ public class Member extends BaseEntity {
         this.deleted = true;
     }
 
+    public String getNickname() {
+        if (isDeleted())
+            return "탈퇴한 사용자";
+        return nickname;
+    }
 }
