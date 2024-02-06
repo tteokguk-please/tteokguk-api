@@ -41,12 +41,18 @@ public class UserInfoService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
+        if (member.isDeleted())
+            throw new BusinessException(DELETED_MEMBER);
+
         return UserInfoResponseAssembler.transferToMyPageResponse(member);
     }
 
     public UserInfoResponse getUserInfo(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
+
+        if (member.isDeleted())
+            throw new BusinessException(DELETED_MEMBER);
 
         return UserInfoResponseAssembler.transferToUserInfoResponse(member);
     }
@@ -117,6 +123,9 @@ public class UserInfoService {
     public AppMyIngredientResponse getMyIngredients(Long id) {
         Member member = memberRepository.findById(id)
             .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
+
+        if (member.isDeleted())
+            throw new BusinessException(DELETED_MEMBER);
 
         return AppMyIngredientResponse.of(member);
     }

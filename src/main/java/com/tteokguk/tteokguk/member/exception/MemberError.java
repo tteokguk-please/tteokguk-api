@@ -17,6 +17,7 @@ public enum MemberError implements ErrorCode {
 	DUPLICATE_EMAIL("이메일이 중복되었습니다.", BAD_REQUEST, "M_002"),
 	DUPLICATE_NICKNAME("닉네임이 중복되었습니다.", BAD_REQUEST, "M_003"),
 	ALREADY_INITIALIZED_USER("이미 초기화된 유저입니다.", BAD_REQUEST, "M_004"),
+	DELETED_MEMBER("탈퇴한 유저입니다.", NOT_FOUND, "M_005")
 	;
 
 	private final String message;
