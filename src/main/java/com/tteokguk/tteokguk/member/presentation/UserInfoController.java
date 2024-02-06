@@ -1,25 +1,19 @@
 package com.tteokguk.tteokguk.member.presentation;
 
-import java.util.List;
-
 import com.tteokguk.tteokguk.global.dto.response.ApiPageResponse;
 import com.tteokguk.tteokguk.global.security.annotation.AuthId;
 import com.tteokguk.tteokguk.member.application.UserInfoService;
-import com.tteokguk.tteokguk.member.application.dto.response.AppInitResponse;
-import com.tteokguk.tteokguk.member.application.dto.response.AppMyIngredientResponse;
-import com.tteokguk.tteokguk.member.application.dto.response.MemberResponse;
-import com.tteokguk.tteokguk.member.application.dto.response.MyPageResponse;
-import com.tteokguk.tteokguk.member.application.dto.response.UserInfoResponse;
+import com.tteokguk.tteokguk.member.application.dto.response.*;
 import com.tteokguk.tteokguk.member.presentation.dto.WebInitRequest;
 import com.tteokguk.tteokguk.member.presentation.dto.WebInitResponse;
 import com.tteokguk.tteokguk.member.presentation.dto.WebMyIngredientResponse;
 import com.tteokguk.tteokguk.support.application.dto.request.PageableRequest;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -44,9 +38,9 @@ public class UserInfoController {
     }
 
     @GetMapping("/random")
-    public ResponseEntity<UserInfoResponse> getRandomUserInfo(@AuthId Long id) {
-        UserInfoResponse userInfo = userInfoService.getRandomUserInfo();
-        return ResponseEntity.ok(userInfo);
+    public ResponseEntity<UserIdResponse> getRandomUserInfo(@AuthId Long id) {
+        UserIdResponse response = userInfoService.getRandomUserInfo();
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/initialization")
@@ -72,10 +66,10 @@ public class UserInfoController {
 
     @GetMapping
     public ResponseEntity<ApiPageResponse<MemberResponse>> searchByNickname(
-        @RequestParam String nickname, @Valid PageableRequest pageableRequest
+            @RequestParam String nickname, @Valid PageableRequest pageableRequest
     ) {
         ApiPageResponse<MemberResponse> response =
-            userInfoService.getMembersByNickname(nickname, pageableRequest.page(), pageableRequest.size());
+                userInfoService.getMembersByNickname(nickname, pageableRequest.page(), pageableRequest.size());
         return ResponseEntity.ok(response);
     }
 
