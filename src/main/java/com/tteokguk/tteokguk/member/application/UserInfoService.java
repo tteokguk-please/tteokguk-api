@@ -35,12 +35,18 @@ public class UserInfoService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
+        if (member.isDeleted())
+            throw new BusinessException(DELETED_MEMBER);
+
         return UserInfoResponseAssembler.transferToMyPageResponse(member);
     }
 
     public UserInfoResponse getUserInfo(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
+
+        if (member.isDeleted())
+            throw new BusinessException(DELETED_MEMBER);
 
         return UserInfoResponseAssembler.transferToUserInfoResponse(member);
     }
@@ -90,7 +96,7 @@ public class UserInfoService {
 
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<Member> members = memberRepository.findByNicknameStartingWith(nickname, pageable);
+        Page<Member> members = memberRepository.findByNicknameStartingWithAndDeleted(nickname, pageable, false);
 
         List<MemberResponse> content =
                 members.map(UserInfoResponseAssembler::transferToMemberResponse).getContent();
@@ -101,7 +107,7 @@ public class UserInfoService {
         if (!StringUtils.hasText(nickname))
             return Collections.emptyList();
 
-        List<Member> members = memberRepository.findAllByNicknameStartingWith(nickname);
+        List<Member> members = memberRepository.findAllByNicknameStartingWithAndDeleted(nickname, false);
 
         return members.stream()
                 .map(UserInfoResponseAssembler::transferToMemberResponse)
@@ -111,6 +117,9 @@ public class UserInfoService {
     public AppMyIngredientResponse getMyIngredients(Long id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
+
+        if (member.isDeleted())
+            throw new BusinessException(DELETED_MEMBER);
 
         return AppMyIngredientResponse.of(member);
     }
