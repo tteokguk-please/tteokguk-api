@@ -29,7 +29,7 @@ public class SupportQueryRepository {
         return query
                 .select(getReceivedIngredientResponseConstructorExpression())
                 .from(support)
-                .where(support.id.in(supportIds))
+                .where(support.id.in(supportIds).and(support.supportedTteokguk.deleted.eq(false)))
                 .orderBy(support.id.desc())
                 .fetch();
     }
