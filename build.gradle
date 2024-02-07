@@ -71,7 +71,7 @@ tasks.register('copyGitSubmodule', Copy) {
 tasks.named('bootBuildImage') {
     environment["BPE_DELIM_JAVA_TOOL_OPTIONS"] = " "
     environment["BPE_APPEND_JAVA_TOOL_OPTIONS"] = "-XX:+ExitOnOutOfMemoryError -XX:MaxDirectMemorySize=10M " +
-            "-XX:MaxMetaspaceSize=100M -XX:ReservedCodeCacheSize=60M -Xss256K"
+            "-XX:MaxMetaspaceSize=150M -XX:ReservedCodeCacheSize=60M -Xss256K"
 
     def dockerhubId = project.property("DOCKERHUB_ID")
     def dockerhubToken = project.property("DOCKERHUB_TOKEN")
