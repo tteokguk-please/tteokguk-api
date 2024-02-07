@@ -35,7 +35,9 @@ public class CustomRequestMatcher {
     public RequestMatcher userEndpoints() {
         return new OrRequestMatcher(
             new AntPathRequestMatcher("/api/v1/user", HttpMethod.GET.toString()),
-            new AntPathRequestMatcher("/api/v1/user/all", HttpMethod.GET.toString())
+            new AntPathRequestMatcher("/api/v1/user/all", HttpMethod.GET.toString()),
+            new AntPathRequestMatcher("/api/v1/user/{id}", HttpMethod.GET.toString()),
+            new AntPathRequestMatcher("/api/v1/user/random", HttpMethod.GET.toString())
         );
     }
 
