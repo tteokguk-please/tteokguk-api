@@ -57,7 +57,7 @@ public class UserInfoService {
     }
 
     public AppInitResponse initialize(Long memberId, AppInitRequest request) {
-        Member member = memberRepository.findByIdAndDeleted(memberId, false)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
         if (member.isInitialized())
