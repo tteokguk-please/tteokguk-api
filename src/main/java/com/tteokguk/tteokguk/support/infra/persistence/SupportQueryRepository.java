@@ -70,7 +70,8 @@ public class SupportQueryRepository {
                 support.sender.nickname,
                 support.supportIngredient,
                 support.message,
-                support.access
+                support.access,
+                support.supportedTteokguk.id
         );
     }
 }

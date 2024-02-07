@@ -8,6 +8,7 @@ public record ReceivedIngredientResponse(
         String nickname,
         Ingredient ingredient,
         String message,
-        boolean access
+        boolean access,
+		Long supportedTteokgukId
 ) {
 }
