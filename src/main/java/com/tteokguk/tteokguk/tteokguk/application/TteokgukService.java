@@ -2,7 +2,7 @@ package com.tteokguk.tteokguk.tteokguk.application;
 
 import com.tteokguk.tteokguk.global.exception.BusinessException;
 import com.tteokguk.tteokguk.member.domain.Member;
-import com.tteokguk.tteokguk.member.infra.persistence.SimpleMemberRepository;
+import com.tteokguk.tteokguk.member.infra.persistence.MemberRepository;
 import com.tteokguk.tteokguk.support.application.dto.request.PageableRequest;
 import com.tteokguk.tteokguk.tteokguk.application.dto.request.CreateTteokgukRequest;
 import com.tteokguk.tteokguk.tteokguk.application.dto.request.IngredientRequest;
@@ -34,7 +34,7 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @RequiredArgsConstructor
 public class TteokgukService {
 
-    private final SimpleMemberRepository memberRepository;
+    private final MemberRepository memberRepository;
     private final TteokgukRepository tteokgukRepository;
 
     public TteokgukResponse createTteokguk(
