@@ -43,9 +43,9 @@ public class TteokgukController {
 
     @GetMapping("/find/{tteokgukId}")
     public ResponseEntity<TteokgukResponse> getTteokguk(
-            @PathVariable Long tteokgukId
+            @AuthId Long memberId, @PathVariable Long tteokgukId
     ) {
-        TteokgukResponse response = tteokgukService.getTteokguk(tteokgukId);
+        TteokgukResponse response = tteokgukService.getTteokguk(memberId, tteokgukId);
         return ResponseEntity.ok(response);
     }
 

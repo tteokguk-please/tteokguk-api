@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static com.tteokguk.tteokguk.member.exception.MemberError.MEMBER_NOT_FOUND;
 import static com.tteokguk.tteokguk.tteokguk.exception.TteokgukError.*;
@@ -113,11 +114,11 @@ public class TteokgukService {
         return new PageImpl<>(responses, pageable, responses.size());
     }
 
-    public TteokgukResponse getTteokguk(Long tteokgukId) {
+    public TteokgukResponse getTteokguk(Long memberId, Long tteokgukId) {
         Tteokguk tteokguk = tteokgukRepository.findByIdAndDeleted(tteokgukId, false)
                 .orElseThrow(() -> BusinessException.of(TTEOKGUK_NOT_FOUND));
 
-        if (!tteokguk.isAccess()) {
+        if (!tteokguk.isAccess() && !Objects.equals(tteokguk.getMember().getId(), memberId)) {
             throw BusinessException.of(NOT_ALLOWED);
         }
         return TteokgukResponseAssembler.toTteokgukResponse(tteokguk);
