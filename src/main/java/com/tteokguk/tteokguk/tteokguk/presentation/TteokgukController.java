@@ -68,6 +68,12 @@ public class TteokgukController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/random")
+    public ResponseEntity<TteokgukResponse> getRandomTteokguk() {
+        TteokgukResponse response = tteokgukService.getRandomTteokguk();
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/new")
     public ResponseEntity<ApiPageResponse<TteokgukResponse>> findNewTteokguks(
             @AuthId Long id,

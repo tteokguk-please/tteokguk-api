@@ -56,6 +56,11 @@ public class TteokgukService {
         return TteokgukResponseAssembler.toTteokgukResponse(savedTteokguk);
     }
 
+    public TteokgukResponse getRandomTteokguk() {
+        Tteokguk randomTteokguk = tteokgukRepository.findRandomTteokguk();
+        return TteokgukResponseAssembler.toTteokgukResponse(randomTteokguk);
+    }
+
     public void deleteTteokguk(
             Long id,
             Long tteokgukId
