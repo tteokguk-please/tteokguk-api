@@ -82,7 +82,9 @@ public class Support {
         this.supportIngredient = supportIngredient;
         this.access = access;
         this.message = message;
-        this.rewardIngredient = Ingredient.random();
+        do {
+            this.rewardIngredient = Ingredient.random();
+        } while (sender.getPrimaryIngredient() == this.rewardIngredient);
         this.rewardQuantity = random.nextInt(1, 7);
 
         sender.sendIngredient(receiver, supportIngredient);
