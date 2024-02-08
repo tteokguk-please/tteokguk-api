@@ -137,7 +137,9 @@ public class Tteokguk extends BaseEntity {
 
         usedIngredients.addAll(desiredIngredients);
         member.useIngredients(desiredIngredients);
+    }
 
+    public void updateCompletion() {
         if (usedIngredients.size() == 5) {
             completion = true;
         }

@@ -71,6 +71,22 @@ public class TteokgukService {
         tteokguk.delete();
     }
 
+    public TteokgukResponse doCompletion(
+            Long id,
+            Long tteokgukId
+    ) {
+        Member member = memberRepository.findByIdAndDeleted(id, false)
+                .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
+
+        Tteokguk tteokguk = member.getTteokguks().stream()
+                .filter(t -> t.getId().equals(tteokgukId))
+                .findFirst()
+                .orElseThrow(() -> BusinessException.of(NOT_OWNER));
+
+        tteokguk.updateCompletion();
+        return TteokgukResponseAssembler.toTteokgukResponse(tteokguk);
+    }
+
     public TteokgukResponse useIngredients(
             Long id,
             IngredientRequest request

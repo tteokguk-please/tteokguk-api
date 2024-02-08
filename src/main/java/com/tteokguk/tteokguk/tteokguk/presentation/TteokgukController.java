@@ -41,6 +41,15 @@ public class TteokgukController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/completion/{tteokgukId}")
+    public ResponseEntity<TteokgukResponse> doCompletion(
+            @AuthId Long id,
+            @PathVariable Long tteokgukId
+    ) {
+        TteokgukResponse response = tteokgukService.doCompletion(id, tteokgukId);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/find/{tteokgukId}")
     public ResponseEntity<TteokgukResponse> getTteokguk(
             @AuthId Long memberId, @PathVariable Long tteokgukId
