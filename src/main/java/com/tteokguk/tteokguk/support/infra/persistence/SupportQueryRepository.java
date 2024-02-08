@@ -2,6 +2,7 @@ package com.tteokguk.tteokguk.support.infra.persistence;
 
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tteokguk.tteokguk.support.application.dto.response.ReceivedIngredientResponse;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +68,10 @@ public class SupportQueryRepository {
                 ReceivedIngredientResponse.class,
                 support.id,
                 support.sender.id,
-                support.sender.nickname,
+                new CaseBuilder()
+                    .when(support.sender.deleted.eq(false))
+                    .then(support.sender.nickname)
+                    .otherwise("탈퇴한 사용자"),
                 support.supportIngredient,
                 support.message,
                 support.access,
