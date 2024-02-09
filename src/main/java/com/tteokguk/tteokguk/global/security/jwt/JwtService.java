@@ -33,7 +33,7 @@ public class JwtService {
 		String encodedBody = refreshToken.getEncodedBody();
 		LocalDateTime expiryDateTime = LocalDateTimeUtils.convertBy(expiry);
 
-		RefreshToken entity = refreshTokenRepository.findByMember(member)
+		RefreshToken entity = refreshTokenRepository.findByMemberAndUserAgent(member, userAgent)
 			.orElseGet(() -> new RefreshToken(member, encodedBody, userAgent, expiryDateTime));
 		entity.update(encodedBody, userAgent, expiryDateTime);
 		refreshTokenRepository.save(entity);

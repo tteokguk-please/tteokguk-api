@@ -27,7 +27,7 @@ public class RefreshTokenService {
 			throw new BusinessException(AuthError.UNUSABLE_TOKEN);
 		}
 
-		RefreshToken entity = refreshTokenRepository.findByToken(refreshToken)
+		RefreshToken entity = refreshTokenRepository.findByTokenAndUserAgent(refreshToken, userAgent)
 			.orElseThrow(() -> new BusinessException(AuthError.UNUSABLE_TOKEN));
 
 		long currentTimeMillis = System.currentTimeMillis();
