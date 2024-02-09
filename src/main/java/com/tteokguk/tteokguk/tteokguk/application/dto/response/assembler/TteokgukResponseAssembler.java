@@ -8,7 +8,6 @@ import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Comparator;
 import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -56,7 +55,6 @@ public class TteokgukResponseAssembler {
     public static List<TteokgukResponse> toTteokgukResponses(List<Tteokguk> tteokguks) {
         return tteokguks.stream()
                 .map(TteokgukResponseAssembler::toTteokgukResponse)
-                .sorted(Comparator.comparing(TteokgukResponse::tteokgukId).reversed())
                 .toList();
     }
 }
