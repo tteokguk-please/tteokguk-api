@@ -56,7 +56,7 @@ public class UserInfoService {
         return new UserIdResponse(randomUser.getId());
     }
 
-    public AppInitResponse initialize(Long memberId, AppInitRequest request) {
+    public AppInitResponse initialize(Long memberId, AppInitRequest request, String userAgent) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> BusinessException.of(MEMBER_NOT_FOUND));
 
@@ -70,7 +70,7 @@ public class UserInfoService {
 
         Long now = System.currentTimeMillis();
         Jwt accessToken = jwtService.getAccessToken(member, now);
-        Jwt refreshToken = jwtService.getRefreshToken(member, now);
+        Jwt refreshToken = jwtService.getRefreshToken(member, userAgent, now);
 
         return AppInitResponse.of(member, accessToken.getEncodedBody(), refreshToken.getEncodedBody());
     }

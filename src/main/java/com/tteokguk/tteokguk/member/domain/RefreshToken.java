@@ -30,17 +30,22 @@ public class RefreshToken {
 	@Column(name = "token", nullable = false, unique = true)
 	private String token;
 
+	@Column(name = "user_agent")
+	private String userAgent;
+
 	@Column(name = "rt_expired_datetime", nullable = false)
 	private LocalDateTime expiredDateTime;
 
-	public RefreshToken(Member member, String token, LocalDateTime expiredDateTime) {
+	public RefreshToken(Member member, String token, String userAgent, LocalDateTime expiredDateTime) {
 		this.member = member;
 		this.token = token;
+		this.userAgent = userAgent;
 		this.expiredDateTime = expiredDateTime;
 	}
 
-	public void update(String token, LocalDateTime expiredDateTime) {
+	public void update(String token, String userAgent, LocalDateTime expiredDateTime) {
 		this.token = token;
+		this.userAgent = userAgent;
 		this.expiredDateTime = expiredDateTime;
 	}
 }

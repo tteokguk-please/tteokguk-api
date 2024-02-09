@@ -38,7 +38,7 @@ public class OAuthController {
 	@GetMapping("/{provider}/login")
 	public String oAuthLogin(@PathVariable String provider, @RequestParam String code, HttpServletRequest request) {
 		AppOAuthLoginResponse response = oAuthService.getByAuthorizationCode(
-			ProviderType.valueOf(provider.toUpperCase()), code
+			ProviderType.valueOf(provider.toUpperCase()), code, request.getHeader("User-Agent")
 		);
 
 		String redirectUrl = Arrays.stream(request.getCookies())
@@ -57,10 +57,11 @@ public class OAuthController {
 	@PostMapping("/{provider}/login")
 	public ResponseEntity<WebOAuthLoginResponse> oAuthLogin(
 		@PathVariable String provider,
-		@RequestBody WebOAuthLoginRequest request
+		@RequestBody WebOAuthLoginRequest request,
+		HttpServletRequest servletRequest
 	) {
 		AppOAuthLoginResponse response = oAuthService.getByAccessToken(
-			ProviderType.valueOf(provider.toUpperCase()), request.accessToken()
+			ProviderType.valueOf(provider.toUpperCase()), request.accessToken(), servletRequest.getHeader("User-Agent")
 		);
 		return ResponseEntity.ok(WebOAuthLoginResponse.of(response));
 	}

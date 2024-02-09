@@ -8,6 +8,9 @@ import com.tteokguk.tteokguk.member.presentation.dto.WebInitRequest;
 import com.tteokguk.tteokguk.member.presentation.dto.WebInitResponse;
 import com.tteokguk.tteokguk.member.presentation.dto.WebMyIngredientResponse;
 import com.tteokguk.tteokguk.support.application.dto.request.PageableRequest;
+
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -46,9 +49,12 @@ public class UserInfoController {
     @PostMapping("/initialization")
     public ResponseEntity<WebInitResponse> initialize(
             @AuthId Long id,
-            @RequestBody WebInitRequest request
+            @RequestBody WebInitRequest request,
+            HttpServletRequest servletRequest
     ) {
-        AppInitResponse response = userInfoService.initialize(id, request.convert());
+        AppInitResponse response = userInfoService.initialize(
+            id, request.convert(), servletRequest.getHeader("User-Agent")
+        );
         return ResponseEntity.ok(WebInitResponse.of(response));
     }
 

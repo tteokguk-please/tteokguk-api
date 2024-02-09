@@ -48,7 +48,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		PrincipalDetails details = (PrincipalDetails)authentication.getPrincipal();
 		response.setContentType(MimeTypeUtils.APPLICATION_JSON_VALUE);
 		response.setCharacterEncoding("utf-8");
-		writeResponseBody(response, getJsonResponse(details.getMember()));
+		writeResponseBody(response, getJsonResponse(details.getMember(), request.getHeader("User-Agent")));
 	}
 
 	private void writeResponseBody(HttpServletResponse response, String jsonResponse) throws IOException {
@@ -56,13 +56,13 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		writer.write(jsonResponse);
 	}
 
-	private String getJsonResponse(Member member) throws IOException {
+	private String getJsonResponse(Member member, String userAgent) throws IOException {
 		om.registerModule(new JavaTimeModule());
 		om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
 		Long now = System.currentTimeMillis();
 		String accessToken = jwtService.getAccessToken(member, now).getEncodedBody();
-		String refreshToken = jwtService.getRefreshToken(member, now).getEncodedBody();
+		String refreshToken = jwtService.getRefreshToken(member, userAgent, now).getEncodedBody();
 
 		return om.writerWithDefaultPrettyPrinter()
 			.writeValueAsString(
