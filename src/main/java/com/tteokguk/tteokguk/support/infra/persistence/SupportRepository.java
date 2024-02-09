@@ -17,7 +17,7 @@ public interface SupportRepository extends JpaRepository<Support, Long> {
                 ON s.supportedTteokguk.id = t.id 
                 WHERE t.deleted = false
                 AND s.sender.id = :id
-                ORDER BY s.id desc 
+                ORDER BY s.supportedTteokguk.updatedDate desc 
             """)
     List<Support> findSupportTteokguks(Long id, Pageable pageable);
 
