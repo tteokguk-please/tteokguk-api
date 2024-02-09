@@ -27,15 +27,15 @@ public class JwtService {
 		);
 	}
 
-	public Jwt getRefreshToken(Member member, Long now) {
+	public Jwt getRefreshToken(Member member, String userAgent, Long now) {
 		Long expiry = jwtFactory.getExpiryOfRefreshToken(now);
 		Jwt refreshToken = jwtFactory.createAuthToken(null, new Date(expiry));
 		String encodedBody = refreshToken.getEncodedBody();
 		LocalDateTime expiryDateTime = LocalDateTimeUtils.convertBy(expiry);
 
-		RefreshToken entity = refreshTokenRepository.findByMember(member)
-			.orElseGet(() -> new RefreshToken(member, encodedBody, expiryDateTime));
-		entity.update(encodedBody, expiryDateTime);
+		RefreshToken entity = refreshTokenRepository.findByMemberAndUserAgent(member, userAgent)
+			.orElseGet(() -> new RefreshToken(member, encodedBody, userAgent, expiryDateTime));
+		entity.update(encodedBody, userAgent, expiryDateTime);
 		refreshTokenRepository.save(entity);
 		return refreshToken;
 	}

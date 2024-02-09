@@ -28,7 +28,7 @@ public class AuthService {
 	private final PasswordEncoder encoder;
 	private final JwtService jwtService;
 
-	public AppJoinResponse join(AppJoinRequest request) {
+	public AppJoinResponse join(AppJoinRequest request, String userAgent) {
 		if (existsByEmail(request.email()))
 			throw new BusinessException(MemberError.DUPLICATE_EMAIL);
 
@@ -47,7 +47,7 @@ public class AuthService {
 
 		Long now = System.currentTimeMillis();
 		String accessToken = jwtService.getAccessToken(entity, now).getEncodedBody();
-		String refreshToken = jwtService.getRefreshToken(entity, now).getEncodedBody();
+		String refreshToken = jwtService.getRefreshToken(entity, userAgent, now).getEncodedBody();
 		return AppJoinResponse.of(entity, accessToken, refreshToken);
 	}
 

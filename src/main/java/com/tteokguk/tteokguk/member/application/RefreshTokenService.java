@@ -20,24 +20,24 @@ public class RefreshTokenService {
 	private final RefreshTokenRepository refreshTokenRepository;
 	private final JwtService jwtService;
 
-	public AppIssuedTokensResponse issueTokens(String refreshToken) {
+	public AppIssuedTokensResponse issueTokens(String refreshToken, String userAgent) {
 		try {
 			jwtService.validate(refreshToken);
 		} catch (BusinessException e) {
 			throw new BusinessException(AuthError.UNUSABLE_TOKEN);
 		}
 
-		RefreshToken entity = refreshTokenRepository.findByToken(refreshToken)
+		RefreshToken entity = refreshTokenRepository.findByTokenAndUserAgent(refreshToken, userAgent)
 			.orElseThrow(() -> new BusinessException(AuthError.UNUSABLE_TOKEN));
 
 		long currentTimeMillis = System.currentTimeMillis();
 		String issuedAccessToken = issueAccessToken(entity, currentTimeMillis);
-		String issuedRefreshToken = issueRefreshToken(entity, currentTimeMillis);
+		String issuedRefreshToken = issueRefreshToken(entity, userAgent, currentTimeMillis);
 		return new AppIssuedTokensResponse(entity.getMember().getId(), issuedAccessToken, issuedRefreshToken);
 	}
 
-	public String issueRefreshToken(RefreshToken entity, Long currentTimeMillis) {
-		return jwtService.getRefreshToken(entity.getMember(), currentTimeMillis).getEncodedBody();
+	public String issueRefreshToken(RefreshToken entity, String userAgent, Long currentTimeMillis) {
+		return jwtService.getRefreshToken(entity.getMember(), userAgent, currentTimeMillis).getEncodedBody();
 	}
 
 	public String issueAccessToken(RefreshToken entity, Long currentTimeMillis) {

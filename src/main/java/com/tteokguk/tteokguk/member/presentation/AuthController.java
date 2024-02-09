@@ -22,6 +22,8 @@ import com.tteokguk.tteokguk.member.presentation.dto.WebIssuedTokensResponse;
 import com.tteokguk.tteokguk.member.presentation.dto.WebJoinRequest;
 import com.tteokguk.tteokguk.member.presentation.dto.WebJoinResponse;
 
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,8 +37,10 @@ public class AuthController {
 	private final RefreshTokenService refreshTokenService;
 
 	@PostMapping("/join")
-	public ResponseEntity<WebJoinResponse> join(@RequestBody @Validated WebJoinRequest request) {
-		AppJoinResponse appResponse = authService.join(request.convert());
+	public ResponseEntity<WebJoinResponse> join(
+		@RequestBody @Validated WebJoinRequest request,
+		HttpServletRequest servletRequest) {
+		AppJoinResponse appResponse = authService.join(request.convert(), servletRequest.getHeader("User-Agent"));
 		return ResponseEntity.created(URI.create("/api/v1/members/" + appResponse.id()))
 			.body(WebJoinResponse.of(appResponse));
 	}
@@ -54,8 +58,11 @@ public class AuthController {
 	}
 
 	@PostMapping("/token")
-	public ResponseEntity<WebIssuedTokensResponse> reIssueTokens(@RequestBody WebIssuedTokensRequest request) {
-		AppIssuedTokensResponse issuedTokensResponse = refreshTokenService.issueTokens(request.refreshToken());
+	public ResponseEntity<WebIssuedTokensResponse> reIssueTokens(
+		@RequestBody WebIssuedTokensRequest request,
+		HttpServletRequest servletRequest) {
+		AppIssuedTokensResponse issuedTokensResponse =
+			refreshTokenService.issueTokens(request.refreshToken(), servletRequest.getHeader("User-Agent"));
 		return ResponseEntity.ok(WebIssuedTokensResponse.of(issuedTokensResponse));
 	}
 }

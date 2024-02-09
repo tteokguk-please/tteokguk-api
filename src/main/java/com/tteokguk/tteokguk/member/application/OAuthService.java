@@ -30,20 +30,20 @@ public class OAuthService {
 	private final OAuthMemberRepository oAuthMemberRepository;
 	private final JwtService jwtService;
 
-	public AppOAuthLoginResponse getByAuthorizationCode(ProviderType providerType, String code) {
+	public AppOAuthLoginResponse getByAuthorizationCode(ProviderType providerType, String code, String userAgent) {
 		TokenResponse tokenResponse = oAuthHttpRequestHelper.exchangeToken(providerType, code);
 
 		UserInfoResponse userInfoResponse = oAuthHttpRequestHelper.getUserInfo(
 			providerType, tokenResponse.accessToken()
 		);
 
-		return createResponse(getOAuthMember(providerType, userInfoResponse));
+		return createResponse(getOAuthMember(providerType, userInfoResponse), userAgent);
 	}
 
-	public AppOAuthLoginResponse getByAccessToken(ProviderType providerType, String accessToken) {
+	public AppOAuthLoginResponse getByAccessToken(ProviderType providerType, String accessToken, String userAgent) {
 		UserInfoResponse userInfoResponse = oAuthHttpRequestHelper.getUserInfo(providerType, accessToken);
 
-		return createResponse(getOAuthMember(providerType, userInfoResponse));
+		return createResponse(getOAuthMember(providerType, userInfoResponse), userAgent);
 	}
 
 	private OAuthMember getOAuthMember(ProviderType providerType, UserInfoResponse userInfoResponse) {
@@ -59,13 +59,13 @@ public class OAuthService {
 			));
 	}
 
-	private AppOAuthLoginResponse createResponse(OAuthMember member) {
+	private AppOAuthLoginResponse createResponse(OAuthMember member, String userAgent) {
 		Long now = System.currentTimeMillis();
 
 		return new AppOAuthLoginResponse(
 			member.getId(),
 			jwtService.getAccessToken(member, now).getEncodedBody(),
-			jwtService.getRefreshToken(member, now).getEncodedBody(),
+			jwtService.getRefreshToken(member, userAgent, now).getEncodedBody(),
 			member.getRole() == RoleType.ROLE_USER
 		);
 	}

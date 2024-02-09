@@ -8,6 +8,6 @@ import com.tteokguk.tteokguk.member.domain.Member;
 import com.tteokguk.tteokguk.member.domain.RefreshToken;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
-	Optional<RefreshToken> findByMember(Member member);
-	Optional<RefreshToken> findByToken(String token);
+	Optional<RefreshToken> findByMemberAndUserAgent(Member member, String userAgent);
+	Optional<RefreshToken> findByTokenAndUserAgent(String token, String userAgent);
 }
