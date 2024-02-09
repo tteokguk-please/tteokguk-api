@@ -56,6 +56,7 @@ public class SupportService {
         );
 
         Support savedSupport = supportRepository.save(support);
+        sender.useIngredients(List.of(support.getSupportIngredient()));
         return SupportResponseAssembler.toSupportResponse(savedSupport); // 공개여부!!
     }
 
