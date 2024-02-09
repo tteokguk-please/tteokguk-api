@@ -12,21 +12,22 @@ import java.util.List;
 public interface SupportRepository extends JpaRepository<Support, Long> {
 
     @Query("""
-        SELECT DISTINCT s 
-        FROM Support s JOIN FETCH Tteokguk t 
-        ON s.supportedTteokguk.id = t.id 
-        WHERE t.deleted = false
-        AND s.sender.id = :id
-    """)
+                SELECT DISTINCT s 
+                FROM Support s JOIN FETCH Tteokguk t 
+                ON s.supportedTteokguk.id = t.id 
+                WHERE t.deleted = false
+                AND s.sender.id = :id
+                ORDER BY s.id desc 
+            """)
     List<Support> findSupportTteokguks(Long id, Pageable pageable);
 
     @Query("""
-        SELECT s 
-        FROM Support s JOIN FETCH Tteokguk t 
-        ON s.supportedTteokguk.id = t.id 
-        WHERE t.deleted = false 
-        GROUP BY s.supportedTteokguk.id 
-        HAVING s.sender.id = :id
-    """)
+                SELECT s 
+                FROM Support s JOIN FETCH Tteokguk t 
+                ON s.supportedTteokguk.id = t.id 
+                WHERE t.deleted = false 
+                GROUP BY s.supportedTteokguk.id 
+                HAVING s.sender.id = :id
+            """)
     List<Support> findSupportTteokguksTemp(Long id, Pageable pageable);
 }
