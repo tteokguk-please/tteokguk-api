@@ -2,6 +2,7 @@ package com.tteokguk.tteokguk.tteokguk.presentation;
 
 import com.tteokguk.tteokguk.global.dto.response.ApiPageResponse;
 import com.tteokguk.tteokguk.global.security.annotation.AuthId;
+import com.tteokguk.tteokguk.member.application.dto.response.SupporterResponse;
 import com.tteokguk.tteokguk.support.application.dto.request.PageableRequest;
 import com.tteokguk.tteokguk.tteokguk.application.TteokgukService;
 import com.tteokguk.tteokguk.tteokguk.application.dto.request.CreateTteokgukRequest;
@@ -92,5 +93,11 @@ public class TteokgukController {
         Page<TteokgukResponse> response = tteokgukService.findCompletionTteokguks(request);
         ApiPageResponse<TteokgukResponse> pagedApiResponse = ApiPageResponse.of(response);
         return ResponseEntity.ok(pagedApiResponse);
+    }
+
+    @GetMapping("/{tteokgukId}/supporters")
+    public ResponseEntity<SupporterResponse> findSupporters(@PathVariable Long tteokgukId) {
+        SupporterResponse response = tteokgukService.findSupporters(tteokgukId);
+        return ResponseEntity.ok(response);
     }
 }

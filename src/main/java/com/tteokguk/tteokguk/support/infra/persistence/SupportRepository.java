@@ -1,6 +1,8 @@
 package com.tteokguk.tteokguk.support.infra.persistence;
 
 import com.tteokguk.tteokguk.support.domain.Support;
+import com.tteokguk.tteokguk.tteokguk.domain.Tteokguk;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,4 +32,6 @@ public interface SupportRepository extends JpaRepository<Support, Long> {
                 HAVING s.sender.id = :id
             """)
     List<Support> findSupportTteokguksTemp(Long id, Pageable pageable);
+
+    List<Support> findAllBySupportedTteokguk(Tteokguk supportedTteokguk);
 }

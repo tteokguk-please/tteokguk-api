@@ -20,7 +20,8 @@ public class CustomRequestMatcher {
         return new OrRequestMatcher(
                 new AntPathRequestMatcher("/api/v1/tteokguk/new/**"),
                 new AntPathRequestMatcher("/api/v1/tteokguk/completion/**", HttpMethod.GET.toString()),
-                new AntPathRequestMatcher("/api/v1/tteokguk/random/**")
+                new AntPathRequestMatcher("/api/v1/tteokguk/random/**"),
+                new AntPathRequestMatcher("/api/v1/tteokguk/{tteokgukId:\\d+}/supporters", HttpMethod.GET.toString())
         );
     }
 
