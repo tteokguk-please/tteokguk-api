@@ -1,9 +1,12 @@
 package com.tteokguk.tteokguk.tteokguk.application;
 
 import com.tteokguk.tteokguk.global.exception.BusinessException;
+import com.tteokguk.tteokguk.member.application.dto.response.SupporterResponse;
 import com.tteokguk.tteokguk.member.domain.Member;
 import com.tteokguk.tteokguk.member.infra.persistence.MemberRepository;
 import com.tteokguk.tteokguk.support.application.dto.request.PageableRequest;
+import com.tteokguk.tteokguk.support.domain.Support;
+import com.tteokguk.tteokguk.support.infra.persistence.SupportRepository;
 import com.tteokguk.tteokguk.tteokguk.application.dto.request.CreateTteokgukRequest;
 import com.tteokguk.tteokguk.tteokguk.application.dto.request.IngredientRequest;
 import com.tteokguk.tteokguk.tteokguk.application.dto.response.TteokgukResponse;
@@ -37,6 +40,7 @@ public class TteokgukService {
 
     private final MemberRepository memberRepository;
     private final TteokgukRepository tteokgukRepository;
+    private final SupportRepository supportRepository;
 
     public TteokgukResponse createTteokguk(
             Long id,
@@ -143,5 +147,14 @@ public class TteokgukService {
             throw BusinessException.of(NOT_ALLOWED);
         }
         return TteokgukResponseAssembler.toTteokgukResponse(tteokguk);
+    }
+
+    public SupporterResponse findSupporters(Long tteokgukId) {
+        Tteokguk tteokguk = tteokgukRepository.findById(tteokgukId)
+            .orElseThrow(() -> BusinessException.of(TTEOKGUK_NOT_FOUND));
+
+        List<Support> supports = supportRepository.findAllBySupportedTteokguk(tteokguk);
+
+        return SupporterResponse.of(tteokguk, supports);
     }
 }
