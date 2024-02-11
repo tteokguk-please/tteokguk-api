@@ -14,11 +14,37 @@ public interface TteokgukRepository extends JpaRepository<Tteokguk, Long> {
 
     Optional<Tteokguk> findByIdAndDeleted(Long id, boolean deleted);
 
-    @Query("SELECT t FROM Tteokguk t WHERE t.access = true and t.member.deleted = false and t.completion = false ORDER BY t.id DESC")
+    @Query("""
+        SELECT t 
+        FROM Tteokguk t 
+        WHERE t.access = true and t.member.deleted = false and t.completion = false 
+        ORDER BY t.id DESC
+    """)
     List<Tteokguk> findNewTteokguks(Pageable pageable);
 
-    @Query("SELECT t FROM Tteokguk t WHERE t.access = true and t.member.deleted = false and t.completion = true ORDER BY t.updatedDate DESC")
+    @Query("""
+        SELECT t 
+        FROM Tteokguk t 
+        WHERE t.access = true or (t.access = false and t.member.id = :memberId) and t.member.deleted = false and t.completion = false 
+        ORDER BY t.id DESC
+    """)
+    List<Tteokguk> findNewTteokguks(Long memberId, Pageable pageable);
+
+    @Query("""
+        SELECT t 
+        FROM Tteokguk t 
+        WHERE t.access = true and t.member.deleted = false and t.completion = true 
+        ORDER BY t.updatedDate DESC
+    """)
     List<Tteokguk> findCompletionTteokguks(Pageable pageable);
+
+    @Query("""
+        SELECT t 
+        FROM Tteokguk t 
+        WHERE t.access = true or (t.access = false and t.member.id = :memberId) and t.member.deleted = false and t.completion = true 
+        ORDER BY t.updatedDate DESC
+    """)
+    List<Tteokguk> findCompletionTteokguks(Long memberId, Pageable pageable);
 
     @Query(value = "SELECT t FROM Tteokguk t WHERE t.deleted = false AND t.access = true ORDER BY RAND() LIMIT 1")
     Tteokguk findRandomTteokguk();

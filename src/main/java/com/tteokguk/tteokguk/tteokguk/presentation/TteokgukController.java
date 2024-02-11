@@ -80,7 +80,7 @@ public class TteokgukController {
             @AuthId Long id,
             @Valid PageableRequest request
     ) {
-        Page<TteokgukResponse> response = tteokgukService.findNewTteokguks(request);
+        Page<TteokgukResponse> response = tteokgukService.findNewTteokguks(id, request);
         ApiPageResponse<TteokgukResponse> pagedApiResponse = ApiPageResponse.of(response);
         return ResponseEntity.ok(pagedApiResponse);
     }
@@ -90,7 +90,7 @@ public class TteokgukController {
             @AuthId Long id,
             @Valid PageableRequest request
     ) {
-        Page<TteokgukResponse> response = tteokgukService.findCompletionTteokguks(request);
+        Page<TteokgukResponse> response = tteokgukService.findCompletionTteokguks(id, request);
         ApiPageResponse<TteokgukResponse> pagedApiResponse = ApiPageResponse.of(response);
         return ResponseEntity.ok(pagedApiResponse);
     }

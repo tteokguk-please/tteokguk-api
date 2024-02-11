@@ -114,29 +114,41 @@ public class TteokgukService {
         return TteokgukResponseAssembler.toTteokgukResponse(tteokguk);
     }
 
-    public Page<TteokgukResponse> findNewTteokguks(PageableRequest request) {
+    public Page<TteokgukResponse> findNewTteokguks(Long memberId, PageableRequest request) {
         PageRequest pageable = PageRequest.of(
                 request.page() - 1,
                 request.size(),
                 Sort.by(DESC, "id"));
 
-        List<Tteokguk> newTteokguks = tteokgukRepository.findNewTteokguks(pageable);
+        List<Tteokguk> newTteokguks = findNewTteoguks(memberId, pageable);
         List<TteokgukResponse> responses = TteokgukResponseAssembler.toTteokgukResponses(newTteokguks);
-
-
         responses.forEach(response -> log.warn("{}", response));
         return new PageImpl<>(responses, pageable, responses.size());
     }
 
-    public Page<TteokgukResponse> findCompletionTteokguks(PageableRequest request) {
+    private List<Tteokguk> findNewTteoguks(Long memberId, PageRequest pageable) {
+        if (memberId == null)
+            return tteokgukRepository.findNewTteokguks(pageable);
+        else
+            return tteokgukRepository.findNewTteokguks(memberId, pageable);
+    }
+
+    public Page<TteokgukResponse> findCompletionTteokguks(Long memberId, PageableRequest request) {
         PageRequest pageable = PageRequest.of(
                 request.page() - 1,
                 request.size());
 
-        List<Tteokguk> completionTteokguks = tteokgukRepository.findCompletionTteokguks(pageable);
+        List<Tteokguk> completionTteokguks = findCompletionTteokguks(memberId, pageable);
         List<TteokgukResponse> responses = TteokgukResponseAssembler.toTteokgukResponses(completionTteokguks);
         responses.forEach(response -> log.warn("{}", response));
         return new PageImpl<>(responses, pageable, responses.size());
+    }
+
+    private List<Tteokguk> findCompletionTteokguks(Long memberId, PageRequest pageable) {
+        if (memberId == null)
+            return tteokgukRepository.findCompletionTteokguks(pageable);
+        else
+            return tteokgukRepository.findCompletionTteokguks(memberId, pageable);
     }
 
     public TteokgukResponse getTteokguk(Long memberId, Long tteokgukId) {
