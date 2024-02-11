@@ -25,7 +25,7 @@ public interface TteokgukRepository extends JpaRepository<Tteokguk, Long> {
     @Query("""
         SELECT t 
         FROM Tteokguk t 
-        WHERE t.access = true or (t.access = false and t.member.id = :memberId) and t.member.deleted = false and t.completion = false 
+        WHERE (t.access = true or (t.access = false and t.member.id = :memberId)) and t.member.deleted = false and t.completion = false 
         ORDER BY t.id DESC
     """)
     List<Tteokguk> findNewTteokguks(Long memberId, Pageable pageable);
@@ -41,7 +41,7 @@ public interface TteokgukRepository extends JpaRepository<Tteokguk, Long> {
     @Query("""
         SELECT t 
         FROM Tteokguk t 
-        WHERE t.access = true or (t.access = false and t.member.id = :memberId) and t.member.deleted = false and t.completion = true 
+        WHERE (t.access = true or (t.access = false and t.member.id = :memberId)) and t.member.deleted = false and t.completion = true 
         ORDER BY t.updatedDate DESC
     """)
     List<Tteokguk> findCompletionTteokguks(Long memberId, Pageable pageable);
