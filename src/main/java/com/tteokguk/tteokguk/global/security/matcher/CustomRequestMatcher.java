@@ -18,8 +18,6 @@ public class CustomRequestMatcher {
 
     public RequestMatcher mainPageEndPoints() {
         return new OrRequestMatcher(
-                new AntPathRequestMatcher("/api/v1/tteokguk/new/**"),
-                new AntPathRequestMatcher("/api/v1/tteokguk/completion/**", HttpMethod.GET.toString()),
                 new AntPathRequestMatcher("/api/v1/tteokguk/random/**"),
                 new AntPathRequestMatcher("/api/v1/tteokguk/{tteokgukId:\\d+}/supporters", HttpMethod.GET.toString())
         );
@@ -48,5 +46,13 @@ public class CustomRequestMatcher {
 
     public RequestMatcher errorEndpoints() {
         return new AntPathRequestMatcher("/error", HttpMethod.GET.toString());
+    }
+
+    public RequestMatcher secretTteokgukEndpoints() {
+        return new OrRequestMatcher(
+            new AntPathRequestMatcher("/api/v1/tteokguk/find/**", HttpMethod.GET.toString()),
+            new AntPathRequestMatcher("/api/v1/tteokguk/new", HttpMethod.GET.toString()),
+            new AntPathRequestMatcher("/api/v1/tteokguk/completion", HttpMethod.GET.toString())
+        );
     }
 }
